@@ -1,4 +1,4 @@
-# Python inara.cz interface for Elite Dangerous.
+# Python Lib
 
 ## Table of Contents
 
@@ -10,15 +10,15 @@
 
 ## About <a name = "about"></a>
 
-inara.cz says it all.  Not sure what this is?  Hmmm... Come back when you do.  This thing does data analysis for the purpose of well... work it out.
+Are you sure you should be reading this?
 
 ## Getting Started <a name = "getting_started"></a>
 
-Checkout the code and set-up your environment. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+Goi away. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-See the requirements.txt file.
+None.
 
 ```
 Give examples
@@ -26,26 +26,23 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
+N/A
 ```
 Give the example
 ```
 
-And repeat
+N/A
 
 ```
 until finished
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
+N/A
 
 ## Usage <a name = "usage"></a>
 
-Add notes about how to use the system.
+N/A
 
 ## Copyright <a name = "copyright"></a>
 
-(c). Ray C Horn, All RIghts Reserved.
+(c). Copyright Ray C Horn, All Rights Reserved.
