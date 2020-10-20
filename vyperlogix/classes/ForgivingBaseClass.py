@@ -1,3 +1,6 @@
+"""
+# Commented this out because it may have been cool once upon a time but that time has passed.
+
 class LookBeforeYouLeap(X):
     "look before you leap idiom for call-if-exists"
     def __init__(self):
@@ -39,4 +42,11 @@ class HomogeneizeDifferentCases2(X):
         fun(self)
         # subclass-specific initialization follows
 
+if (__name__ == '__main__'):
+    class Foo(LookBeforeYouLeap):
+        def __init__(self, bar):
+            print(bar)
 
+    f = Foo()
+    print('done.')
+"""
