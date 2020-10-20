@@ -1,7 +1,7 @@
 __copyright__ = """\
 (c). Copyright 2008-2013, Vyper Logix Corp., 
 
-                   All Rights Reserved.
+            All Rights Reserved.
 
 Published under Creative Commons License 
 (http://creativecommons.org/licenses/by-nc/3.0/) 
@@ -26,7 +26,22 @@ __version__ = "0.2.1.2"
 
 import sys
 
-import BaseHTTPServer, select, socket, SocketServer, urlparse
+try:
+    import BaseHTTPServer  # Python 2.7
+except ImportError:
+    from http.server import HTTPServer
+
+try:
+    import SocketServer  # Python 2.7
+except ImportError:
+    import socketserver  # Python 3.x
+
+try:
+    import urlparse  # Python 2.7
+except ImportError:
+    from urllib import parse as urlparse
+
+import select, socket
 
 from vyperlogix.classes.CooperativeClass import Cooperative
 

@@ -69,9 +69,9 @@ except ImportError:
     from pickle import Pickler, Unpickler
 
 try:
-    from cStringIO import StringIO
+    from StringIO import StringIO ## for Python 2
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO ## for Python 3
 
 dbx_name = lambda name,data_path:os.sep.join([data_path,'.'.join([os.path.basename(name.split('.')[0]),'dbx'])])
 

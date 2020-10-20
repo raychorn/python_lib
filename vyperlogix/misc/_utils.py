@@ -1244,12 +1244,10 @@ def crc32(top, isVerbose=False, isObfuscated=False):
 
 def stringIO(*args, **kwargs):
     try:
-        from cStringIO import StringIO as StringIO
+        from StringIO import StringIO ## for Python 2
     except ImportError:
-        try:
-            from StringIO import StringIO as StringIO
-        except ImportError:
-            pass
+        from io import StringIO ## for Python 3
+
     return StringIO(*args, **kwargs)
 
 __symbol_InternetShortcut__ = '[InternetShortcut]'

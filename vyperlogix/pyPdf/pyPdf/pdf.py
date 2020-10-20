@@ -40,9 +40,9 @@ __author_email__ = "biziqe@mathieu.fenniak.net"
 
 import struct
 try:
-    from cStringIO import StringIO
+    from StringIO import StringIO ## for Python 2
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO ## for Python 3
 
 import filters
 import utils

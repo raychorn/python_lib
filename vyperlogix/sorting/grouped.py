@@ -45,7 +45,11 @@ class GroupedSort(UserList.UserList):
         self.__grouping__ = __groups__
 
     def __repr__(self):
-        import StringIO
+        try:
+            from StringIO import StringIO ## for Python 2
+        except ImportError:
+            from io import StringIO ## for Python 3
+
         ioBuf = StringIO.StringIO()
         print >>ioBuf, 'BEGIN:'
         _t_ = self.grouping[0]['b']

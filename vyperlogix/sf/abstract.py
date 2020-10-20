@@ -9,9 +9,9 @@ from vyperlogix.misc import _utils
 from vyperlogix.classes.SmartObject import SmartFuzzyObject
 
 try:
-    from cStringIO import StringIO as StringIO
-except:
-    from StringIO import StringIO as StringIO
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
 
 import vyperlogix.sf
 from pyax.sobject.classfactory import ClassFactory

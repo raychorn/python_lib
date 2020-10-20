@@ -11,9 +11,9 @@ from pyax.connection import Connection
 from pyax.exceptions import ApiFault
 
 try:
-    from cStringIO import StringIO as StringIO
-except:
-    from StringIO import StringIO as StringIO
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
 
 class SalesForceLoginModel(Cooperative):
     def __init__(self, username='', password='', callback_developers_check=None, api_version='14.0'):

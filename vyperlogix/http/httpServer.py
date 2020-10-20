@@ -31,10 +31,19 @@ import sys
 import traceback
 import tempfile
 
-import BaseHTTPServer
+try:
+    import BaseHTTPServer  # Python 2.7
+except ImportError:
+    from http.server import HTTPServer
+
 import cgitb
 import httplib
-import cStringIO
+
+try:
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
+
 import mimetools
 import socket
 import errno

@@ -6,9 +6,9 @@ from vyperlogix import misc
 from vyperlogix.misc import ObjectTypeName
 
 try:
-    from cStringIO import StringIO as StringIO
-except:
-    from StringIO import StringIO as StringIO
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
 
 from vyperlogix.sf.abstract import SalesForceAbstract
 

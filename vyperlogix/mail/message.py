@@ -2,9 +2,9 @@ import sys
 import types
 
 try:
-    from cStringIO import StringIO
+    from StringIO import StringIO ## for Python 2
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO ## for Python 3
 
     from vyperlogix import misc
 from vyperlogix.misc import ObjectTypeName

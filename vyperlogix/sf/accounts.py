@@ -10,9 +10,9 @@ from vyperlogix.decorators.TailRecursive import tail_recursion
 from vyperlogix.decorators.memoized import memoized
 
 try:
-    from cStringIO import StringIO as StringIO
-except:
-    from StringIO import StringIO as StringIO
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
 
 from vyperlogix.sf.abstract import SalesForceAbstract
 

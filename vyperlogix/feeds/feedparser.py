@@ -68,9 +68,9 @@ PREFERRED_TIDY_INTERFACES = ["uTidy", "mxTidy"]
 # ---------- required modules (should come with any Python distribution) ----------
 import sgmllib, re, sys, copy, urlparse, time, rfc822, types, cgi, urllib, urllib2
 try:
-    from cStringIO import StringIO as _StringIO
-except:
-    from StringIO import StringIO as _StringIO
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
 
 # ---------- optional modules (feedparser will work without these, but with reduced functionality) ----------
 
