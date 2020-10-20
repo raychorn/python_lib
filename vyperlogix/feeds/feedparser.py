@@ -72,6 +72,9 @@ try:
 except ImportError:
     from io import StringIO ## for Python 3
 
+import sys
+if sys.version_info[0] >= 3:
+    unicode = str
 # ---------- optional modules (feedparser will work without these, but with reduced functionality) ----------
 
 # gzip is included with most Python distributions, but may not be available if you compiled your own
@@ -140,23 +143,23 @@ sgmllib.special = re.compile('<!')
 sgmllib.charref = re.compile('&#(x?[0-9A-Fa-f]+)[^0-9A-Fa-f]')
 
 SUPPORTED_VERSIONS = {'': 'unknown',
-                      'rss090': 'RSS 0.90',
-                      'rss091n': 'RSS 0.91 (Netscape)',
-                      'rss091u': 'RSS 0.91 (Userland)',
-                      'rss092': 'RSS 0.92',
-                      'rss093': 'RSS 0.93',
-                      'rss094': 'RSS 0.94',
-                      'rss20': 'RSS 2.0',
-                      'rss10': 'RSS 1.0',
-                      'rss': 'RSS (unknown version)',
-                      'atom01': 'Atom 0.1',
-                      'atom02': 'Atom 0.2',
-                      'atom03': 'Atom 0.3',
-                      'atom10': 'Atom 1.0',
-                      'atom': 'Atom (unknown version)',
-                      'cdf': 'CDF',
-                      'hotrss': 'Hot RSS'
-                      }
+                        'rss090': 'RSS 0.90',
+                        'rss091n': 'RSS 0.91 (Netscape)',
+                        'rss091u': 'RSS 0.91 (Userland)',
+                        'rss092': 'RSS 0.92',
+                        'rss093': 'RSS 0.93',
+                        'rss094': 'RSS 0.94',
+                        'rss20': 'RSS 2.0',
+                        'rss10': 'RSS 1.0',
+                        'rss': 'RSS (unknown version)',
+                        'atom01': 'Atom 0.1',
+                        'atom02': 'Atom 0.2',
+                        'atom03': 'Atom 0.3',
+                        'atom10': 'Atom 1.0',
+                        'atom': 'Atom (unknown version)',
+                        'cdf': 'CDF',
+                        'hotrss': 'Hot RSS'
+                    }
 
 try:
     UserDict = dict
@@ -171,20 +174,20 @@ except NameError:
 
 class FeedParserDict(UserDict):
     keymap = {'channel': 'feed',
-              'items': 'entries',
-              'guid': 'id',
-              'date': 'updated',
-              'date_parsed': 'updated_parsed',
-              'description': ['subtitle', 'summary'],
-              'url': ['href'],
-              'modified': 'updated',
-              'modified_parsed': 'updated_parsed',
-              'issued': 'published',
-              'issued_parsed': 'published_parsed',
-              'copyright': 'rights',
-              'copyright_detail': 'rights_detail',
-              'tagline': 'subtitle',
-              'tagline_detail': 'subtitle_detail'}
+                'items': 'entries',
+                'guid': 'id',
+                'date': 'updated',
+                'date_parsed': 'updated_parsed',
+                'description': ['subtitle', 'summary'],
+                'url': ['href'],
+                'modified': 'updated',
+                'modified_parsed': 'updated_parsed',
+                'issued': 'published',
+                'issued_parsed': 'published_parsed',
+                'copyright': 'rights',
+                'copyright_detail': 'rights_detail',
+                'tagline': 'subtitle',
+                'tagline_detail': 'subtitle_detail'}
     def __getitem__(self, key):
         if key == 'category':
             return UserDict.__getitem__(self, 'tags')[0]['term']
@@ -290,65 +293,65 @@ def _urljoin(base, uri):
 
 class _FeedParserMixin:
     namespaces = {'': '',
-                  'http://backend.userland.com/rss': '',
-                  'http://blogs.law.harvard.edu/tech/rss': '',
-                  'http://purl.org/rss/1.0/': '',
-                  'http://my.netscape.com/rdf/simple/0.9/': '',
-                  'http://example.com/newformat#': '',
-                  'http://example.com/necho': '',
-                  'http://purl.org/echo/': '',
-                  'uri/of/echo/namespace#': '',
-                  'http://purl.org/pie/': '',
-                  'http://purl.org/atom/ns#': '',
-                  'http://www.w3.org/2005/Atom': '',
-                  'http://purl.org/rss/1.0/modules/rss091#': '',
-                  
-                  'http://webns.net/mvcb/':                               'admin',
-                  'http://purl.org/rss/1.0/modules/aggregation/':         'ag',
-                  'http://purl.org/rss/1.0/modules/annotate/':            'annotate',
-                  'http://media.tangent.org/rss/1.0/':                    'audio',
-                  'http://backend.userland.com/blogChannelModule':        'blogChannel',
-                  'http://web.resource.org/cc/':                          'cc',
-                  'http://backend.userland.com/creativeCommonsRssModule': 'creativeCommons',
-                  'http://purl.org/rss/1.0/modules/company':              'co',
-                  'http://purl.org/rss/1.0/modules/content/':             'content',
-                  'http://my.theinfo.org/changed/1.0/rss/':               'cp',
-                  'http://purl.org/dc/elements/1.1/':                     'dc',
-                  'http://purl.org/dc/terms/':                            'dcterms',
-                  'http://purl.org/rss/1.0/modules/email/':               'email',
-                  'http://purl.org/rss/1.0/modules/event/':               'ev',
-                  'http://rssnamespace.org/feedburner/ext/1.0':           'feedburner',
-                  'http://freshmeat.net/rss/fm/':                         'fm',
-                  'http://xmlns.com/foaf/0.1/':                           'foaf',
-                  'http://www.w3.org/2003/01/geo/wgs84_pos#':             'geo',
-                  'http://postneo.com/icbm/':                             'icbm',
-                  'http://purl.org/rss/1.0/modules/image/':               'image',
-                  'http://www.itunes.com/DTDs/PodCast-1.0.dtd':           'itunes',
-                  'http://example.com/DTDs/PodCast-1.0.dtd':              'itunes',
-                  'http://purl.org/rss/1.0/modules/link/':                'l',
-                  'http://search.yahoo.com/mrss':                         'media',
-                  'http://madskills.com/public/xml/rss/module/pingback/': 'pingback',
-                  'http://prismstandard.org/namespaces/1.2/basic/':       'prism',
-                  'http://www.w3.org/1999/02/22-rdf-syntax-ns#':          'rdf',
-                  'http://www.w3.org/2000/01/rdf-schema#':                'rdfs',
-                  'http://purl.org/rss/1.0/modules/reference/':           'ref',
-                  'http://purl.org/rss/1.0/modules/richequiv/':           'reqv',
-                  'http://purl.org/rss/1.0/modules/search/':              'search',
-                  'http://purl.org/rss/1.0/modules/slash/':               'slash',
-                  'http://schemas.xmlsoap.org/soap/envelope/':            'soap',
-                  'http://purl.org/rss/1.0/modules/servicestatus/':       'ss',
-                  'http://hacks.benhammersley.com/rss/streaming/':        'str',
-                  'http://purl.org/rss/1.0/modules/subscription/':        'sub',
-                  'http://purl.org/rss/1.0/modules/syndication/':         'sy',
-                  'http://purl.org/rss/1.0/modules/taxonomy/':            'taxo',
-                  'http://purl.org/rss/1.0/modules/threading/':           'thr',
-                  'http://purl.org/rss/1.0/modules/textinput/':           'ti',
-                  'http://madskills.com/public/xml/rss/module/trackback/':'trackback',
-                  'http://wellformedweb.org/commentAPI/':                 'wfw',
-                  'http://purl.org/rss/1.0/modules/wiki/':                'wiki',
-                  'http://www.w3.org/1999/xhtml':                         'xhtml',
-                  'http://www.w3.org/XML/1998/namespace':                 'xml',
-                  'http://schemas.pocketsoap.com/rss/myDescModule/':      'szf'
+                    'http://backend.userland.com/rss': '',
+                    'http://blogs.law.harvard.edu/tech/rss': '',
+                    'http://purl.org/rss/1.0/': '',
+                    'http://my.netscape.com/rdf/simple/0.9/': '',
+                    'http://example.com/newformat#': '',
+                    'http://example.com/necho': '',
+                    'http://purl.org/echo/': '',
+                    'uri/of/echo/namespace#': '',
+                    'http://purl.org/pie/': '',
+                    'http://purl.org/atom/ns#': '',
+                    'http://www.w3.org/2005/Atom': '',
+                    'http://purl.org/rss/1.0/modules/rss091#': '',
+                    
+                    'http://webns.net/mvcb/':                               'admin',
+                    'http://purl.org/rss/1.0/modules/aggregation/':         'ag',
+                    'http://purl.org/rss/1.0/modules/annotate/':            'annotate',
+                    'http://media.tangent.org/rss/1.0/':                    'audio',
+                    'http://backend.userland.com/blogChannelModule':        'blogChannel',
+                    'http://web.resource.org/cc/':                          'cc',
+                    'http://backend.userland.com/creativeCommonsRssModule': 'creativeCommons',
+                    'http://purl.org/rss/1.0/modules/company':              'co',
+                    'http://purl.org/rss/1.0/modules/content/':             'content',
+                    'http://my.theinfo.org/changed/1.0/rss/':               'cp',
+                    'http://purl.org/dc/elements/1.1/':                     'dc',
+                    'http://purl.org/dc/terms/':                            'dcterms',
+                    'http://purl.org/rss/1.0/modules/email/':               'email',
+                    'http://purl.org/rss/1.0/modules/event/':               'ev',
+                    'http://rssnamespace.org/feedburner/ext/1.0':           'feedburner',
+                    'http://freshmeat.net/rss/fm/':                         'fm',
+                    'http://xmlns.com/foaf/0.1/':                           'foaf',
+                    'http://www.w3.org/2003/01/geo/wgs84_pos#':             'geo',
+                    'http://postneo.com/icbm/':                             'icbm',
+                    'http://purl.org/rss/1.0/modules/image/':               'image',
+                    'http://www.itunes.com/DTDs/PodCast-1.0.dtd':           'itunes',
+                    'http://example.com/DTDs/PodCast-1.0.dtd':              'itunes',
+                    'http://purl.org/rss/1.0/modules/link/':                'l',
+                    'http://search.yahoo.com/mrss':                         'media',
+                    'http://madskills.com/public/xml/rss/module/pingback/': 'pingback',
+                    'http://prismstandard.org/namespaces/1.2/basic/':       'prism',
+                    'http://www.w3.org/1999/02/22-rdf-syntax-ns#':          'rdf',
+                    'http://www.w3.org/2000/01/rdf-schema#':                'rdfs',
+                    'http://purl.org/rss/1.0/modules/reference/':           'ref',
+                    'http://purl.org/rss/1.0/modules/richequiv/':           'reqv',
+                    'http://purl.org/rss/1.0/modules/search/':              'search',
+                    'http://purl.org/rss/1.0/modules/slash/':               'slash',
+                    'http://schemas.xmlsoap.org/soap/envelope/':            'soap',
+                    'http://purl.org/rss/1.0/modules/servicestatus/':       'ss',
+                    'http://hacks.benhammersley.com/rss/streaming/':        'str',
+                    'http://purl.org/rss/1.0/modules/subscription/':        'sub',
+                    'http://purl.org/rss/1.0/modules/syndication/':         'sy',
+                    'http://purl.org/rss/1.0/modules/taxonomy/':            'taxo',
+                    'http://purl.org/rss/1.0/modules/threading/':           'thr',
+                    'http://purl.org/rss/1.0/modules/textinput/':           'ti',
+                    'http://madskills.com/public/xml/rss/module/trackback/':'trackback',
+                    'http://wellformedweb.org/commentAPI/':                 'wfw',
+                    'http://purl.org/rss/1.0/modules/wiki/':                'wiki',
+                    'http://www.w3.org/1999/xhtml':                         'xhtml',
+                    'http://www.w3.org/XML/1998/namespace':                 'xml',
+                    'http://schemas.pocketsoap.com/rss/myDescModule/':      'szf'
 }
     _matchnamespaces = {}
 
@@ -707,7 +710,7 @@ class _FeedParserMixin:
         
     def _mapToStandardPrefix(self, name):
         colonpos = name.find(':')
-        if colonpos <> -1:
+        if colonpos != -1:
             prefix = name[:colonpos]
             suffix = name[colonpos+1:]
             prefix = self.namespacemap.get(prefix, prefix)
@@ -747,10 +750,12 @@ class _FeedParserMixin:
         context.setdefault(key, value)
 
     def _start_rss(self, attrsD):
-        versionmap = {'0.91': 'rss091u',
-                      '0.92': 'rss092',
-                      '0.93': 'rss093',
-                      '0.94': 'rss094'}
+        versionmap = {
+            '0.91': 'rss091u',
+            '0.92': 'rss092',
+            '0.93': 'rss093',
+            '0.94': 'rss094'
+            }
         if not self.version:
             attr_version = attrsD.get('version', '')
             version = versionmap.get(attr_version)
@@ -781,9 +786,11 @@ class _FeedParserMixin:
     
     def _start_feed(self, attrsD):
         self.infeed = 1
-        versionmap = {'0.1': 'atom01',
-                      '0.2': 'atom02',
-                      '0.3': 'atom03'}
+        versionmap = {
+            '0.1': 'atom01',
+            '0.2': 'atom02',
+            '0.3': 'atom03'
+            }
         if not self.version:
             attr_version = attrsD.get('version')
             version = versionmap.get(attr_version)
@@ -1414,8 +1421,10 @@ if _XML_AVAILABLE:
             raise exc
 
 class _BaseHTMLProcessor(sgmllib.SGMLParser):
-    elements_no_end_tag = ['area', 'base', 'basefont', 'br', 'col', 'frame', 'hr',
-      'img', 'input', 'isindex', 'link', 'meta', 'param']
+    elements_no_end_tag = [
+        'area', 'base', 'basefont', 'br', 'col', 'frame', 'hr',
+        'img', 'input', 'isindex', 'link', 'meta', 'param'
+        ]
     
     def __init__(self, encoding):
         self.encoding = encoding
@@ -1553,31 +1562,33 @@ class _LooseFeedParser(_FeedParserMixin, _BaseHTMLProcessor):
         return data
         
 class _RelativeURIResolver(_BaseHTMLProcessor):
-    relative_uris = [('a', 'href'),
-                     ('applet', 'codebase'),
-                     ('area', 'href'),
-                     ('blockquote', 'cite'),
-                     ('body', 'background'),
-                     ('del', 'cite'),
-                     ('form', 'action'),
-                     ('frame', 'longdesc'),
-                     ('frame', 'src'),
-                     ('iframe', 'longdesc'),
-                     ('iframe', 'src'),
-                     ('head', 'profile'),
-                     ('img', 'longdesc'),
-                     ('img', 'src'),
-                     ('img', 'usemap'),
-                     ('input', 'src'),
-                     ('input', 'usemap'),
-                     ('ins', 'cite'),
-                     ('link', 'href'),
-                     ('object', 'classid'),
-                     ('object', 'codebase'),
-                     ('object', 'data'),
-                     ('object', 'usemap'),
-                     ('q', 'cite'),
-                     ('script', 'src')]
+    relative_uris = [
+        ('a', 'href'),
+        ('applet', 'codebase'),
+        ('area', 'href'),
+        ('blockquote', 'cite'),
+        ('body', 'background'),
+        ('del', 'cite'),
+        ('form', 'action'),
+        ('frame', 'longdesc'),
+        ('frame', 'src'),
+        ('iframe', 'longdesc'),
+        ('iframe', 'src'),
+        ('head', 'profile'),
+        ('img', 'longdesc'),
+        ('img', 'src'),
+        ('img', 'usemap'),
+        ('input', 'src'),
+        ('input', 'usemap'),
+        ('ins', 'cite'),
+        ('link', 'href'),
+        ('object', 'classid'),
+        ('object', 'codebase'),
+        ('object', 'data'),
+        ('object', 'usemap'),
+        ('q', 'cite'),
+        ('script', 'src')
+    ]
 
     def __init__(self, baseuri, encoding):
         _BaseHTMLProcessor.__init__(self, encoding)
@@ -1598,25 +1609,29 @@ def _resolveRelativeURIs(htmlSource, baseURI, encoding):
     return p.output()
 
 class _HTMLSanitizer(_BaseHTMLProcessor):
-    acceptable_elements = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'big',
-      'blockquote', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col',
-      'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset',
-      'font', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'input',
-      'ins', 'kbd', 'label', 'legend', 'li', 'map', 'menu', 'ol', 'optgroup',
-      'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike',
-      'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th',
-      'thead', 'tr', 'tt', 'u', 'ul', 'var']
+    acceptable_elements = [
+        'a', 'abbr', 'acronym', 'address', 'area', 'b', 'big',
+        'blockquote', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col',
+        'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset',
+        'font', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'input',
+        'ins', 'kbd', 'label', 'legend', 'li', 'map', 'menu', 'ol', 'optgroup',
+        'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike',
+        'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th',
+        'thead', 'tr', 'tt', 'u', 'ul', 'var'
+    ]
 
-    acceptable_attributes = ['abbr', 'accept', 'accept-charset', 'accesskey',
-      'action', 'align', 'alt', 'axis', 'border', 'cellpadding', 'cellspacing',
-      'char', 'charoff', 'charset', 'checked', 'cite', 'class', 'clear', 'cols',
-      'colspan', 'color', 'compact', 'coords', 'datetime', 'dir', 'disabled',
-      'enctype', 'for', 'frame', 'headers', 'height', 'href', 'hreflang', 'hspace',
-      'id', 'ismap', 'label', 'lang', 'longdesc', 'maxlength', 'media', 'method',
-      'multiple', 'name', 'nohref', 'noshade', 'nowrap', 'prompt', 'readonly',
-      'rel', 'rev', 'rows', 'rowspan', 'rules', 'scope', 'selected', 'shape', 'size',
-      'span', 'src', 'start', 'summary', 'tabindex', 'target', 'title', 'type',
-      'usemap', 'valign', 'value', 'vspace', 'width']
+    acceptable_attributes = [
+        'abbr', 'accept', 'accept-charset', 'accesskey',
+        'action', 'align', 'alt', 'axis', 'border', 'cellpadding', 'cellspacing',
+        'char', 'charoff', 'charset', 'checked', 'cite', 'class', 'clear', 'cols',
+        'colspan', 'color', 'compact', 'coords', 'datetime', 'dir', 'disabled',
+        'enctype', 'for', 'frame', 'headers', 'height', 'href', 'hreflang', 'hspace',
+        'id', 'ismap', 'label', 'lang', 'longdesc', 'maxlength', 'media', 'method',
+        'multiple', 'name', 'nohref', 'noshade', 'nowrap', 'prompt', 'readonly',
+        'rel', 'rev', 'rows', 'rowspan', 'rules', 'scope', 'selected', 'shape', 'size',
+        'span', 'src', 'start', 'summary', 'tabindex', 'target', 'title', 'type',
+        'usemap', 'valign', 'value', 'vspace', 'width'
+    ]
 
     unacceptable_elements_with_end_tag = ['script', 'applet']
 
@@ -1831,7 +1846,7 @@ def _open_resource(url_file_stream_or_string, etag, modified, agent, referrer, h
         pass
 
     # treat url_file_stream_or_string as string
-    return _StringIO(str(url_file_stream_or_string))
+    return StringIO(str(url_file_stream_or_string))
 
 _date_handlers = []
 def registerDateHandler(func):
@@ -2471,7 +2486,7 @@ def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, refer
     if f and data and hasattr(f, 'headers'):
         if gzip and f.headers.get('content-encoding', '') == 'gzip':
             try:
-                data = gzip.GzipFile(fileobj=_StringIO(data)).read()
+                data = gzip.GzipFile(fileobj=StringIO(data)).read()
             except Exception as e:
                 # Some feeds claim to be gzipped but they're not, so
                 # we get garbage.  Ideally, we should re-request the
@@ -2605,7 +2620,7 @@ def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, refer
         saxparser.setContentHandler(feedparser)
         saxparser.setErrorHandler(feedparser)
         source = xml.sax.xmlreader.InputSource()
-        source.setByteStream(_StringIO(data))
+        source.setByteStream(StringIO(data))
         if hasattr(saxparser, '_ns_stack'):
             # work around bug in built-in SAX parser (doesn't recognize xml: namespace)
             # PyXML doesn't have this problem, and it doesn't have _ns_stack either

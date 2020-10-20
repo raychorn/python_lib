@@ -1,8 +1,10 @@
+from __future__ import print_function
 import sys, os
 import types
 import logging
 import glob
 import string
+import traceback
 
 from vyperlogix.misc import _utils
 from vyperlogix import misc
@@ -47,17 +49,14 @@ class Log(Cooperative):
     def write(self, s):
         if (self.f):
             try:
-		try:
-		    self.f.flush()
-		except:
-		    pass
+                self.f.flush()
                 self.f.write(s)
             except Exception as details:
                 info_string = _utils.formattedException(details=details)
                 logging.warning(info_string)
             
     def rotate(self):
-	_fname = self.logFileName
+        _fname = self.logFileName
         logging.info('Rotate Log for "%s".' % (_fname))
         ts = _utils.timeStamp()
         if (sys.platform == 'win32'):
@@ -78,55 +77,55 @@ class Log(Cooperative):
                 try:
                     os.remove(f)
                     logging.info('(%s) :: Removed "%s".' % (misc.funcName(),f))
-		except Exception as details:
-		    info_string = _utils.formattedException(details=details)
-		    logging.warning(info_string)
-		
+                except Exception as details:
+                    info_string = _utils.formattedException(details=details)
+                    logging.warning(info_string)
+
     def logFileName():
         doc = "The log's filename, if it exists."
         def fget(self):
-	    _name = 'Log File is NOT Named.'
-	    _className = ObjectTypeName.typeClassName(self.f)
-	    if (_className not in ['StringIO.StringIO','cStringIO.StringO']):
-		try:
-		    _name = self.f.name
-		except AttributeError, details:
-		    info_string = _utils.formattedException(details=details)
-		    logging.warning(info_string)
-	    else:
-		_name = _className
-	    return _name
+            _name = 'Log File is NOT Named.'
+            _className = ObjectTypeName.typeClassName(self.f)
+            if (_className not in ['StringIO.StringIO','cStringIO.StringO']):
+                try:
+                    _name = self.f.name
+                except AttributeError, details:
+                    info_string = _utils.formattedException(details=details)
+                    logging.warning(info_string)
+                else:
+                    _name = _className
+            return _name
         return locals()
     logFileName = property(**logFileName())
 
     def close(self):
         logging.info('Closing Log for "%s".' % (self.logFileName))
-	try:
-	    self.f.close()
-	except Exception as details:
-	    info_string = _utils.formattedException(details=details)
-	    logging.warning(info_string)
+        try:
+            self.f.close()
+        except Exception as details:
+            info_string = _utils.formattedException(details=details)
+            logging.warning(info_string)
 
     def flush(self):
-	try:
-	    self.f.flush()
-	except Exception as details:
-	    info_string = _utils.formattedException(details=details)
-	    logging.warning(info_string)
+        try:
+            self.f.flush()
+        except Exception as details:
+            info_string = _utils.formattedException(details=details)
+            logging.warning(info_string)
 
     def getLogger(self, name): # do nothing for now.  This method exists to suppress errors and warnings.
-	pass
-	    
+        pass
+
     def name():
         doc = "name"
         def fget(self):
-	    _name = 'Log File is NOT Named.'
-	    try:
-		_name = self.f.name
-	    except AttributeError, details:
-                info_string = _utils.formattedException(details=details)
-                logging.warning(info_string)
-	    return _name
+            _name = 'Log File is NOT Named.'
+            try:
+                _name = self.f.name
+            except AttributeError, details:
+                    info_string = _utils.formattedException(details=details)
+                    logging.warning(info_string)
+            return _name
         return locals()
     name = property(**name())
 
@@ -135,66 +134,66 @@ class EchoLog(Log):
     to ensure that everything is logged and echoed to sys.stdout,
     even during an unexpected exit."""
     def __init__(self, f, fOut=sys.stdout):
-	self.fOut = fOut
-	super(EchoLog, self).__init__(f)
+        self.fOut = fOut
+        super(EchoLog, self).__init__(f)
         
     def write(self, s):
-	_typeName = ObjectTypeName.typeClassName(self.fOut)
-	if (_typeName.find('.EchoLog') == -1):
-	    print >>self.fOut, s.strip()
-	super(EchoLog, self).write(s)
+        _typeName = ObjectTypeName.typeClassName(self.fOut)
+        if (_typeName.find('.EchoLog') == -1):
+            self.fOut.write(s.strip())
+        super(EchoLog, self).write(s)
     
 class BackgroundLog(Log):
     """file like for writes that dump to sys.stdout in the background.
     """
     def __init__(self, threads=100, fOut=sys.stdout):
-	from vyperlogix.misc import threadpool
+        from vyperlogix.misc import threadpool
 	
-	self._Q_ = threadpool.ThreadQueue(threads,isDaemon=False)
+        self._Q_ = threadpool.ThreadQueue(threads,isDaemon=False)
 
-	@threadpool.threadify(self._Q_)
-	def log_this(s,callback=None):
-	    from vyperlogix.decorators.synchronized import synchronized
-	    from threading import Lock
-	    myLock = Lock()
-	    
-	    @synchronized(myLock)
-	    def _log_this(s,callback):
-		if (callable(callback)):
-		    try:
-			callback(s)
-		    except:
-			pass
-		
-	    _log_this(s,callback)
-	    
-	self.log_this = log_this
-	    
-	super(BackgroundLog, self).__init__(fOut)
+        @threadpool.threadify(self._Q_)
+        def log_this(s,callback=None):
+            from vyperlogix.decorators.synchronized import synchronized
+            from threading import Lock
+            myLock = Lock()
+            
+            @synchronized(myLock)
+            def _log_this(s,callback):
+                if (callable(callback)):
+                    try:
+                        callback(s)
+                    except:
+                        pass
+            
+            _log_this(s,callback)
+
+            self.log_this = log_this
+
+        super(BackgroundLog, self).__init__(fOut)
         
     def logFileName():
         doc = "The log's filename, if it exists."
         def fget(self):
-	    _name = 'Log File is NOT Named.'
-	    try:
-		_name = self.f.name
-	    except AttributeError, details:
-                info_string = _utils.formattedException(details=details)
-                logging.warning(info_string)
-	    return _name
+            _name = 'Log File is NOT Named.'
+            try:
+                _name = self.f.name
+            except AttributeError, details:
+                    info_string = _utils.formattedException(details=details)
+                    logging.warning(info_string)
+            return _name
         return locals()
     logFileName = property(**logFileName())
 
     def write(self, s):
-	self.log_this(s,callback=super(BackgroundLog, self).write)
+        self.log_this(s,callback=super(BackgroundLog, self).write)
     
-if hasattr(sys, 'frozen'): #support for py2exe
-    _srcfile = "logging%s__init__%s" % (os.sep, __file__[-4:])
-elif string.lower(__file__[-4:]) in ['.pyc', '.pyo']:
-    _srcfile = __file__[:-4] + '.py'
-else:
-    _srcfile = __file__
-_srcfile = os.path.normcase(_srcfile)
+        if hasattr(sys, 'frozen'): #support for py2exe
+            _srcfile = "logging%s__init__%s" % (os.sep, __file__[-4:])
+        elif string.lower(__file__[-4:]) in ['.pyc', '.pyo']:
+            _srcfile = __file__[:-4] + '.py'
+        else:
+            _srcfile = __file__
+        _srcfile = os.path.normcase(_srcfile)
 
 def currentframe():
     """Return the frame object for the caller's stack frame."""
@@ -208,15 +207,15 @@ if hasattr(sys, '_getframe'): currentframe = lambda: sys._getframe(3)
 class CustomLog(Log):
     """Use in-place of logging, provides INFO, WARNING, DEBUG and ERROR logging to a single log-file."""
     def __init__(self, f):
-	self.__logging__ = None
-	super(CustomLog, self).__init__(f)
+        self.__logging__ = None
+        super(CustomLog, self).__init__(f)
     
     def logging():
         doc = "Echo to this logging instance also."
         def fget(self):
-	    return self.__logging__
+            return self.__logging__
         def fset(self, log):
-	    self.__logging__ = log
+            self.__logging__ = log
         return locals()
     logging = property(**logging())
 
@@ -230,6 +229,7 @@ class CustomLog(Log):
         while hasattr(f, "f_code"):
             co = f.f_code
             filename = os.path.normcase(co.co_filename)
+            _srcfile = __file__[:-4] + '.py' # ???
             if filename == _srcfile:
                 f = f.f_back
                 continue
@@ -238,35 +238,35 @@ class CustomLog(Log):
         return rv
 
     def log_as(self, _levelName, s):
-	if (self.__logging__ is not None):
-	    try:
-		if (_levelName == 'INFO'):
-		    self.__logging__.info(s)
-		if (_levelName == 'WARNING'):
-		    self.__logging__.warning(s)
-		if (_levelName == 'DEBUG'):
-		    self.__logging__.debug(s)
-		if (_levelName == 'ERROR'):
-		    self.__logging__.error(s)
-	    except:
-		pass
-	fn, lno, func = self.findCaller()
-	super(CustomLog, self).write('%s :: %s :: %s\n' % (_levelName,'%s %s' % (fn, lno),s))
+        if (self.__logging__ is not None):
+            try:
+                if (_levelName == 'INFO'):
+                    self.__logging__.info(s)
+                if (_levelName == 'WARNING'):
+                    self.__logging__.warning(s)
+                if (_levelName == 'DEBUG'):
+                    self.__logging__.debug(s)
+                if (_levelName == 'ERROR'):
+                    self.__logging__.error(s)
+            except:
+                pass
+        fn, lno, func = self.findCaller()
+        super(CustomLog, self).write('%s :: %s :: %s\n' % (_levelName,'%s %s' % (fn, lno),s))
     
     def info(self, s):
-	self.log_as('INFO', s)
+        self.log_as('INFO', s)
     
     def warning(self, s):
-	self.log_as('WARNING', s)
+        self.log_as('WARNING', s)
     
     def warn(self, s):
-	self.log_as('WARNING', s)
+        self.log_as('WARNING', s)
     
     def debug(self, s):
-	self.log_as('DEBUG', s)
+        self.log_as('DEBUG', s)
     
     def error(self, s):
-	self.log_as('ERROR', s)
+        self.log_as('ERROR', s)
 	
 def dummy():
     pass
@@ -285,8 +285,8 @@ class Daemon:
             if pid > 0:
                 # exit first parent
                 sys.exit(0)
-        except OSError, e:
-            print >>sys.stderr, "fork #1 failed: %d (%s)" % (e.errno, e.strerror)
+        except OSError as e:
+            sys.stderr.write("fork #1 failed: %d (%s)" % (e.errno, e.strerror))
             sys.exit(1)
         
         # decouple from parent environment
@@ -299,21 +299,21 @@ class Daemon:
             pid = os.fork()
             if pid > 0:
                 # exit from second parent, print eventual PID before
-                print "Daemon PID %d" % pid
+                print("Daemon PID %d" % pid)
                 try:
                     fh = open(self.PIDFILE,'w')
                 except:
                     exc_info = sys.exc_info()
                     info_string = '\n'.join(traceback.format_exception(*exc_info))
-                    print >>sys.stderr, info_string
-                    print >>sys.stderr, 'Cannot continue...'
+                    sys.stderr.write(info_string)
+                    sys.stderr.write('Cannot continue...')
                     sys.exit(0)
                 fh.write("%d"%pid)
                 fh.flush()
                 fh.close()
                 sys.exit(0)
-        except OSError, e:
-            print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror)
+        except OSError as e:
+            sys.stderr.write("fork #2 failed: %d (%s)" % (e.errno, e.strerror))
             sys.exit(1)
         
         # start the daemon main loop
@@ -326,8 +326,8 @@ class Daemon:
         except:
             exc_info = sys.exc_info()
             info_string = '\n'.join(traceback.format_exception(*exc_info))
-            print >>sys.stderr, info_string
-            print >>sys.stderr, 'Cannot continue...'
+            sys.stderr.write(info_string)
+            sys.stderr.write('Cannot continue...')
             sys.exit(0)
         sys.stdout = sys.stderr = Log(fh)
         #ensure the that the daemon runs a normal user
@@ -339,7 +339,7 @@ class Daemon:
         except:
             exc_info = sys.exc_info()
             info_string = '\n'.join(traceback.format_exception(*exc_info))
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string)
     
     def get_LOGFILE(self):
         return self.__LOGFILE__
@@ -365,25 +365,26 @@ class Daemon:
     DIRNAME = property(get_DIRNAME)
 
 def redirectStdErrOutWrapper(func=dummy,args=[],top=os.path.abspath('.')):
+    ret = None
     info_string = ''
     if (callable(func)):
-	_stderr = sys.stderr
-	_stdout = sys.stdout
-	fStderr = open(os.sep.join([top,'stderr.txt']),'w')
-	fStdout = open(os.sep.join([top,'stdout.txt']),'w')
-	sys.stdout = daemon.Log(fStdout)
-	sys.stderr = daemon.Log(fStderr)
-	try:
-	    ret = func(args)
-	except:
-            exc_info = sys.exc_info()
-            info_string = '\n'.join(traceback.format_exception(*exc_info))
-	finally:
-	    sys.stderr.close()
-	    sys.stderr = _stderr
-	    sys.stdout.close()
-	    sys.stdout = _stdout
-	print >>sys.stderr, info_string
+        _stderr = sys.stderr
+        _stdout = sys.stdout
+        fStderr = open(os.sep.join([top,'stderr.txt']),'w')
+        fStdout = open(os.sep.join([top,'stdout.txt']),'w')
+        #sys.stdout = daemon.Log(fStdout)
+        #sys.stderr = daemon.Log(fStderr)
+        try:
+            ret = func(args)
+        except:
+                exc_info = sys.exc_info()
+                info_string = '\n'.join(traceback.format_exception(*exc_info))
+        finally:
+            sys.stderr.close()
+            sys.stderr = _stderr
+            sys.stdout.close()
+            sys.stdout = _stdout
+        sys.stderr.write(info_string)
     else:
-	print >>sys.stderr, '%s :: Cannot process this function due to an error in the parameters, are you sure you are awake ?' % (misc.funcName())
+        sys.stderr.write('%s :: Cannot process this function due to an error in the parameters, are you sure you are awake ?' % (misc.funcName()))
     return ret
