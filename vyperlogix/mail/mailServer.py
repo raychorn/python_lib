@@ -1,5 +1,13 @@
+from __future__ import print_function
+
 import sys
-import cStringIO as StringIO
+
+try:
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
+
+
 import smtplib
 import sets
 import traceback
@@ -19,9 +27,9 @@ Published under Creative Commons License
 (http://creativecommons.org/licenses/by-nc/3.0/) 
 restricted to non-commercial educational use only., 
 
-http://www.VyperLogix.com for details
 
-THE AUTHOR VYPER LOGIX CORP DISCLAIMS ALL WARRANTIES WITH REGARD TO
+
+THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
 THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
 FITNESS, IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL,
 INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING

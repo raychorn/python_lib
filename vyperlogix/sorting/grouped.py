@@ -68,7 +68,7 @@ class GroupedSort(UserList.UserList):
         return locals()
     grouping = property(**grouping())
     
-if (__name__ == __main__):
+if (__name__ == '__main__'):
     __data__ = GroupedSort()
     for i in xrange(20):
         __data__.append({'a':i+1,'b':random.choice(['a','b','c','d']),'type':random.choice(['Linux','Windows'])})

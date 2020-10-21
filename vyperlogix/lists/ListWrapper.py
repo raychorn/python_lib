@@ -82,8 +82,8 @@ class CircularList(ListWrapper):
             return self.__cycler__.next()
         except AttributeError:
             import itertools
-            self.__cycler__ = itertools.cycle(self)
-            return self.next()
+        self.__cycler__ = itertools.cycle(self)
+        return self.next()
 
 class SeqentialList(ListWrapper):
     def next(self):
@@ -94,8 +94,8 @@ class SeqentialList(ListWrapper):
                 for item in self:
                     yield item
                 yield None
-                self.__cycler__ = iterate()
-                return self.next()
+            self.__cycler__ = iterate()
+            return self.next()
         except StopIteration:
             return None
 

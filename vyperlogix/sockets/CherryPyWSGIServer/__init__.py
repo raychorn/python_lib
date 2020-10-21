@@ -84,10 +84,12 @@ import re
 quoted_slash = re.compile("(?i)%2F")
 import rfc822
 import socket
+
 try:
-    import cStringIO as StringIO
+    from StringIO import StringIO ## for Python 2
 except ImportError:
-    import StringIO
+    from io import StringIO ## for Python 3
+
 
 _fileobject_uses_str_type = isinstance(socket._fileobject(None)._rbuf, basestring)
 

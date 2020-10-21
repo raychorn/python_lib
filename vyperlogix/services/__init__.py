@@ -5,9 +5,9 @@ Published under Creative Commons License
 (http://creativecommons.org/licenses/by-nc/3.0/) 
 restricted to non-commercial educational use only., 
 
-http://www.VyperLogix.com for details
 
-THE AUTHOR VYPER LOGIX CORP DISCLAIMS ALL WARRANTIES WITH REGARD TO
+
+THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
 THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
 FITNESS, IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL,
 INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING
@@ -17,9 +17,9 @@ WITH THE USE OR PERFORMANCE OF THIS SOFTWARE !
 
 USE AT YOUR OWN RISK.
 """
-def get_named_service_for_name_or_partial_name(machine,service,state=None):
+def get_named_service_for_name_or_partial_name(machine,service,state=None, valid_service_states=[]):
     import wmi
-    if (not state) or (state not in __valid_service_states__):
+    if (not state) or (state not in valid_service_states):
         c = wmi.WMI(machine)
     else:
         c = wmi.WMI(machine,State=state)

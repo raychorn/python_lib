@@ -1,14 +1,19 @@
 
 def asHTMLEmail(html, text, subject):
     """Create a mime-message that will render HTML in popular
-	   MUAs, text in better ones"""
+        MUAs, text in better ones"""
     import MimeWriter
     import mimetools
-    import cStringIO
 
-    out = cStringIO.StringIO() # output buffer for our message 
-    htmlin = cStringIO.StringIO(html)
-    txtin = cStringIO.StringIO(text)
+    try:
+        from StringIO import StringIO ## for Python 2
+    except ImportError:
+        from io import StringIO ## for Python 3
+
+
+    out = StringIO() # output buffer for our message 
+    htmlin = StringIO(html)
+    txtin = StringIO(text)
 
     writer = MimeWriter.MimeWriter(out)
     #
