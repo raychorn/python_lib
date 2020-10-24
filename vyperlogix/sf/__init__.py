@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -27,8 +28,8 @@ try:
     assert pyax.__version__ == __expected_pyax_version__, 'WARNING: %s.' % (msg)
     _actual_pyax_version = pyax.__version__
 except ImportError:
-    print 'ERROR: %s.' % (msg)
+    print('ERROR: %s.' % (msg))
     import sys
     sys.exit(1)
     
-#print 'pyax version %s is loaded as expected.' % (_actual_pyax_version)
+#print('pyax version %s is loaded as expected.' % (_actual_pyax_version))

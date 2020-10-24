@@ -1,10 +1,11 @@
+from __future__ import print_function
 from os.path import splitext, abspath
 from sys import modules
 
 try:
     import win32serviceutil
 except ImportError, details:
-    print 'WARNING due to "%s".' % str(details)
+    print('WARNING due to "%s".' % str(details))
 try:
     import win32service
     RUNNING = win32service.SERVICE_RUNNING
@@ -12,15 +13,15 @@ try:
     STOPPING = win32service.SERVICE_STOP_PENDING
     STOPPED = win32service.SERVICE_STOPPED	
 except ImportError, details:
-    print 'WARNING due to "%s".' % str(details)
+    print('WARNING due to "%s".' % str(details))
 try:
     import win32event
 except ImportError, details:
-    print 'WARNING due to "%s".' % str(details)
+    print('WARNING due to "%s".' % str(details))
 try:
     import win32api
 except ImportError, details:
-    print 'WARNING due to "%s".' % str(details)
+    print('WARNING due to "%s".' % str(details))
 
 def get_service_containing(service_name):
     import wmi
@@ -118,19 +119,19 @@ def instart(cls, name, display_name=None, stay_alive=True):
             cls._svc_display_name_,
             startType=win32service.SERVICE_AUTO_START
         )
-        print 'Install ok'
+        print('Install ok')
         win32serviceutil.StartService(
             cls._svc_name_
         )
-        print 'Start ok'
+        print('Start ok')
     except Exception as x:
-        print str(x)
+        print(str(x))
         
 if (__name__ == '__main__'):
     services = ['memcache','tntdrive']
     for service in services:
-        print 'Checking for %s' % (service)
+        print('Checking for %s' % (service))
         __service__ = get_service_containing(service)
         __has__ = __service__ is not None
-        print '%s %s%s' % ('Has' if (__has__) else 'Does not have',service,' (%s)'%(__service__.State if (__has__) else ''))
+        print('%s %s%s' % ('Has' if (__has__) else 'Does not have',service,' (%s)'%(__service__.State if (__has__) else '')))
     

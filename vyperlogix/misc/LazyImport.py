@@ -1,3 +1,4 @@
+from __future__ import print_function
 from vyperlogix.classes.CooperativeClass import Cooperative
 from vyperlogix.misc import ObjectTypeName
 from vyperlogix.misc.ObjectTypeName import __typeName as ObjectTypeName__typeName
@@ -97,13 +98,8 @@ class LazyImport(Cooperative):
         if (self.__lazyimport_loaded):
             return self.__lazyimport_locals[name]
         if (_utils.isBeingDebugged) and (_utils.isVerbose):
-            print '%s: Loading module %r' % (ObjectTypeName.typeName(self),name)
-        self.__lazyimport_locals[name] \
-             = module \
-             = __import__(name,
-                          self.__lazyimport_locals,
-                          self.__lazyimport_globals,
-                          '*')
+            print('%s: Loading module %r' % (ObjectTypeName.typeName(self),name))
+        self.__lazyimport_locals[name] = module = __import__(name, self.__lazyimport_locals, self.__lazyimport_globals, '*')
 
         # Fill namespace with all symbols from original module to
         # provide faster access.
@@ -113,7 +109,7 @@ class LazyImport(Cooperative):
         self.__dict__['__lazyimport_loaded'] = 1
 
         if (_utils.isBeingDebugged) and (_utils.isVerbose):
-            print '%s: Module %r loaded' % (ObjectTypeName.typeName(self),name)
+            print('%s: Module %r loaded' % (ObjectTypeName.typeName(self),name))
         return module
 
     def __getattr__(self, name):
@@ -123,7 +119,7 @@ class LazyImport(Cooperative):
         if (self.__lazyimport_loaded):
             raise AttributeError, name
         if (_utils.isBeingDebugged) and (_utils.isVerbose):
-            print '%s: Module load triggered by attribute %r read access' % (ObjectTypeName.typeName(self),name)
+            print('%s: Module load triggered by attribute %r read access' % (ObjectTypeName.typeName(self),name))
         module = self.__lazyimport_import()
         try:
             return getattr(module, name)
@@ -142,7 +138,7 @@ class LazyImport(Cooperative):
             self.__dict__[name] = value
             return
         if (_utils.isBeingDebugged) and (_utils.isVerbose):
-            print '%s: Module load triggered by attribute %r write access' % (ObjectTypeName.typeName(self),name)
+            print('%s: Module load triggered by attribute %r write access' % (ObjectTypeName.typeName(self),name))
         module = self.__lazyimport_import()
         setattr(module, name, value)
 

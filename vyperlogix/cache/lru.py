@@ -1,3 +1,4 @@
+from __future__ import print_function
 # lrucache.py -- a simple LRU (Least-Recently-Used) cache class
 
 # Copyright 2004 Evan Prodromou <evan@bad.dynu.ca>
@@ -81,22 +82,22 @@ class LRUCache(object):
             # store in cache for next time
         cache['foo'] = contents
 
-    print cache.size # Maximum size
+    print(cache.size # Maximum size)
 
-    print len(cache) # 0 <= len(cache) <= cache.size
+    print(len(cache) # 0 <= len(cache) <= cache.size)
 
     cache.size = 10 # Auto-shrink on size assignment
 
     for i in range(50): # note: larger than cache size
         cache[i] = i
 
-    if 0 not in cache: print 'Zero was discarded.'
+    if 0 not in cache: print('Zero was discarded.')
 
     if 42 in cache:
         del cache[42] # Manual deletion
 
     for j in cache:   # iterate (in LRU order)
-        print j, cache[j] # iterator produces keys, not values
+        print(j, cache[j]) # iterator produces keys, not values
     """
 
     class __Node(object):
@@ -112,13 +113,12 @@ class LRUCache(object):
             return cmp(self.atime, other.atime)
 
         def __repr__(self):
-            return "<%s %s => %s (accessed at %s)>" % \
-                   (self.__class__, self.key, self.obj, self.atime)
+            return "<%s %s => %s (accessed at %s)>" % (self.__class__, self.key, self.obj, self.atime)
 
     def __getseqn(self):
         seqn = self.__seqn_
         self.__seqn_ = seqn + 1
-        #print seqn
+        #print(seqn)
         return seqn
 
     __seqn = property(__getseqn)
@@ -126,9 +126,9 @@ class LRUCache(object):
     def __init__(self, size=DEFAULT_SIZE):
         # Check arguments
         if size <= 0:
-            raise ValueError, size
+            raise(ValueError, size)
         elif type(size) is not type(0):
-            raise TypeError, size
+            raise(TypeError, size)
         object.__init__(self)
         self.__heap = []
         self.__dict = {}
@@ -156,13 +156,13 @@ class LRUCache(object):
                 lru = heappop(self.__heap)
                 del self.__dict[lru.key]
                 if DEBUG:
-                    print "eliminant(setitem)-->", lru.obj._v_pathname
+                    print("eliminant(setitem)-->", lru.obj._v_pathname)
             node = self.__Node(key, obj, self.__seqn)
             self.__dict[key] = node
             if DEBUG:
-                print "introduint node-->", node.obj._v_pathname
+                print("introduint node-->", node.obj._v_pathname)
                 f = sys._getframe(3)
-                print "cridador-->", f.f_code.co_name, f.f_lineno, f.f_code.co_filename
+                print("cridador-->", f.f_code.co_name, f.f_lineno, f.f_code.co_filename)
             heappush(self.__heap, node)
 
     def __getitem__(self, key):
@@ -171,9 +171,9 @@ class LRUCache(object):
         else:
             node = self.__dict[key]
             if DEBUG:
-                print "recuperant-->", node.obj._v_pathname
+                print("recuperant-->", node.obj._v_pathname)
                 f = sys._getframe(4)
-                print "cridador-->", f.f_code.co_name, f.f_lineno, f.f_code.co_filename
+                print("cridador-->", f.f_code.co_name, f.f_lineno, f.f_code.co_filename)
             node.atime = self.__seqn
             heapify(self.__heap)
             return node.obj
@@ -185,9 +185,9 @@ class LRUCache(object):
             node = self.__dict[key]
             del self.__dict[key]
             if DEBUG and hasattr(node.obj, "_v_pathname"):
-                print "eliminant(delitem)-->", node.obj._v_pathname
+                print("eliminant(delitem)-->", node.obj._v_pathname)
                 f = sys._getframe(2)
-                print "cridador-->", f.f_code.co_name, f.f_lineno, f.f_code.co_filename
+                print("cridador-->", f.f_code.co_name, f.f_lineno, f.f_code.co_filename)
             self.__heap.remove(node)
             heapify(self.__heap)
             return node.obj
@@ -223,21 +223,21 @@ class LRUCache(object):
 
 if __name__ == "__main__":
     cache = LRUCache(25)
-    print cache
+    print(cache)
     for i in range(50):
         cache[i] = str(i)
-    print cache
+    print(cache)
     if 46 in cache:
         del cache[46]
-    print cache
+    print(cache)
     cache.size = 10
-    print cache
+    print(cache)
     cache[46] = '46'
-    print cache
-    print len(cache)
+    print(cache)
+    print(len(cache))
     for c in cache:
-        print c
-    print cache
-    #print cache.mtime(46)
+        print(c)
+    print(cache)
+    #(rint cache.mtime(46))
     for c in cache:
-        print c
+        print(c)

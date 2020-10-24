@@ -1,3 +1,4 @@
+from __future__ import print_function
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_ERROR
 import time
 
@@ -76,7 +77,7 @@ class parallelBridge():
         mySocket.bind ( ( self.ipAddr, self.port) )
         mySocket.listen ( 10 )
         channel, details = mySocket.accept()
-        print 'Opened a connection with', details
+        print('Opened a connection with', details)
         isRunning = True
         while isRunning:
             hasValue = True
@@ -89,14 +90,14 @@ class parallelBridge():
             if (_cmd.endswith(chr(0))):
                 _cmd = _cmd[0:-1]
             d = self.parse(_cmd)
-            print 'Received... (%s) [%s]' % (_cmd,self.reportChars(_cmd))
-            print '\td=(%s)' % (str(d))
+            print('Received... (%s) [%s]' % (_cmd,self.reportChars(_cmd)))
+            print('\td=(%s)' % (str(d)))
             if (_cmd == self.sShutdown):
-                print 'Shutdown Received...'
+                print('Shutdown Received...')
                 channel.close()
                 break
             elif (_cmd == _const_issue_callback):
-                print 'Callback Request Received...'
+                print('Callback Request Received...')
                 try:
                     val = self.callBack(d)
                 except:
@@ -111,7 +112,7 @@ class parallelBridge():
             #val = 'OK'
             val = '<root>' + val + '</root>'
             try:
-                print 'Sending... (%s)' % (val)
+                print('Sending... (%s)' % (val))
                 while (val):
                     if (not val.endswith('\x00')):
                         val += '\x00'

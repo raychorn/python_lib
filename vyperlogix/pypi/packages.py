@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys
 
 from vyperlogix import misc
@@ -72,7 +73,7 @@ def get_packages(browser,url,username,password,logging=None):
         info_string = _utils.formattedException(details=e)
         if (logging is not None):
             logging.warning(info_string)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
     return packages
 
 def get_package_details2(browser,_url,url,logging=None):
@@ -147,7 +148,7 @@ def edit_a_package(browser,_url,pkg,callback=None,logging=None):
     if (logging is not None):
         logging.info(pkg)
     else:
-        print >>sys.stderr, pkg
+        sys.stderr.write(pkg+'\n')
 
     url, d, details = pkg
     dd = d[d.keys()[0]]
@@ -166,6 +167,6 @@ def edit_a_package(browser,_url,pkg,callback=None,logging=None):
             if (logging is not None):
                 logging.info(info_string)
             else:
-                print >>sys.stderr, info_string
-                print '='*80
+                sys.stderr.write(info_string+'\n')
+                print('='*80)
 

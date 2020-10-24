@@ -1,3 +1,4 @@
+from __future__ import print_function
 import urllib
 import httplib
 from vyperlogix.hash import lists
@@ -39,8 +40,8 @@ def performGoogleSearch(searchString,start=-1):
     if (start > -1):
         _term += '&start=%s' % start
 
-    print 'url="%s"' % url
-    print '_term="%s"' % _term
+    print('url="%s"' % url)
+    print('_term="%s"' % _term)
 
     conn = httplib.HTTPConnection(url)
     conn.request("GET", _term % (urllib.quote(searchString)))

@@ -24,7 +24,7 @@ from vyperlogix import misc
 def killProcByPID(pid,isVerbose=False):
     info_string = ''
     if (isVerbose):
-        print >>sys.stderr, '(%s) :: sys.platform is "%s".' % (misc.funcName(),sys.platform)
+        sys.stderr.write('(%s) :: sys.platform is "%s".\n' % (misc.funcName(),sys.platform))
     if (sys.platform == 'win32'):
         def kill(pid):
             info_string = ''
@@ -32,7 +32,7 @@ def killProcByPID(pid,isVerbose=False):
             p = WinProcesses.WinProcesses()
             proc_handle = p.openProcessTerminateForPID(pid)
             if (isVerbose):
-                print >>sys.stderr, '(%s) :: proc_handle is "%s".' % (misc.funcName(),proc_handle)
+                sys.stderr.write('(%s) :: proc_handle is "%s".\n' % (misc.funcName(),proc_handle))
             if (proc_handle):
                 try:
                     import win32api
@@ -46,12 +46,12 @@ def killProcByPID(pid,isVerbose=False):
                     except Exception as details:
                         from vyperlogix.misc import _utils
                         info_string += _utils.formattedException(details=details)
-                        print >>sys.stderr, 'ERROR: Cannot Kill the process with pid of %s due to a system error.' % (pid)
-                        print >>sys.stderr, info_string
+                        sys.stderr.write('ERROR: Cannot Kill the process with pid of %s due to a system error.\n' % (pid))
+                        sys.stderr.write(info_string+'\n')
                 finally:
                     p.closeProcessHandle(proc_handle)
         if (isVerbose):
-            print >>sys.stderr, '(%s) :: kill(%d).' % (misc.funcName(),pid)
+            sys.stderr.write('(%s) :: kill(%d).\n' % (misc.funcName(),pid))
         kill(pid)
     else:
         try:
@@ -59,12 +59,12 @@ def killProcByPID(pid,isVerbose=False):
         except Exception as details:
             from vyperlogix.misc import _utils
             info_string += _utils.formattedException(details=details)
-            print >>sys.stderr, 'ERROR: Cannot kill the process !'
-            print >>sys.stderr, info_string
+            sys.stderr.write('ERROR: Cannot kill the process !\n')
+            sys.stderr.write(info_string+'\n')
     if (isVerbose):
-        print >>sys.stderr, '(%s) :: info_string is "%s".' % (misc.funcName(),info_string)
+        sys.stderr.write('(%s) :: info_string is "%s".\n' % (misc.funcName(),info_string))
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')

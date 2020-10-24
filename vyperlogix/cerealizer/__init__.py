@@ -1,3 +1,4 @@
+from __future__ import print_function
 # -*- coding: utf-8 -*-
 # Cerealizer
 # Copyright (C) 2005-2008 Jean-Baptiste LAMY
@@ -624,5 +625,5 @@ Utility function; for each classes found in the given module, print the needed c
     s = set([c for module in modules for c in module.__dict__.values() if isinstance(c, type(D)) or  isinstance(c, type(O))])
     l = ['cerealizer.register(%s.%s)' % (c.__module__, c.__name__) for c in s]
     l.sort()
-    for i in l: print i
+    for i in l: print(i)
 

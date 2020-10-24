@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -36,26 +38,26 @@ StringIO = _utils.stringIO
 try:
     # This fails if TurboGears is installed because TurboGears wants to use CherryPy version 2...
     from cherrypy.wsgiserver import CherryPyWSGIServer as Server
-    print >>sys.stderr, 'Imported the installed %s' % (Server.version)
-except ImportError, details:
+    sys.stderr.write('Imported the installed %s\n' % (Server.version))
+except ImportError as details:
     try:
         from cherrypy3.wsgiserver import CherryPyWSGIServer as Server
-        print >>sys.stderr, 'Imported the installed %s' % (Server.version)
-    except ImportError, details:
+        sys.stderr.write('Imported the installed %s\n' % (Server.version))
+    except ImportError as details:
         info_string = _utils.formattedException(details)
-        print >>sys.stderr, 'Import of installed CherryPy Failed, retrying from the vyperlogix library.\n%s' % (info_string)
+        sys.stderr.write('Import of installed CherryPy Failed, retrying from the vyperlogix library.\n%s\n' % (info_string))
         try:
             from vyperlogix.sockets.CherryPyWSGIServer import CherryPyWSGIServer as Server
-            print >>sys.stderr, 'Imported the vyperlogix library %s' % (Server.version)
-        except ImportError, details:
+            sys.stderr.write('Imported the vyperlogix library %s\n' % (Server.version))
+        except ImportError as details:
             info_string = _utils.formattedException(details)
-            print >>sys.stderr, 'Import of CherryPy from vyperlogix library failed, retrying the older verson of CherryPy from the vyperlogix library.\n%s' % (info_string)
+            sys.stderr.write('Import of CherryPy from vyperlogix library failed, retrying the older verson of CherryPy from the vyperlogix library.\n%s\n' % (info_string))
             try:
                 from vyperlogix.sockets.wsgi.wsgiserver import CherryPyWSGIServer as Server
-                print >>sys.stderr, 'Imported the older version of %s' % (Server.version)
+                sys.stderr.write('Imported the older version of %s\n' % (Server.version))
             except ImportError, details:
                 info_string = _utils.formattedException(details)
-                print >>sys.stderr, 'ERROR: Cannot use the %s command because cannot import CherryPyWSGIServer from the known sources.\n%s' % (__name__,info_string)
+                sys.stderr.write('ERROR: Cannot use the %s command because cannot import CherryPyWSGIServer from the known sources.\n%s\n' % (__name__,info_string))
                 sys.exit(0)
 
 from django.core.handlers.wsgi import WSGIHandler
@@ -93,7 +95,7 @@ def get_uid_gid(uid, gid=None):
             gid = default_grp
     return (uid, gid)
 
-def chown_pid_log(optons,uid, gid=None):
+def chown_pid_log(options,uid, gid=None):
     if not os.geteuid() == 0:
         # Do not try to change the gid/uid if not root.
         return
@@ -136,13 +138,13 @@ def parse_options():
     toks = cmd_options.host.split(':')
     _ip = toks[0]
     if (_utils.is_ip_address_valid(_ip)) and (options.IP_ADDRESS != _ip):
-        print >>sys.stdout, 'INFO: Overriding options.IP_ADDRESS of "%s" with "%s".' % (options.IP_ADDRESS,_ip)
+        sys.stdout.write('INFO: Overriding options.IP_ADDRESS of "%s" with "%s".\n' % (options.IP_ADDRESS,_ip))
         options.IP_ADDRESS = toks[0]
     port = int(options.PORT)
     if (len(toks) == 2):
         port = int(toks[-1]) if (str(toks[-1]).isdigit()) else port
     if (int(options.PORT) != port) and (port >= 0) and (port <= 65535):
-        print >>sys.stdout, 'INFO: Overriding options.PORT of "%s" with "%s".' % (options.PORT,port)
+        sys.stdout.write('INFO: Overriding options.PORT of "%s" with "%s".\n' % (options.PORT,port))
         options.PORT = port
     parts = list(os.path.splitext(options.LOGFILE))
     options.SERVER_NAME = '%s:%s' % (options.IP_ADDRESS,options.PORT)
@@ -252,50 +254,50 @@ class Runner:
             app = AdminMediaHandler(WSGIHandler())
         else:
             app = WSGIHandler()
-	try:
-	    if (self.options.SERVER_VERSION):
-		Server.version = '%s+%s' % (self.options.SERVER_VERSION,Server.version)
-	except AttributeError:
-	    Server.version = 'DjangoCerise+%s' % (Server.version)
-        self.server = Server((self.options.IP_ADDRESS, self.options.PORT),
-                             app, self.options.SERVER_THREADS, self.options.SERVER_NAME)
-        if self.options.SSL:
-            self.server.ssl_certificate = self.options.SSL_CERTIFICATE
-            self.server.ssl_private_key = self.options.SSL_PRIVATE_KEY
         try:
-            signal.signal(signal.SIGUSR1, self.signal_handler)
+            if (self.options.SERVER_VERSION):
+                Server.version = '%s+%s' % (self.options.SERVER_VERSION,Server.version)
         except AttributeError:
-            print >>sys.stderr, 'WARNING: signal.SIGUSR1 is not supported.'
-        try:
-            signal.signal(signal.SIGHUP, self.signal_handler)
-        except AttributeError:
-            print >>sys.stderr, 'WARNING: signal.SIGHUP is not supported.'
-        try:
-            signal.signal(signal.SIGTERM, self.signal_handler)    
-        except AttributeError:
-            print >>sys.stderr, 'WARNING: signal.SIGTERM is not supported.'
-        try:
-            info_string = "Start the %s server on %s:%s logging to %s" % (__name__,self.options.IP_ADDRESS, str(self.options.PORT),self.options.LOGFILE)
-            print >>sys.stdout, info_string
-            log.info(info_string)
-            sys.stderr = self.logger
-            sys.stdout = self.logger
-            self.server.start()
-        except KeyboardInterrupt:
-            self.server.stop()
-            log.debug("KeyboardInterrupt: stop the server")
-            self.clean()
+            Server.version = 'DjangoCerise+%s' % (Server.version)
+            self.server = Server((self.options.IP_ADDRESS, self.options.PORT),
+                                app, self.options.SERVER_THREADS, self.options.SERVER_NAME)
+            if self.options.SSL:
+                self.server.ssl_certificate = self.options.SSL_CERTIFICATE
+                self.server.ssl_private_key = self.options.SSL_PRIVATE_KEY
+            try:
+                signal.signal(signal.SIGUSR1, self.signal_handler)
+            except AttributeError:
+                sys.stderr.write('WARNING: signal.SIGUSR1 is not supported.\n')
+            try:
+                signal.signal(signal.SIGHUP, self.signal_handler)
+            except AttributeError:
+                sys.stderr.write('WARNING: signal.SIGHUP is not supported.\n')
+            try:
+                signal.signal(signal.SIGTERM, self.signal_handler)    
+            except AttributeError:
+                sys.stderr.write('WARNING: signal.SIGTERM is not supported.\n')
+            try:
+                info_string = "Start the %s server on %s:%s logging to %s" % (__name__,self.options.IP_ADDRESS, str(self.options.PORT),self.options.LOGFILE)
+                sys.stdout.write(info_string+'\n')
+                log.info(info_string)
+                sys.stderr = self.logger
+                sys.stdout = self.logger
+                self.server.start()
+            except KeyboardInterrupt:
+                self.server.stop()
+                log.debug("KeyboardInterrupt: stop the server")
+                self.clean()
 
-    def signal_handler(self, sig, stack):
-        """Handle the signal sent to the daemon."""
-        if sig == signal.SIGUSR1:
-            pass
-        elif sig == signal.SIGHUP:
-            log.debug("Should reload itself.")
-        elif sig == signal.SIGTERM:
-            self.server.stop()
-            log.debug("SIGTERM: stop the server")
-            self.clean()
-            sys.exit(0)
-        else:
-            log.debug("SIG: %s" % str(sig))
+        def signal_handler(self, sig, stack):
+            """Handle the signal sent to the daemon."""
+            if sig == signal.SIGUSR1:
+                pass
+            elif sig == signal.SIGHUP:
+                log.debug("Should reload itself.")
+            elif sig == signal.SIGTERM:
+                self.server.stop()
+                log.debug("SIGTERM: stop the server")
+                self.clean()
+                sys.exit(0)
+            else:
+                log.debug("SIG: %s" % str(sig))

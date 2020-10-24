@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Class to calculate temperatures and voltages of thermocouples.  The
 basic equation is T = f(V) where T is temperature and V is voltage. The
@@ -254,20 +255,20 @@ if __name__ == "__main__":
         except:
             pass
 
-    #print "Tests finished"
+    #print("Tests finished")
 
     ambient = [70, 75, 80, 85, 90, 95]
     tc = Tc() # Defaults to type K
-    print " " * 10, "Ambient Temperature in deg F\n"
-    print " mV\t",
+    print(" " * 10, "Ambient Temperature in deg F\n")
+    sys.stdout.write(" mV\t")
     for amb in ambient:
-        print "%5d\t" % amb,
-    print
+        sys.stdout.write("%5d\t" % amb)
+    print()
     for mv in xrange(100):
         mV = mv/10.
         degF = tc.mV_to_degF(mV)
-        print "%.1f" % mV,
+        sys.stdout.write("%.1f" % mV)
         for amb in ambient:
-            print "\t%.0f" % (degF+amb),
-        print
+            sys.stdout.write("\t%.0f" % (degF+amb))
+        print()
 

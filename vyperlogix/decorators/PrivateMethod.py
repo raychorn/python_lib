@@ -1,4 +1,9 @@
+from __future__ import print_function
+
 import sys, traceback
+from vyperlogix.misc import _utils
+
+import logging 
 
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
@@ -29,60 +34,58 @@ class PrivateMethod(object):
     def __init__(self, f, *dec_args, **dec_kw):
         self.f = f
 
-    def __call__(self, *fargs, **kw):
-	from vyperlogix.misc import _utils
-	ctx = _utils.callersContext()
-	if (self.f.func_name in ctx.co_names) and (str(ctx.co_name).find('module') == -1):
-	    ret=self.f(*fargs, **kw)
-	    return ret
-	else:
-	    raise ReferenceError('Cannot issue a call to a private method (%s) from outside the context of the class where this method is defined.' % (self.f.func_name))
+	def __call__(self, *fargs, **kw):
+		ctx = _utils.callersContext()
+		if (self.f.func_name in ctx.co_names) and (str(ctx.co_name).find('module') == -1):
+			ret=self.f(*fargs, **kw)
+			return ret
+		else:
+			raise ReferenceError('Cannot issue a call to a private method (%s) from outside the context of the class where this method is defined.' % (self.f.func_name))
 
     def __repr__(self):
         return self.f.func_name
 
 class PrivateTest:
-    def __init__(self):
-	pass
+	def __init__(self):
+		pass
     
-    def test(self):
-	self.__private__('method1','2',3,4)
-	pass
+	def test(self):
+		self.__private__('method1','2',3,4)
     
-    def test2(self):
-	self.method2(4,5)
-	pass
+	def test2(self):
+		self.method2(4,5)
     
-    @PrivateMethod
-    def method2(*args,**kw):
-	print 'method2 args=%s, kw=%s' % (str(args),str(kw))
-	    
-    def __private__(self,entry,*args,**kwargs):
-	from vyperlogix.misc import _utils
+	@PrivateMethod
+	def method2(*args,**kw):
+		print('method2 args=%s, kw=%s' % (str(args),str(kw)))
+
+	def __private__(self,entry,*args,**kwargs):
+		from vyperlogix.misc import _utils
 	
 	def method1(args,kw):
-	    print 'method1 args=%s, kw=%s' % (args,kw)
-	    
-	try:
-	    ctx = _utils.callersContext()
-	    if (ctx.co_name in dir(self)):
-		x = eval('%s(args,kwargs)' % entry)
+		print('method1 args=%s, kw=%s' % (args,kw))
+
+		x = None
+		try:
+			ctx = _utils.callersContext()
+			if (ctx.co_name in dir(self)):
+				x = eval('%s(args,kwargs)' % entry)
+		except:
+			from vyperlogix import misc
+			exc_info = sys.exc_info()
+			info_string = '\n'.join(traceback.format_exception(*exc_info))
+			logging.warning('(%s) :: Cannot call private method named "%s"...%s' % (misc.funcName(),entry,info_string))
+			raise ReferenceError('Cannot issue a call to a private method (%s) from outside the context of the class where this method is defined.' % (entry))
+
 		return x
-	except:
-	    from vyperlogix import misc
-	    exc_info = sys.exc_info()
-	    info_string = '\n'.join(traceback.format_exception(*exc_info))
-	    logging.warning('(%s) :: Cannot call private method named "%s"...%s' % (misc.funcName(),entry,info_string))
-	raise ReferenceError('Cannot issue a call to a private method (%s) from outside the context of the class where this method is defined.' % (entry))
 
 class PrivateTest2:
-    def __init__(self):
-	pass
+	def __init__(self):
+		pass
     
-    def test2(self):
-	pt = PrivateTest()
-	pt.method2(1,2,3,4)
-	pass
+	def test2(self):
+		pt = PrivateTest()
+		pt.method2(1,2,3,4)
     
 if __name__ == '__main__':
     pt2 = PrivateTest2()

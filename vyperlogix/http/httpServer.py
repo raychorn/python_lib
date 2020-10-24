@@ -241,8 +241,8 @@ class HTTPServer:
 
                 tbhandler = cgitb.Hook(file=self.wfile).handle
                 try:
-                    infile = cStringIO.StringIO(self.rfile.read(int(self.headers.get('content-length', 0))))
-                    outfile = cStringIO.StringIO()
+                    infile = StringIO(self.rfile.read(int(self.headers.get('content-length', 0))))
+                    outfile = StringIO()
                     try:
                         import types
                         import urllib

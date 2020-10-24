@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Defines the Wire class, which is used to model various characteristics
 of wire.
@@ -125,10 +126,10 @@ def WireTable(temp_deg_C, wire_material):
     m_to_mils = 39370
     kg_to_lbs = 2.2046
  
-    print "Wire Table for %s at %d degrees C" % (wire_material, int(temp_deg_C))
-    print ""
-    print "AWG  Diam, mils    ft/lb    ohm/1000 ft"
-    print "---  ----------   --------  -----------"
+    print("Wire Table for %s at %d degrees C" % (wire_material, int(temp_deg_C)))
+    print("")
+    print("AWG  Diam, mils    ft/lb    ohm/1000 ft")
+    print("---  ----------   --------  -----------")
     w = Wire()
     w.SetMaterial("copper")
     w.SetTemperatureInK(temp_deg_C + 273)
@@ -138,10 +139,10 @@ def WireTable(temp_deg_C, wire_material):
         p = w.GetProperties()
         resistance  = p[0]
         mass        = p[3]
-        print " %2d  %8.1f" % (gauge, w.diam_in_m * m_to_mils),
+        sys.stdout.write(" %2d  %8.1f" % (gauge, w.diam_in_m * m_to_mils))
         ft_per_lb       = 1/(mass * kg_to_lbs)
         milliohm_per_ft = resistance * 1000.
-        print " %10.2f  %11.4f" % (ft_per_lb, milliohm_per_ft)
+        print(" %10.2f  %11.4f" % (ft_per_lb, milliohm_per_ft))
 
 if __name__ == "__main__":
     WireTable(20, "copper")
@@ -162,11 +163,11 @@ p = w.GetProperties()
 n = w.GetPropertyNames()
 
 for ix in xrange(len(n)):
-    print n[ix], p[ix]
+    print('%s %s' % (n[ix], p[ix]))
 
 resistance  = p[0]
 mass        = p[3]
-print " %2d  %8.1f" % (gauge, w.diam_in_m * m_to_mils),
+sys.stdout.write(" %2d  %8.1f" % (gauge, w.diam_in_m * m_to_mils))
 ft_per_lb       = 1/(mass * kg_to_lbs)
 milliohm_per_ft = resistance * 1000.
-print " %10.2f  %11.4f" % (ft_per_lb, milliohm_per_ft)
+print(" %10.2f  %11.4f" % (ft_per_lb, milliohm_per_ft))

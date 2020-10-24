@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -83,27 +84,27 @@ class GeolocationDistance():
         return m * self.feet_per_meter
     
     def radians(self,degrees):
-	return degrees*2*math_pi/360
+        return degrees*2*math_pi/360
     
     def hemispherical_offset_for_lat_or_lng(self,value,units,direction=False):
-	return (-units if (value > 0) else units) if (direction) else (units if (value > 0) else -units)
+        return (-units if (value > 0) else units) if (direction) else (units if (value > 0) else -units)
 
     def distance(self, lat1, lon1, lat2, lon2, units):
-	'''
-	this formula works best for points close together or antipodal
-	rounding error strikes when distance is one-quarter Earth's circumference
-	(ref: wikipedia Great-circle distance)
-	'''
-	latRadians1 = self.radians(lat1)
-	latRadians2 = self.radians(lat2)
-	sdlat = math_sin((latRadians1 - latRadians2) / 2.0);
-	sdlon = math_sin((self.radians(lon1) - self.radians(lon2)) / 2.0);
-	result = math_sqrt(sdlat * sdlat + math_cos(latRadians1) * math_cos(latRadians2) * sdlon * sdlon);
-	result = 2 * math_asin(result);
-	try:
-	    if (self.multipliers.has_key(units)):
-		result = result * self.multipliers[units];
-	except Exception as e:
-	    print str(e)
-	return result;
+        '''
+        this formula works best for points close together or antipodal
+        rounding error strikes when distance is one-quarter Earth's circumference
+        (ref: wikipedia Great-circle distance)
+        '''
+        latRadians1 = self.radians(lat1)
+        latRadians2 = self.radians(lat2)
+        sdlat = math_sin((latRadians1 - latRadians2) / 2.0);
+        sdlon = math_sin((self.radians(lon1) - self.radians(lon2)) / 2.0);
+        result = math_sqrt(sdlat * sdlat + math_cos(latRadians1) * math_cos(latRadians2) * sdlon * sdlon);
+        result = 2 * math_asin(result);
+        try:
+            if (self.multipliers.has_key(units)):
+                result = result * self.multipliers[units];
+        except Exception as e:
+            print(str(e))
+        return result;
     

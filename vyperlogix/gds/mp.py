@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 # ToDo
 #
 # Add a syntax like
@@ -62,17 +64,17 @@ need_global_expansion   = re.compile(r"%\(([a-zA-Z][a-zA-Z_]*)\)")
 #a = 9
 #kj = 898
 #if mo:
-#    print "match"
-#    print "groups() = ", mo.groups()
+#    print("match")
+#    print("groups() = ", mo.groups())
 #    varname = mo.groups()[0]
 #    if globals().has_key(varname):
-#        print "In globals dict"
+#        print("In globals dict")
 #    else:
-#        print "Not in globals dict"
+#        print("Not in globals dict")
 #else:
-#    print "no match"
-#print "Substitution:"
-#print x % globals()
+#    print("no match")
+#print("Substitution:")
+#print(x % globals())
 #sys.exit(0)
 
 special_macros = '''      25 Aug 2002     Is the current date in DD MMM YYYY format.
@@ -160,7 +162,7 @@ See <a href="%s">%s</a> for more details.
 del gnu_url
 
 def Usage():
-    print '''Usage:  %(script)s [options] file1 [file2...]
+    print('''Usage:  %(script)s [options] file1 [file2...]
   Options
       -d      Print list of macro definitions found in files
       -h      Print a man page
@@ -178,10 +180,10 @@ def Usage():
       sinclude                      Insert a file; no error if not found
       cd [dir]                      Change the current directory
   Special macros
-%(special_macros)s''' % globals()
+%(special_macros)s''' % globals())
 
 def ManPage():
-    print '''NAME
+    print('''NAME
     %(script)s - Macro processor
     Version:  $Revision: 1.9 $
 
@@ -364,7 +366,7 @@ Example
     Note:  any global variables and functions you define in your code
     will be put into the %(script)s script's global namespace.
 
-''' % globals()
+''' % globals())
 
 def Log(str):
     if verbose:
@@ -378,7 +380,7 @@ def Initialize():
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "dhI:v")
     except getopt.error, str:
-        print "getopt error:  %s\n" % str
+        print("getopt error:  %s\n" % str)
         sys.exit(1)
     for opt in optlist:
         if opt[0] == "-d":

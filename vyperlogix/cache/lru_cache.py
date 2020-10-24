@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import time
 import tempfile
@@ -120,26 +122,26 @@ if (__name__ == '__main__'):
             return fib(n-1) + fib(n-2)
         
         for n in xrange(100):
-            print fib(n)
+            print(fib(n))
         
     if (1):
         fname = os.path.sep.join([os.path.dirname(tempfile.NamedTemporaryFile().name),'lru_cache'])
         p = shelved.persistence(fname)
-        print p.getShelvedFileName()
+        print(p.getShelvedFileName())
         
         def cache_miss(key=None):
-            print 'Cache miss --> "%s".' % (key)
+            print('Cache miss --> "%s".' % (key))
             
         def persist(key=None,value=None):
             if (key and value):
-                print 'persist --> "%s" --> "%s".' % (key,value)
+                print('persist --> "%s" --> "%s".' % (key,value))
                 p.shelveThis(key, value)
             elif (key and (value is None)):
                 v = p.unShelveThis(key,value=None)
-                print 'persist (?) --> "%s" ("%s").' % (key,v)
+                print('persist (?) --> "%s" ("%s").' % (key,v))
                 return v
             elif ( (key is None) and (value is None) ):
-                print 'persist CLEAR !!!.'
+                print('persist CLEAR !!!.')
                 f = p.getShelvedFileName()
                 if (os.path.exists(f)):
                     os.unlink(f)
@@ -151,9 +153,9 @@ if (__name__ == '__main__'):
             return fib(n-1) + fib(n-2)
         
         for n in xrange(100):
-            print fib(n)
+            print(fib(n))
             
         time.sleep(11)
 
         for n in xrange(100):
-            print fib(n)
+            print(fib(n))

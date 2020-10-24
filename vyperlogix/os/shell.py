@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -32,32 +33,32 @@ class Shell(CooperativeClass.Cooperative):
 	self.__callback__ = callback
 	self.__onExit__ = onExit
         self.__isDebugging__ = isDebugging if (misc.isBoolean(isDebugging)) else False
-	print 'DEBUG: %s' % (self.__command__)
+	print('DEBUG: %s' % (self.__command__))
 	self.__shell__(self.__command__,isWait=isWait,isExit=isExit)
 
     def __callback__(self,data):
         if (self.__isDebugging__):
-            print '<<%s>>' % (data)
-	if (callable(self.__callback__)):
-	    try:
-		self.__callback__(data)
-	    except Exception as ex:
-		info_string = _utils.formattedException(details=ex)
-		print >> sys.stderr, info_string
+            print('<<%s>>' % (data))
+    if (callable(self.__callback__)):
+        try:
+            self.__callback__(data)
+        except Exception as ex:
+            info_string = _utils.formattedException(details=ex)
+            sys.stderr.write(info_string+'\n')
 
     def __shell__(self,cmd,isExit=True,isWait=False,isVerbose=True):
-	if (callable(self.__callback__)):
-	    try:
-		self.__callback__(None)
-	    except Exception as ex:
-		info_string = _utils.formattedException(details=ex)
-		print >> sys.stderr, info_string
-        _isExit=isExit
-        _isWait=isWait
-        if (self.__isDebugging__):
-            print '%s.1 --> cmd=%s, isExit=%s, isWait=%s, isVerbose=%s' % (misc.funcName(),cmd,_isExit,_isWait,isVerbose)
-        s = Popen.Shell(cmd, shell=None, env=None, isExit=_isExit, isWait=_isWait, isVerbose=isVerbose, fOut=self.__callback__, onExit=self.__onExit__)
-        return
+        if (callable(self.__callback__)):
+            try:
+                self.__callback__(None)
+            except Exception as ex:
+                info_string = _utils.formattedException(details=ex)
+                sys.stderr.write(info_string+'\n')
+            _isExit=isExit
+            _isWait=isWait
+            if (self.__isDebugging__):
+                print('%s.1 --> cmd=%s, isExit=%s, isWait=%s, isVerbose=%s' % (misc.funcName(),cmd,_isExit,_isWait,isVerbose))
+            s = Popen.Shell(cmd, shell=None, env=None, isExit=_isExit, isWait=_isWait, isVerbose=isVerbose, fOut=self.__callback__, onExit=self.__onExit__)
+            return
 
     def command():
         doc = "get the command."
@@ -77,4 +78,4 @@ class Shell(CooperativeClass.Cooperative):
 
 if (__name__ == "__main__"):
     s = Shell(isDebugging=True)
-    print 'The command is "%s".' % (s.command)
+    print('The command is "%s".' % (s.command))

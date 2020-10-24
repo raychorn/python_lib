@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 """
 example3.py
 
@@ -29,8 +29,8 @@ fd = open("ex_mysecret.enc", "wb")
 fd.write(enc)
 fd.close()
 
-print "Original text:"
-print orig
-print
-print "Saved encrypted text in ex_mysecret.enc - example4.py will use this"
+print("Original text:")
+print(orig)
+print()
+print("Saved encrypted text in ex_mysecret.enc - example4.py will use this")
 

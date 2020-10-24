@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 from vyperlogix.misc import _utils
 
@@ -11,7 +12,7 @@ class LoggingMiddleware():
     def process_response(self, request, response):
         try:
             if (callable(request.log_func)):
-                print request.log_func(request,response)
+                print(request.log_func(request,response))
         except:
             pass
         return response
@@ -20,7 +21,7 @@ class LoggingMiddleware():
         import traceback
         try:
             if (callable(request.log_func)):
-                print request.log_func(request,response, extra_info=traceback.format_exc())
+                print(request.log_func(request,response, extra_info=traceback.format_exc()))
         except:
             pass
 

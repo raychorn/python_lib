@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from vyperlogix.iterators.dict.dictutils import DictWalkOptions
 
 __copyright__ = """\
@@ -30,7 +32,7 @@ def walk_into(bucket,options=DictWalkOptions.values_only):
     
     @walk_into(bucket,options=DictWalkOptions.keys_only)
     def method(item):
-        print item
+        print(item)
     '''
     def decorator(f):
         from vyperlogix.iterators.dict import dictutils

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import hotshot, hotshot.stats
  
 def profileit(printlines=1):
@@ -9,9 +10,9 @@ def profileit(printlines=1):
             stats = hotshot.stats.load("profiling.data")
             stats.strip_dirs()
             stats.sort_stats('time', 'calls')
-            print ">>>---- Begin profiling print"
+            print(">>>---- Begin profiling print")
             stats.print_stats(printlines)
-            print ">>>---- End profiling print"
+            print(">>>---- End profiling print")
             return res
         return _func
     return _my
@@ -26,4 +27,4 @@ if __name__ == '__main__':
         for i in xrange(1000):
             a += mip()
         return a
-    print mop()
+    print(mop())

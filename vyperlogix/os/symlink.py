@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -35,7 +36,7 @@ class Symlink(CooperativeClass.Cooperative):
         if (_utils.isUsingLinux) or (_utils.isUsingMacOSX):
             self.__command__ = 'ln -s %s %s'
             _cmd_ = self.__command__ % (self.__srce__,os.sep.join([self.__folder__,self.__alias__]))
-            print 'DEBUG: %s' % (_cmd_)
+            print('DEBUG: %s' % (_cmd_))
             self.__shell__(_cmd_)
         elif (_utils.isUsingWindows):
             import win32file
@@ -43,13 +44,13 @@ class Symlink(CooperativeClass.Cooperative):
             
     def __callback__(self,data):
         if (self.__isDebugging__):
-            print '<<%s>>' % (data)
+            print('<<%s>>' % (data))
 
     def __shell__(self,cmd,isExit=True,isWait=False,isVerbose=True):
         _isExit=isExit
         _isWait=isWait
         if (self.__isDebugging__):
-            print '%s.1 --> cmd=%s, isExit=%s, isWait=%s, isVerbose=%s' % (misc.funcName(),cmd,_isExit,_isWait,isVerbose)
+            print('%s.1 --> cmd=%s, isExit=%s, isWait=%s, isVerbose=%s' % (misc.funcName(),cmd,_isExit,_isWait,isVerbose))
         s = Popen.Shell(cmd, shell=None, env=None, isExit=_isExit, isWait=_isWait, isVerbose=isVerbose, fOut=self.__callback__)
         return
 
@@ -83,4 +84,4 @@ if (__name__ == "__main__"):
         __ip__ = 'rackspace.vyperlogix.com'
 
     t = TraceRoute(__ip__,isDebugging=True)
-    print 'There %s %d hop%s.' % ('are' if (t.hops > 1) else 'is',t.hops,'s' if (t.hops > 1) else '')
+    print('There %s %d hop%s.' % ('are' if (t.hops > 1) else 'is',t.hops,'s' if (t.hops > 1) else ''))

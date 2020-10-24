@@ -1,3 +1,4 @@
+from __future__ import print_function
 #@+leo
 #@+node:0::@file easy/ezPyCrypto.py
 #@+body
@@ -330,7 +331,7 @@ class key:
         try:
             #k1 = keystring.split("<StartPycryptoKey>", 1)
             #k2 = k1[1].split("<EndPycryptoKey>")
-            ##print "decoding:\n", k2[0]
+            ##print("decoding:\n", k2[0])
             #k = base64.decodestring(k2[0])
     
             #trace()
@@ -448,16 +449,16 @@ class key:
             rawpriv += self.randfunc(extras) # padd with random bytes
             newlen = len(rawpriv)
             encpriv = ''
-            #print "newlen = %d" % newlen
+            #print("newlen = %d" % newlen)
             #trace()
             i = 0
             while i < newlen:
                 rawbit = rawpriv[i:i+blksiz]
                 encbit = ppCipher.encrypt(rawpriv[i:i+blksiz])
-                #print "i=%d rawbit len=%d, encbit len=%d" % (i, len(rawbit), len(encbit))
+                #print("i=%d rawbit len=%d, encbit len=%d" % (i, len(rawbit), len(encbit)))
                 encpriv += encbit
                 i += blksiz
-            #print "keylen=%d, newlen=%d, len(encpriv)=%d" % (keylen, newlen, len(encpriv))
+            #print("keylen=%d, newlen=%d, len(encpriv)=%d" % (keylen, newlen, len(encpriv)))
             #trace()
             keytuple = (True, keylen, encpriv)
         else:
@@ -616,8 +617,8 @@ class key:
         m = MD5.new()
         m.update(raw)
         d = m.digest()
-        #print "sign: digest"
-        #print repr(d)
+        #print("sign: digest")
+        #print(repr(d))
     
         # sign the hash with our current public key cipher
         self.randpool.stir()
@@ -668,8 +669,8 @@ class key:
         m = MD5.new()
         m.update(raw)
         d = m.digest()
-        #print "verify: digest"
-        #print repr(d)
+        #print("verify: digest")
+        #print(repr(d))
     
         # now verify the hash against sig
         if self.k.verify(d, rawsig):
@@ -754,7 +755,7 @@ class key:
         self._tstBlk0 = ''
         self._tstBlk1 = ''
     
-        #print "pub key len=%d" % pubkeyLen
+        #print("pub key len=%d" % pubkeyLen)
         
         len0 = pubkeyLen % 256
         len1 = pubkeyLen / 256
@@ -977,7 +978,7 @@ class key:
         decData = ''
     
         # loop around processing as much data as we can
-        #print "decNext: started"
+        #(rint "decNext: started")
         while 1:
             if self._decState == 'p':
                 size = ord(self._decBuf[0]) + 256 * ord(self._decBuf[1])
@@ -1037,7 +1038,7 @@ class key:
     
             # state-dependent processing
             if self._decState == 'c':
-                #print "decrypting cipher info"
+                #print("decrypting cipher info")
                 # awaiting cipher info
                 blk = self._decRawPub(blk)
     
@@ -1057,7 +1058,7 @@ class key:
     
             elif self._decState == 'k':
                 # awaiting session key
-                #print "decrypting session key"
+                #print("decrypting session key")
                 blk = self._decRawPub(blk)
                 self.sessKey = blk[0:self._tmpSessKeyLen]
                 self._tstSessKey1 = self.sessKey
@@ -1066,22 +1067,21 @@ class key:
     
             elif self._decState == 'i':
                 # awaiting cipher start value
-                #print "decrypting IV"
+                #print("decrypting IV")
                 blk = self._decRawPub(blk)
                 self.sessIV = blk[0:self._tmpSessIVLen]
                 self._tstIV1 = self.sessIV
     
                 # Create cipher object, now we have what we need
                 self.blkCipher = self.algoSes.new(self.sessKey,
-                                                  getattr(self.algoSes, "MODE_CFB"),
-                                                  self.sessIV)
+                    getattr(self.algoSes, "MODE_CFB"),
+                    self.sessIV)
                 self._calcSesBlkSize()
                 self._decState = 'd'
                 continue
     
             else:
-                raise Exception(
-                    "decNext: strange state '%s'" % self._decState[0])
+                raise(Exception("decNext: strange state '%s'" % self._decState[0]))
     
     #@-body
     #@-node:5::decNext()
@@ -1125,8 +1125,8 @@ class key:
             k1 = msg.split("<StartPycrypto%s>" % type, 1)
             k2 = k1[1].split("<EndPycrypto%s>" % type)
             k = k2[0]
-            #print "raw = "
-            #print k
+            #print("raw = ")
+            #print(k)
             bin = base64.decodestring(k)
             return bin
         except:
@@ -1168,7 +1168,7 @@ class key:
         s = self.k.encrypt(raw, k)
         #d = self.k.decrypt(s)
         #if d != raw:
-        #    #print "_encRawPub: decrypt verify fail"
+        #    #print("_encRawPub: decrypt verify fail")
         #    return None
     
         #trace()
@@ -1190,7 +1190,7 @@ class key:
     
         #d = self._decRawPub(enc)
         #if d != raw:
-        #    print "panic:_encRawPub: decrypt verify fail!"
+        #    print("panic:_encRawPub: decrypt verify fail!")
             
         return enc
     
@@ -1300,8 +1300,7 @@ class key:
     
         rawlen = len(raw)
         extras = self.randfunc(self.pubBlkSize - rawlen)
-        #print "padToPubBlkSize: len=%d, added %d bytes of chaff :)" \
-        #      % (rawlen, len(extras))
+        #print("padToPubBlkSize: len=%d, added %d bytes of chaff :)" % (rawlen, len(extras)))
         return raw + extras
     
     #@-body

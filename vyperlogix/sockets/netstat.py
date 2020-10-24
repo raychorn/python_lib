@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -44,7 +45,7 @@ class NetStat(CooperativeClass.Cooperative):
         self.__isDebugging__ = isDebugging if (misc.isBoolean(isDebugging)) else False
         if (_utils.isUsingWindows):
 	    self.__command__ = 'netstat -a'
-	    print 'DEBUG: %s' % (self.__command__)
+	    print('DEBUG: %s' % (self.__command__))
 	    self.__shell__(self.__command__)
 
 	    #lines = _utils.read_lines_simple('J:/@Deployments/@@TEMPLATE@@/netstat.txt','r')
@@ -52,15 +53,15 @@ class NetStat(CooperativeClass.Cooperative):
 		#self.__callback__(aLine)
         else:
             self.__command__ = 'netstat -lnptu'
-            print 'DEBUG: %s' % (self.__command__)
+            print('DEBUG: %s' % (self.__command__))
             self.__shell__(self.__command__)
 
     def __callback__(self,data):
         if (self.__isDebugging__):
-            print '<<%s>>' % (data)
+            print('<<%s>>' % (data))
 	lines = data.split(os.linesep)
 	if (self.__isDebugging__):
-	    print 'lines=%d\n%s' % (len(lines),'\n'.join(lines))
+	    print('lines=%d\n%s' % (len(lines),'\n'.join(lines)))
 	for aLine in lines:
 	    toks = aLine.split()
 	    if (not self.has_header) and (toks == __header__):
@@ -97,7 +98,7 @@ class NetStat(CooperativeClass.Cooperative):
         _isExit=isExit
         _isWait=isWait
         if (self.__isDebugging__):
-            print '%s.1 --> cmd=%s, isExit=%s, isWait=%s, isVerbose=%s' % (misc.funcName(),cmd,_isExit,_isWait,isVerbose)
+            print('%s.1 --> cmd=%s, isExit=%s, isWait=%s, isVerbose=%s' % (misc.funcName(),cmd,_isExit,_isWait,isVerbose))
         s = Popen.Shell(cmd, shell=None, env=None, isExit=_isExit, isWait=_isWait, isVerbose=isVerbose, fOut=self.__callback__)
         return
 
@@ -126,6 +127,6 @@ class NetStat(CooperativeClass.Cooperative):
 
 if (__name__ == "__main__"):
     n = NetStat(isDebugging=True)
-    print 'The ports are\n\t%s' % ('\n\t'.join(n.ports))
-    print 'The listeners are\n\t%s' % ('\n\t'.join(n.listeners))
+    print('The ports are\n\t%s' % ('\n\t'.join(n.ports)))
+    print('The listeners are\n\t%s' % ('\n\t'.join(n.listeners)))
     

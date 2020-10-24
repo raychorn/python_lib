@@ -37,43 +37,44 @@ def grid_handler(request,cls_or_object,func,total=None):
     except Exception as details:
         page = -1
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
         
     try:
         rp = int(request.POST['rp'])
     except Exception as details:
         rp = -1
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
 
     try:
         sortname = request.POST['sortname']
     except Exception as details:
         sortname = ''
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
 
     try:
         sortorder = str(request.POST['sortorder']).lower()
     except Exception as details:
         sortorder = ''
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
 
     try:
         query = request.POST['query']
     except Exception as details:
         query = ''
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
 
     try:
         qtype = request.POST['qtype']
     except Exception as details:
         qtype = ''
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
         
+    _real_count = lambda aList:len(aList) if (not str(total).isdigit()) else total
     try:
         if sortname == '' : sortname = 'name'
         if sortorder == '' : sortorder = '-'
@@ -81,7 +82,6 @@ def grid_handler(request,cls_or_object,func,total=None):
         start = (page - 1) * rp
 
         rows = []
-        _real_count = lambda aList:len(aList) if (not str(total).isdigit()) else total
         count = _real_count(rows)
         if (ObjectTypeName.typeClassName(cls_or_object) == 'django.db.models.base.ModelBase'):
             try:
@@ -96,21 +96,21 @@ def grid_handler(request,cls_or_object,func,total=None):
                     count = _real_count(items)
             except Exception as details:
                 info_string = _utils.formattedException(details=details)
-                print >>sys.stderr, info_string
+                sys.stderr.write(info_string+'\n')
         elif (isinstance(cls_or_object,list)):
             try:
                 rows = items = cls_or_object
                 count = _real_count(items)
             except Exception as details:
                 info_string = _utils.formattedException(details=details)
-                print >>sys.stderr, info_string
+                sys.stderr.write(info_string+'\n')
         else:
             try:
                 rows = items = [cls_or_object]
                 count = _real_count(items)
             except Exception as details:
                 info_string = _utils.formattedException(details=details)
-                print >>sys.stderr, info_string
+                sys.stderr.write(info_string+'\n')
     
         cells = [ func(r) for r in rows ]
         results = [ {'cell' : c } for c in cells ]
@@ -118,7 +118,7 @@ def grid_handler(request,cls_or_object,func,total=None):
         results = []
         count = _real_count(results)
         info_string = _utils.formattedException(details=details)
-        print >>sys.stderr, info_string
+        sys.stderr.write(info_string+'\n')
     
     ret = { 'page' : page,
             'total' : count,

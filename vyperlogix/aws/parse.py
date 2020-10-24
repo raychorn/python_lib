@@ -1,3 +1,5 @@
+from __future__ import print_function
+from os import write
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -31,63 +33,63 @@ def is_valid_file(fname):
     return  _fname_ if (_isString_ and os.path.exists(_fname_) and  os.path.isfile(_fname_)) else None
 
 def _parseAws(data):
-    __data__ = []
-    try:
-	_lines_ =  [l for l in data.split('\n') if (len(l) > 0)]
-	_guide_ =  _lines_[0].split('+')
-	_columns_ =  _lines_[1].split('|')
-	_num_columns_ =  len(_columns_)
-	if (len(_guide_) == _num_columns_):
-	    _columns_ =  [c.strip() for c in _columns_]
-	    _num_lines_ = len(_lines_)
-	    _width_ = int(math.floor(math.log10(_num_lines_)))
-	    _fmt_ = '#%' + ('0%d' % (_width_ + 1)) + 'd'
-	    for lineNum in xrange(3, _num_lines_-1):
-		aLine =  _lines_[lineNum]
-		_aLine_ =  [c.strip() for c in aLine.split('|')]
-		if (_num_columns_ == len(_aLine_)):
-		    _tt_ = []
-		    for i in xrange(0, len(_aLine_)):
-			if (len(_columns_[i]) > 0):
-			    _tt_.append(tuple([_columns_[i], _aLine_[i]]))
-		    __data__.append(SmartFuzzyObject(args=dict(_tt_)))
-		else:
-		    print >> sys.stderr, 'WARNING: Looks like "%s" is not a valid aws ls file at line #%d.' % (__path__, lineNum)
-    except:
-	pass
-    return __data__
+	__data__ = []
+	try:
+		_lines_ =  [l for l in data.split('\n') if (len(l) > 0)]
+		_guide_ =  _lines_[0].split('+')
+		_columns_ =  _lines_[1].split('|')
+		_num_columns_ =  len(_columns_)
+		if (len(_guide_) == _num_columns_):
+			_columns_ =  [c.strip() for c in _columns_]
+			_num_lines_ = len(_lines_)
+			_width_ = int(math.floor(math.log10(_num_lines_)))
+			_fmt_ = '#%' + ('0%d' % (_width_ + 1)) + 'd'
+			for lineNum in xrange(3, _num_lines_-1):
+				aLine =  _lines_[lineNum]
+				_aLine_ =  [c.strip() for c in aLine.split('|')]
+				if (_num_columns_ == len(_aLine_)):
+					_tt_ = []
+					for i in xrange(0, len(_aLine_)):
+						if (len(_columns_[i]) > 0):
+							_tt_.append(tuple([_columns_[i], _aLine_[i]]))
+						__data__.append(SmartFuzzyObject(args=dict(_tt_)))
+				else:
+					sys.stderr.write('WARNING: Looks like "%s" is not a valid aws ls file at line #%d.\n' % (__path__, lineNum))
+	except:
+		pass
+	return __data__
 
 def parseAws(__path__):
-    __data__ = []
-    if (os.path.exists(__path__)):
-	if (os.path.isfile(__path__)):
-	    __data__ = _parseAws(_utils.readFileFrom(__path__, noCRs=False))
+	__data__ = []
+	if (os.path.exists(__path__)):
+		if (os.path.isfile(__path__)):
+			__data__ = _parseAws(_utils.readFileFrom(__path__, noCRs=False))
+		else:
+			sys.stderr.write('WARNING: Looks like "%s" is not a file.\n' % (__path__))
 	else:
-	    print >> sys.stderr, 'WARNING: Looks like "%s" is not a file.' % (__path__)
-    else:
-	print >> sys.stderr, 'WARNING: Cannot determine the location of "%s".' % (__path__)
-    return __data__
+		sys.stderr.write('WARNING: Cannot determine the location of "%s".\n' % (__path__))
+	return __data__
 
 def _find_in_aws(data, target):
-    __is_found__ = False
-    __data__ =  _parseAws(data)
-    for  item in  __data__:
-	try:
-	    if item.key.find(target) >  -1:
-		__is_found__ = True
-		break
-	except:
-	    pass
-    return __is_found__
+	__is_found__ = False
+	__data__ =  _parseAws(data)
+	for  item in  __data__:
+		try:
+			if item.key.find(target) >  -1:
+				__is_found__ = True
+			break
+		except:
+			pass
+	return __is_found__
 
 def find_in_aws(__path__, target):
-    __is_found__ = False
-    __data__ =  parseAws(__path__)
-    for  item in  __data__:
-	try:
-	    if item.key.find(target) >  -1:
-		__is_found__ = True
-		break
-	except:
-	    pass
-    return __is_found__
+	__is_found__ = False
+	__data__ =  parseAws(__path__)
+	for  item in  __data__:
+		try:
+			if item.key.find(target) >  -1:
+				__is_found__ = True
+			break
+		except:
+			pass
+	return __is_found__

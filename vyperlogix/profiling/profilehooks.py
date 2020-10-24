@@ -1,3 +1,4 @@
+from __future__ import print_function
 """
 Profiling hooks
 
@@ -14,7 +15,7 @@ Usage example (Python 2.4 or newer)::
         if n < 2: return 1
         else: return n * fn(n-1)
 
-    print fn(42)
+    print(fn(42))
 
 Usage example (Python 2.3 or older)::
 
@@ -27,7 +28,7 @@ Usage example (Python 2.3 or older)::
     # Now wrap that function in a decorator
     fn = profile(fn) # or coverage(fn)
 
-    print fn(42)
+    print(fn(42))
 
 Reports for all thusly decorated functions will be printed to sys.stdout
 on program termination.  You can alternatively request for immediate
@@ -304,15 +305,15 @@ class FuncProfile:
         funcname = self.fn.__name__
         filename = self.fn.func_code.co_filename
         lineno = self.fn.func_code.co_firstlineno
-        print
-        print "*** PROFILER RESULTS ***"
-        print "%s (%s:%s)" % (funcname, filename, lineno)
-        print "function called %d times" % self.ncalls,
+        print()
+        print("*** PROFILER RESULTS ***")
+        print("%s (%s:%s)" % (funcname, filename, lineno))
+        print("function called %d times" % self.ncalls,)
         if self.skipped:
-            print "(%d calls not profiled)" % self.skipped
+            print("(%d calls not profiled)" % self.skipped)
         else:
-            print
-        print
+            print()
+        print()
         stats = self.stats
         if self.filename:
             stats.dump_stats(self.filename)
@@ -391,15 +392,15 @@ class HotShotFuncProfile:
         funcname = self.fn.__name__
         filename = self.fn.func_code.co_filename
         lineno = self.fn.func_code.co_firstlineno
-        print
-        print "*** PROFILER RESULTS ***"
-        print "%s (%s:%s)" % (funcname, filename, lineno)
-        print "function called %d times" % self.ncalls,
+        print()
+        print("*** PROFILER RESULTS ***")
+        print("%s (%s:%s)" % (funcname, filename, lineno))
+        sys.stdout.write("function called %d times" % self.ncalls)
         if self.skipped:
-            print "(%d calls not profiled)" % self.skipped
+            print("(%d calls not profiled)" % self.skipped)
         else:
-            print
-        print
+            print()
+        print()
         stats = hotshot.stats.load(self.logfilename)
         # hotshot.stats.load takes ages, and the .prof file eats megabytes, but
         # a saved stats object is small and fast
@@ -452,11 +453,11 @@ class HotShotFuncCoverage:
         funcname = self.fn.__name__
         filename = self.fn.func_code.co_filename
         lineno = self.fn.func_code.co_firstlineno
-        print
-        print "*** COVERAGE RESULTS ***"
-        print "%s (%s:%s)" % (funcname, filename, lineno)
-        print "function called %d times" % self.ncalls
-        print
+        print()
+        print("*** COVERAGE RESULTS ***")
+        print("%s (%s:%s)" % (funcname, filename, lineno))
+        print("function called %d times" % self.ncalls)
+        print()
         fs = FuncSource(self.fn)
         reader = hotshot.log.LogReader(self.logfilename)
         for what, (filename, lineno, funcname), tdelta in reader:
@@ -473,7 +474,7 @@ class HotShotFuncCoverage:
                     lineno = fs.firstcodelineno
                 fs.mark(lineno)
         reader.close()
-        print fs
+        print(fs)
 
 
 class TraceFuncCoverage:
@@ -526,20 +527,20 @@ class TraceFuncCoverage:
         funcname = self.fn.__name__
         filename = self.fn.func_code.co_filename
         lineno = self.fn.func_code.co_firstlineno
-        print
-        print "*** COVERAGE RESULTS ***"
-        print "%s (%s:%s)" % (funcname, filename, lineno)
-        print "function called %d times" % self.ncalls
-        print
+        print()
+        print("*** COVERAGE RESULTS ***")
+        print("%s (%s:%s)" % (funcname, filename, lineno))
+        print("function called %d times" % self.ncalls)
+        print()
         fs = FuncSource(self.fn)
         for (filename, lineno), count in self.tracer.counts.items():
             if filename != fs.filename:
                 continue
             fs.mark(lineno, count)
-        print fs
+        print(fs)
         never_executed = fs.count_never_executed()
         if never_executed:
-            print "%d lines were not executed." % never_executed
+            print("%d lines were not executed." % never_executed)
 
 
 class FuncSource:
@@ -662,16 +663,15 @@ class FuncTimer(object):
                 funcname = fn.__name__
                 filename = fn.func_code.co_filename
                 lineno = fn.func_code.co_firstlineno
-                print >> sys.stderr, "\n  %s (%s:%s):\n    %.3f seconds\n" % (
-                                        funcname, filename, lineno, duration)
+                sys.stderr.write("\n  %s (%s:%s):\n    %.3f seconds\n" % (funcname, filename, lineno, duration))
     def atexit(self):
         if not self.ncalls:
             return
         funcname = self.fn.__name__
         filename = self.fn.func_code.co_filename
         lineno = self.fn.func_code.co_firstlineno
-        print ("\n  %s (%s:%s):\n"
-               "    %d calls, %.3f seconds (%.3f seconds per call)\n" % (
+        print("\n  %s (%s:%s):\n"
+                "    %d calls, %.3f seconds (%.3f seconds per call)\n" % (
                                 funcname, filename, lineno, self.ncalls,
                                 self.totaltime, self.totaltime / self.ncalls))
 

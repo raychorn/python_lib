@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 '''
 $Id: tzfile.py,v 1.8 2004/06/03 00:15:24 zenzen Exp $
 '''
@@ -108,10 +109,8 @@ if __name__ == '__main__':
     import os.path
     from pprint import pprint
     base = os.path.join(os.path.dirname(__file__), 'zoneinfo')
-    tz = build_tzinfo('Australia/Melbourne',
-                      open(os.path.join(base,'Australia','Melbourne'), 'rb'))
-    tz = build_tzinfo('US/Eastern',
-                      open(os.path.join(base,'US','Eastern'), 'rb'))
+    tz = build_tzinfo('Australia/Melbourne', open(os.path.join(base,'Australia','Melbourne'), 'rb'))
+    tz = build_tzinfo('US/Eastern', open(os.path.join(base,'US','Eastern'), 'rb'))
     pprint(tz._utc_transition_times)
-    #print tz.asPython(4)
-    #print tz.transitions_mapping
+    #print(tz.asPython(4))
+    #print(tz.transitions_mapping)

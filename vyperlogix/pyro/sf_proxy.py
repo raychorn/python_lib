@@ -1,3 +1,4 @@
+from __future__ import print_function
 from vyperlogix import misc
 from vyperlogix.misc import ObjectTypeName
 
@@ -62,17 +63,17 @@ class SalesForceProxy(MagicObject2):
         ident = __func__(__version__)
 
         locator = Pyro.naming.NameServerLocator(identification=ident)
-        print '%s :: Searching Naming Service...' % (ObjectTypeName.objectSignature(self))
+        print('%s :: Searching Naming Service...' % (ObjectTypeName.objectSignature(self)))
         ns = locator.getNS()
 
-        print '%s :: Naming Service found at %s port %s'  % (ObjectTypeName.objectSignature(self),ns.URI.address,ns.URI.port)
+        print('%s :: Naming Service found at %s port %s'  % (ObjectTypeName.objectSignature(self),ns.URI.address,ns.URI.port))
 
-        print '%s :: Binding to Remote Object.' % (ObjectTypeName.objectSignature(self))
+        print('%s :: Binding to Remote Object.' % (ObjectTypeName.objectSignature(self)))
         try:
             URI = ns.resolve(':SalesForceProxy.version_%s' % (__version__.replace('.','_')))
-            print '%s :: URI: %s' % (ObjectTypeName.objectSignature(self),URI)
+            print('%s :: URI: %s' % (ObjectTypeName.objectSignature(self),URI))
         except Pyro.core.PyroError,x:
-            print '%s :: Couldn\'t bind object, nameserver says: %s' % (ObjectTypeName.objectSignature(self),x)
+            print('%s :: Couldn\'t bind object, nameserver says: %s' % (ObjectTypeName.objectSignature(self),x))
             raise SystemExit
 
         self.__proxy__ = Pyro.core.getProxyForURI(URI)
@@ -84,7 +85,7 @@ class SalesForceProxy(MagicObject2):
 	    _endTime = time.time()
 	    _et = _endTime - _beginTime
 	    _rate = 1.0 / _et if (_et != 0) else 1.0
-	    print '(%2.4f, %4.2f reqs/sec) "%s"' % (_et,_rate,ObjectTypeName.objectSignature(self))
+	    print('(%2.4f, %4.2f reqs/sec) "%s"' % (_et,_rate,ObjectTypeName.objectSignature(self)))
 	
     @MemoizeStrictForDuration(timeout=60,isDebug=False)
     def get_objects(self,s):
@@ -93,7 +94,7 @@ class SalesForceProxy(MagicObject2):
 	except Exception as _details:
 	    objs = []
 	    info_string = _utils.formattedException(details=_details)
-	    print >>sys.stderr, info_string
+	    sys.stderr.write(info_string+'\n')
 	return objs
     
     def __call__(self,*args,**kwargs):
@@ -118,7 +119,7 @@ class SalesForceProxy(MagicObject2):
 	    lastError = objs[-1]
 	    objs = objs[0]
         if (_isRunningLocal):
-            print '"%s" --> %s' % (s,objs if (not misc.isString(objs)) else '"%s"' % (objs))
+            print('"%s" --> %s' % (s,objs if (not misc.isString(objs)) else '"%s"' % (objs)))
         self.__reset_magic__()
 	if (not isinstance(objs,list)) and (not isinstance(objs,tuple)) and (not lists.isDict(objs)):
 	    return objs

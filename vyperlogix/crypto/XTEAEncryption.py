@@ -1,3 +1,4 @@
+from __future__ import print_function
 """ 
 XTEA Block Encryption Algorithm
 
@@ -85,7 +86,7 @@ if __name__ == "__main__":
     import uuid
     
     u = uuid.uuid4()
-    print u
+    print(u)
     pass
 
     iv = 'ABCDEFGH'
@@ -94,36 +95,36 @@ if __name__ == "__main__":
     z = crypt(_key,_original,iv)
     _secret = z.encode('hex')
     assert _secret == 'fe196d0a40d6c222b9eff3', 'Oops, something went wrong because _secret is now "%s"!' % _secret
-    print '_secret=(%s)' % _secret
+    print('_secret=(%s)' % _secret)
     _plain = crypt(_key,z,iv)
-    print '_plain=(%s)' % _plain
+    print('_plain=(%s)' % _plain)
     assert _plain == _original, 'Oops, something went wrong again !'
 
-    print 'Now using a random "iv".'
+    print('Now using a random "iv".')
     iv = GenPasswd.GenPasswd(8,''.join([chr(x) for x in xrange(128,255)]))
-    print 'iv=(%s) [%s]' % (iv,','.join([str(ord(x)) for x in iv]))
+    print('iv=(%s) [%s]' % (iv,','.join([str(ord(x)) for x in iv])))
     z = crypt(_key,_original,iv)
     _secret = z.encode('hex')
-    print '_secret=(%s)' % _secret
+    print('_secret=(%s)' % _secret)
     _plain = crypt(_key,z,iv)
-    print '_plain=(%s)' % _plain
+    print('_plain=(%s)' % _plain)
     assert _plain == _original, 'Oops, something went wrong again !  Got "%s" but expected to get "%s"' % (_plain,_original)
 
-    print 'Now using a random "key" and random "iv".'
+    print('Now using a random "key" and random "iv".')
     iv = GenPasswd.GenPasswd(8,''.join([chr(x) for x in xrange(128,255)]))
-    print 'iv=(%s) [%s]' % (iv,','.join([str(ord(x)) for x in iv]))
+    print('iv=(%s) [%s]' % (iv,','.join([str(ord(x)) for x in iv])))
     _key = GenPasswd.GenPasswd(16,''.join([chr(x) for x in xrange(128,255)]))
-    print '_key=(%s) [%s]' % (_key,','.join([str(ord(x)) for x in _key]))
+    print('_key=(%s) [%s]' % (_key,','.join([str(ord(x)) for x in _key])))
     z = crypt(_key,_original,iv)
     _secret = z.encode('hex')
-    print '_secret=(%s)' % _secret
+    print('_secret=(%s)' % _secret)
     _plain = crypt(_key,z,iv)
-    print '_plain=(%s)' % _plain
+    print('_plain=(%s)' % _plain)
     assert _plain == _original, 'Oops, something went wrong again !  Got "%s" but expected to get "%s"' % (_plain,_original)
 
     def getSchema(s):
         x = [chr(ord(ch)-128) for ch in s]
-        print 'x=(%s)' % x
+        print('x=(%s)' % x)
         return ''.join(x)
     
     def makeSchema():
@@ -191,34 +192,34 @@ if __name__ == "__main__":
     _schema = makeSchema()
     
     _bar = '='*30
-    print '\n%s\n' % _bar
-    print 'Now using a random readable ASCII "key" and random "iv".'
+    print('\n%s\n' % _bar)
+    print('Now using a random readable ASCII "key" and random "iv".')
     _schema_hex = strToHex(_schema)
-    print '_schema=(%s)=(%s)=(%s)' % (_schema,getSchema(_schema),_schema_hex)
+    print('_schema=(%s)=(%s)=(%s)' % (_schema,getSchema(_schema),_schema_hex))
     _schema_from_hex = hexToStr(_schema_hex)
-    print '_schema=(%s)=(%s)' % (getSchema(_schema_from_hex),_schema_from_hex)
+    print('_schema=(%s)=(%s)' % (getSchema(_schema_from_hex),_schema_from_hex))
     iv = GenPasswd.GenPasswd(8,''.join([chr(x) for x in xrange(128,255)]))
     iv_hex = strToHex(iv)
-    print 'iv=(%s) [%s]' % (iv,iv_hex)
+    print('iv=(%s) [%s]' % (iv,iv_hex))
     _key = GenPasswd.GenPasswd(16,''.join([chr(x) for x in xrange(128,255)]))
     _key_hex = strToHex(_key)
-    print '_key=(%s) [%s]' % (_key,_key_hex)
+    print('_key=(%s) [%s]' % (_key,_key_hex))
     z = crypt(_key,''.join([chr(ord(ch)+128) for ch in _original]),iv)
     _secret = z.encode('hex')
-    print '_secret=(%s)' % _secret
+    print('_secret=(%s)' % _secret)
     z_hex = strToHex(z)
-    print '\t(%s)\t(%s)\t(%s)\t(%s)' % (len(z),z,len(z_hex),z_hex)
+    print('\t(%s)\t(%s)\t(%s)\t(%s)' % (len(z),z,len(z_hex),z_hex))
     _secret_hex = strToHex(hexToStr(_secret))
-    print '\t(%s)\t(%s)\t(%s)\t(%s)' % (len(hexToStr(_secret)),hexToStr(_secret),len(_secret_hex),_secret_hex)
+    print('\t(%s)\t(%s)\t(%s)\t(%s)' % (len(hexToStr(_secret)),hexToStr(_secret),len(_secret_hex),_secret_hex))
     _plain = ''.join([chr(ord(ch)-128) for ch in crypt(_key,z,iv)])
-    print '_plain=(%s)' % _plain
+    print('_plain=(%s)' % _plain)
     assert _plain == _original, 'Oops, something went wrong again !  Got "%s" but expected to get "%s"' % (_plain,_original)
 
-    print
+    print()
     s = getEncodedStream(_schema_hex,_key_hex,iv_hex,z_hex)
-    print 's=(%s)' % s
+    print('s=(%s)' % s)
 
-    print
+    print()
     x = unEncodeStream(s)
-    print 'x=(%s)' % str(x)
+    print('x=(%s)' % str(x))
  

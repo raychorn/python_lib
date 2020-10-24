@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import imp
 import os
@@ -37,12 +38,12 @@ class ImpWrapper:
                 try:
                     self.__callback__(path,fullname)
                 except Exception as details:
-                    print 'ERROR: %s' % (str(details))
+                    print('ERROR: %s' % (str(details)))
                     callback_failed = True
             else:
                 callback_failed = True
             if (callback_failed):
-                print '"%s" --> "%s".' % (path,fullname)
+                print('"%s" --> "%s".' % (path,fullname))
         subname = fullname.split(".")[-1]
         if subname != fullname and self.path is None:
             return None
@@ -86,10 +87,10 @@ def reporterHook(fname=None,isVerbose=False):
         _msg = '(%s) :: "%s" --> "%s".' % (os.path.basename(sys.argv[0]),path,fullname)
         fOut = open(fname,'a')
         try:
-            print >>fOut, _msg
+            fOut.write(_msg)
         finally:
             fOut.flush()
             fOut.close()
         if (isVerbose):
-            print _msg
+            print(_msg)
     hook(callback=myCallback)

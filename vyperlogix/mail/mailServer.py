@@ -53,7 +53,7 @@ class MailServer(Cooperative):
         self.__smtp_password__ = ''
         self.__logger__ = None
         
-        print 'You cannot use the %s class because this is an Abstract Class.  Try using one of the sub-classes instead.' % (ObjectTypeName.typeName(self))
+        print('You cannot use the %s class because this is an Abstract Class.  Try using one of the sub-classes instead.' % (ObjectTypeName.typeName(self)))
         
     def __repr__(self):
         return '(%s) %s:%s @ %s' % (str(self.__class__),self.smtp_server,self.smtp_port,self.smtp_username)
@@ -109,7 +109,7 @@ class MailServer(Cooperative):
             self.smtp_server = toks[0]
             self.smtp_port = -1 if (len(toks) != 2) else -1 if (not toks[-1].isdigit()) else int(toks[-1])
         if (len(self.smtp_server) > 0) and (isinstance(self.smtp_port,int)) and (self.smtp_port > -1):
-            print '(%s.%s) :: smtpServer=[%s], port=[%s], username=[%s], password=[%s]' % (ObjectTypeName.typeName(self),misc.funcName(),self.smtp_server,self.smtp_port,self.smtp_username,self.smtp_password)
+            print('(%s.%s) :: smtpServer=[%s], port=[%s], username=[%s], password=[%s]' % (ObjectTypeName.typeName(self),misc.funcName(),self.smtp_server,self.smtp_port,self.smtp_username,self.smtp_password))
             try:
                 self.mailServer = smtplib.SMTP(host=self.smtp_server,port=self.smtp_port)
                 self.mailServer.set_debuglevel(self.debug)
@@ -121,12 +121,12 @@ class MailServer(Cooperative):
                 tbinfofile.seek(0)
                 tbinfo = tbinfofile.read()
                 _msg = '(%s.%s) :: ERROR due to "%s"\n%s.' % (ObjectTypeName.typeName(self),misc.funcName(),details,tbinfo)
-                print >>sys.stderr, _msg
+                sys.stderr.write(_msg+'\n')
                 raise smtplib.SMTPConnectError(_msg)
             self.log = self.logger
         else:
             _msg = '(%s.%s) :: WARNING :: Invalid SMTP Configuration that does not work, recommend checking your choices and attributes because something is wrong. smtpServer=[%s], port=[%s], username=[%s], password=[%s]' % (ObjectTypeName.typeName(self),misc.funcName(),self.smtp_server,self.smtp_port,self.smtp_username,self.smtp_password)
-            print >>sys.stderr, _msg
+            sys.stderr.write(_msg+'\n')
             raise ValueError(_msg)
 
     def genEmailTxt(self, fromAddress, toArray, subject, buf, ccArray=None, bccArray=None):
@@ -198,7 +198,7 @@ class MailServer(Cooperative):
                 if self.log is not None:                    
                     self.log.info(info_string)
                 else:
-                    print >>sys.stderr, info_string
+                    sys.stderr.write(info_string+'\n')
                 
                 return mstat
             
@@ -207,7 +207,7 @@ class MailServer(Cooperative):
                 if self.log is not None:
                     self.log.exception(info_string)
                 else:
-                    print >>sys.stderr, info_string
+                    sys.stderr.write(info_string+'\n')
                 
                 return info_string
 
@@ -217,7 +217,7 @@ class MailServer(Cooperative):
                     self.log.exception(info_string)
                     self.log.exception(' %s ERROR:%s', Exception, e)
                 else:
-                    print >>sys.stderr, info_string
+                    sys.stderr.write(info_string+'\n')
                 
                 return info_string
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Stack class
 
@@ -55,11 +56,11 @@ class stack:
         return len(self.stack)
 
     def dump_stack(self):
-        print "Top of stack is last element in list (number 1)"
+        print("Top of stack is last element in list (number 1)")
         n = len(self.stack)
         fmt = "  %%%dd  %%s" % len(`n + 1`)
         for ix in xrange(n):
-            print fmt % (n - ix, self.stack[ix])
+            print(fmt % (n - ix, self.stack[ix]))
 
 
 if __name__ == "__main__":

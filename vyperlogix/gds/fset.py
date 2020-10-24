@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This script lets you treat the lines of a text file as a set.  You can
 then take the intersection, union, and difference of a set of lines.  
@@ -38,6 +39,7 @@ MA  02111-1307  USA
 
 See http://www.gnu.org/licenses/licenses.html for more details.
 '''
+import sys
 
 debug = 0
 
@@ -49,7 +51,7 @@ op = [ "difference", "intersection", "union" ]
 
 def Debug(str):
     if debug:
-        print "+ " + str
+        print("+ " + str)
 
 def GetFile(filename):
     '''Returns a dictionary with the text file's lines as the keys.
@@ -59,7 +61,7 @@ def GetFile(filename):
         lines = ifp.readlines()
         ifp.close()
     except:
-        print "Couldn't read '%s'" % filename
+        print("Couldn't read '%s'" % filename)
         sys.exit(1)
     dict = {}
     for line in lines:
@@ -101,21 +103,21 @@ def Difference(dict1, dict2):
     return dict1.copy()
 
 def Usage():
-    print '''Usage:  fset.py [-w] op file1 file2 [file3 ...]
+    print('''Usage:  fset.py [-w] op file1 file2 [file3 ...]
   where op is the operation:
       d[ifference]     Lines in first file that are not in second.
       i[ntersection]   Lines that are common to all files.
       u[nion]          Lines that are in any of the files.
 
   Performs operations on the lines of a file as if they were members of
-  a set.  -w means to ignore leading and trailing whitespace.'''
+  a set.  -w means to ignore leading and trailing whitespace.''')
     sys.exit(1)
 
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "w")
     except getopt.error, str:
-        print "getopt error:  %s\n" % str
+        print("getopt error:  %s\n" % str)
         sys.exit(1)
     for opt in opts:
         if opt[0] == "-w":
@@ -149,7 +151,7 @@ def main():
             Debug("Got result for file %s" % file)
             Debug("%s" % `next_file`)
             result = fn(result, next_file)
-    # Print results
+    # Print(results)
     values = result.values()
     if ignore_whitespace:
         for ix in xrange(len(values)):
@@ -157,6 +159,6 @@ def main():
             values[ix] = string.strip(value) + "\n"
     values.sort()
     for value in values:
-        print value,  # Remember lines still have their newlines
+        sys.stdout.write(value)  # Remember lines still have their newlines
 
 main()

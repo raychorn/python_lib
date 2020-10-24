@@ -64,8 +64,8 @@ def watch_usb(*args):
 
 if __name__ == '__main__':
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write( __copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
 
     #watch_process(True,'calc.exe','Creation',)
     #watch_process(True,'notepad.exe','Creation',)

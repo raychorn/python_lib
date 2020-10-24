@@ -1,3 +1,4 @@
+from __future__ import print_function
 ''' 
 This module provides an Otp object that can be used to get one time
 pad strings.  It should be adequate for situations that don't require
@@ -93,11 +94,11 @@ if __name__ == "__main__":
     num = 1
     seed = 0
     if len(sys.argv) < 2:
-        print "Usage:  otp num_times [seed]"
+        print("Usage:  otp num_times [seed]")
         sys.exit(1)
     num = int(sys.argv[1])
     if len(sys.argv) == 3:
         seed = int(sys.argv[2])
     o = Otp(seed=seed)
     for ix in xrange(num):
-        print o.Get()
+        print(o.Get())

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import datetime
 
 def weekDetails(year, week):
@@ -11,5 +12,5 @@ if __name__ == '__main__':
     weeks = xrange(1,52)
     for w in weeks:
         x = weekDetails(2008,w)
-        print "Monday of Week %s: %s \n" % (w, x[0])
-        print "Sunday of Week %s: %s \n" % (w, x[1])
+        print("Monday of Week %s: %s \n" % (w, x[0]))
+        print("Sunday of Week %s: %s \n" % (w, x[1]))

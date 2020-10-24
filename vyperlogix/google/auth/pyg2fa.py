@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function
 ###############################################################################
 # Repo: http://code.thejeshgn.com/pyg2fa
 # Copyright (C) 2012 Thejesh GB <i@thejeshgn.com>
@@ -62,22 +63,22 @@ def otp(key, time):
 	# values = (time)
 	# s = struct.Struct('!L')
 	# packed_data = s.pack(values)
-	# print 'Original values:', values
-	# print 'Format string  :', s.format
-	# print 'Uses           :', s.size, 'bytes'
-	# print 'Packed Value   :', binascii.hexlify(packed_data)
+	# print('Original values: %s' % (values))
+	# print('Format string  : %s' % (s.format))
+	# print('Uses           : %s' % (s.size, 'bytes'))
+	# print('Packed Value   : %s' % (binascii.hexlify(packed_data)))
 	digest = hmac.new(key, bin_counter, hashlib.sha1)
-	# print digest.hexdigest()
+	# print(digest.hexdigest())
 	result = str(truncate(digest.digest())).ljust(length, '0')
 	return result
 
 def truncate(hash):
 	offset = ord(hash[19]) & 0xf;
 	return (
-	    ((ord(hash[offset+0]) & 0x7f) << 24 ) |
-	    ((ord(hash[offset+1]) & 0xff) << 16 ) |
-	    ((ord(hash[offset+2]) & 0xff) << 8 ) |
-	    (ord(hash[offset+3]) & 0xff)
+		((ord(hash[offset+0]) & 0x7f) << 24 ) |
+		((ord(hash[offset+1]) & 0xff) << 16 ) |
+		((ord(hash[offset+2]) & 0xff) << 8 ) |
+		(ord(hash[offset+3]) & 0xff)
 	) % pow(10, length)
 	
  #Verifys a user inputted key against the current timestamp. Checks window
@@ -88,7 +89,7 @@ def validate(b32secretKey, userOTP, window = 4):
 	timestampRange = range(timeStampInInt-window, timeStampInInt+window)
 	for ts in timestampRange:
 		o = otp(binarySeed, ts)
-		#print o
+		#print(o)
 		if int(o) == int(userOTP):
 			return True
 	return False
@@ -100,8 +101,8 @@ def qrCodeURL(site, secretKey):
 #This is for testing only
 def test():
 	YOUR_SECRET_INITIAL_KEY = "KKK67SDNLXIOG65U"   # must be at least 16 base 32 characters, keep this secret
-	print qrCodeURL("http://g2fa-example.com", YOUR_SECRET_INITIAL_KEY)
+	print(qrCodeURL("http://g2fa-example.com", YOUR_SECRET_INITIAL_KEY))
 	userOTP = raw_input("Enter OTP: ")
 	TIME_STAMP = timestamp()
-	print validate(YOUR_SECRET_INITIAL_KEY, int(userOTP), 4)
+	print(validate(YOUR_SECRET_INITIAL_KEY, int(userOTP), 4))
 

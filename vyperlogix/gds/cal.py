@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This utility prints calendars out similar to the regular UNIX cal 
 program.  However, I wanted to customize it to my needs:
@@ -76,9 +77,9 @@ def main():
     cal2 = GetMonth(month+1, year)
     cal3 = GetMonth(month+2, year)
     sep = " " * 5
-    print
-    print time.asctime(time.localtime(time.time())), "\n"
+    print()
+    print(time.asctime(time.localtime(time.time())), "\n")
     for ix in xrange(len(cal1)):
-        print cal1[ix] + sep + cal2[ix] + sep + cal3[ix]
+        print(cal1[ix] + sep + cal2[ix] + sep + cal3[ix])
 
 main()

@@ -24,6 +24,6 @@ def fields_for_model(model, formfield_callback=lambda f: f.formfield()):
             if formfield:
                 field_list.append((f.name, formfield))
     except Exception as details:
-        print >>sys.stderr, _utils.formattedException(details=details)
+        sys.stderr.write(_utils.formattedException(details=details))
     return SortedDictFromList(dict(field_list))
 

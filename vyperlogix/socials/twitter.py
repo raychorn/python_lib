@@ -1234,14 +1234,14 @@ class Api(object):
     To fetch the most recently posted public twitter status messages:
 
       >>> statuses = api.GetPublicTimeline()
-      >>> print [s.user.name for s in statuses]
+      >>> print([s.user.name for s in statuses])
       [u'DeWitt', u'Kesuke Miyagi', u'ev', u'Buzz Andersen', u'Biz Stone'] #...
 
     To fetch a single user's public status messages, where "user" is either
     a Twitter "short name" or their user id.
 
       >>> statuses = api.GetUserTimeline(user)
-      >>> print [s.text for s in statuses]
+      >>> print([s.text for s in statuses])
 
     To use authentication, instantiate the twitter.Api class with a
     username and password:
@@ -1251,12 +1251,12 @@ class Api(object):
     To fetch your friends (after being authenticated):
 
       >>> users = api.GetFriends()
-      >>> print [u.name for u in users]
+      >>> print([u.name for u in users])
 
     To post a twitter status message (after being authenticated):
 
       >>> status = api.PostUpdate('I love python-twitter!')
-      >>> print status.text
+      >>> print(status.text)
       I love python-twitter!
 
     There are many other methods, including:

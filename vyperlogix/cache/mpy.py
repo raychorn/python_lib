@@ -1,3 +1,4 @@
+from __future__ import print_function
 #!/bin/env python
 # vim:ts=4:sw=4
 
@@ -140,7 +141,7 @@ class LRUCache (object):
             pass;
         elif self.size()> (self.maxSize + self.elasticity):
             if LRUCache.DEBUG_DUMP_ENABLED:
-                print 'size [%d] is greater than [%d]. pruning...' % (self.size(), self.maxSize + self.elasticity);
+                print('size [%d] is greater than [%d]. pruning...' % (self.size(), self.maxSize + self.elasticity))
             toDel = self.size() - self.maxSize;
             #
             # TODO: need to improve this to some sort of constant time operation
@@ -190,24 +191,24 @@ if (__name__ == '__main__'):
     # Turning on debug dump for detailed state dumps
     LRUCache.DEBUG_DUMP_ENABLED = True;
 
-    print '>> Testing MPyCache ',LRUCache.getVersionDetails();
+    print('>> Testing MPyCache ',LRUCache.getVersionDetails())
 
     # the lru cache
-    lc = LRUCache(3,0.300,0);
+    lc = LRUCache(3,0.300,0)
 
-    print 'initialized cache : '+str(lc);
+    print('initialized cache : '+str(lc))
     for i in range(0,10):
-        lc.put('key'+str(i),'val'+str(i));
-        print 'After add #'+str(i+1)+':';
-        lc.dumpState();
-        lc.put('key2','val2');
+        lc.put('key'+str(i),'val'+str(i))
+        print('After add #'+str(i+1)+':')
+        lc.dumpState()
+        lc.put('key2','val2')
 
-    print lc.get('key8');
+    print(lc.get('key8'))
     # let's dump the state of the cache
-    lc.dumpState();
+    lc.dumpState()
     
     import time
-    print 'Sleeping for 5 seconds - should see the cache clear itself...'
+    print('Sleeping for 5 seconds - should see the cache clear itself...')
     time.sleep(5)
-    lc.dumpState();
+    lc.dumpState()
     

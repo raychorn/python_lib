@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Implements the Xref function which will generate a dictionary of the
 tokens separated by whitespace and punctuation in a text file.  The
@@ -64,7 +65,7 @@ def Xref(filename, preserve_case = 0):
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 2:
-        print "Usage:  xref file"
+        print("Usage:  xref file")
         sys.exit(1)
     words = Xref(sys.argv[1], 1)
     list = []
@@ -84,4 +85,4 @@ if __name__ == '__main__':
         list.append(str)
     list.sort()
     for s in list:
-        print s
+        print(s)

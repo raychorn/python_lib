@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 ping a location every once in a while to keep an Internet connection 
 open.  Pass the time in hours you want it to stay connected in on 
@@ -50,25 +51,25 @@ def Initialize():
         numstr = sys.argv[1]
         if string.find(numstr, "h") != -1:
             time_in_sec = ConvertHours(numstr)
-            print "Locking for %.1f hours" % (time_in_sec/3600.)
+            print("Locking for %.1f hours" % (time_in_sec/3600.))
         elif string.find(numstr, "m") != -1:
             time_in_sec = ConvertMinutes(numstr)
-            print "Locking for %.1f minutes" % (time_in_sec/60.)
+            print("Locking for %.1f minutes" % (time_in_sec/60.))
         elif string.find(numstr, "d") != -1:
             time_in_sec = ConvertDays(numstr)
-            print "Locking for %.2f days" % (time_in_sec/(3600.*24))
+            print("Locking for %.2f days" % (time_in_sec/(3600.*24)))
         else:
             time_in_sec = ConvertHours(numstr + "h")
-            print "Locking for %.1f hours" % (time_in_sec/3600.)
+            print("Locking for %.1f hours" % (time_in_sec/3600.))
     else:
         time_in_sec = 3600
-        print "Locking for %.1f hours" % (time_in_sec/3600.)
+        print("Locking for %.1f hours" % (time_in_sec/3600.))
     # Perform an initial ping after the typical connect time in case this
     # forces a modem to connect.
     for ix in xrange(10):
         time.sleep(1)
     if os.system(cmd) != 0:
-        print "'cmd' failed. Apparently not connected."
+        print("'cmd' failed. Apparently not connected.")
         sys.exit(1)
     return time_in_sec
 
@@ -78,14 +79,15 @@ def PrintTimeLeft(seconds_left):
     hours = seconds_left/(3600.)
     minutes = seconds_left/(60.)
     if days >= 1.0:
-        print "%.1f days left (%.1f minutes)" % (days, minutes)
+        print("%.1f days left (%.1f minutes)" % (days, minutes))
     elif hours > 1.0:
-        print "%.1f hours left (%.1f minutes)" % (hours, minutes)
+        print("%.1f hours left (%.1f minutes)" % (hours, minutes))
     else:
         if minutes > 0.0:
-            print "%.1f minutes left" % minutes
+            print( "%.1f minutes left" % minutes)
 
 def main():
+    bad_count = 0
     sleep_time = 60  # How many seconds to sleep between pings
     time_in_sec = Initialize()
     start = time.time()
@@ -98,7 +100,7 @@ def main():
         if os.system(cmd) != 0:
             bad_count = bad_count + 1
             if bad_count > 5:
-                print "More than 5 pings returned nonzero status"
+                print("More than 5 pings returned nonzero status")
                 sys.exit(0)
 
         seconds_left = time_in_sec - (time.time() - start)

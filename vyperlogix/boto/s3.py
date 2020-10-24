@@ -39,14 +39,13 @@ def _set_contents_from_file(bucket_name,fileObj,reduced_redundancy=True,callback
     aKey = None
     try:
         _fsize = _utils.fileSize(fileObj.name)
-        has_key = len([k for k in aBucket.get_all_keys() if (k.name == __file_name__)]) > 0
+        has_key = len([k for k in aBucket.get_all_keys() if (k.name == fileObj.name)]) > 0
         if (not has_key):
             aKey = aBucket.new_key(key_name=fileObj.name)
             _metadata = _utils.explain_stat(os.stat(fileObj.name), asDict=True)
             aKey.set_contents_from_file(fileObj, cb=callback, reduced_redundancy=reduced_redundancy)
-    except Exception as e:
-	info_string = formattedException(details=ex)
-        pass
+    except Exception as ex:
+        info_string = formattedException(details=ex)
     return aKey
 
 def set_contents_from_file(bucket_name,fname,reduced_redundancy=True,callback=None,aConnection=None):
@@ -61,6 +60,7 @@ def set_contents_from_file(bucket_name,fname,reduced_redundancy=True,callback=No
 
 def _get_directory_from(bucket,fname=None,aConnection=None):
     _is_not_fname = not misc.isString(fname)
+    keys = []
     if (bucket):
         keys = [k for k in bucket.get_all_keys() if (_is_not_fname) or (k.name == fname)]
     return keys if (_is_not_fname) else keys[0] if (misc.isList(keys) and (len(keys) > 0)) else []

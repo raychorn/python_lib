@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -20,12 +21,12 @@ USE AT YOUR OWN RISK.
 
 class ymlAttr():
     def __str__(self):
-	return '%s=%s' % (self.key, self.value)
+        return '%s=%s' % (self.key, self.value)
 
 class ymlObject():
     def __init__(self,name):
-	self.name = name
-	self.attrs = []
+        self.name = name
+        self.attrs = []
     
     def attrNamed(self,name):
         for a in self.attrs:
@@ -34,21 +35,21 @@ class ymlObject():
         return None
         
     def attrValueForName(self,name):
-	_value = ''
-	try:
-	    a = self.attrNamed(name)
-	    if (a != None):
-		_value = a.value
-	except Exception as details:
-	    print 'ERROR in determining the "%s" due to (%s)' % (name,str(details))
-	return _value
+        _value = ''
+        try:
+            a = self.attrNamed(name)
+            if (a != None):
+                _value = a.value
+        except Exception as details:
+            print('ERROR in determining the "%s" due to (%s)' % (name,str(details)))
+        return _value
         
     def attrsForName(self,name):
-	attrs = []
-	for y in self.attrs:
-	    if (y.key == name):
-		attrs.append(y)
-	return attrs
+        attrs = []
+        for y in self.attrs:
+            if (y.key == name):
+                attrs.append(y)
+        return attrs
         
     def dumpAttrs(self):
         s = '';
@@ -98,28 +99,29 @@ class ymlReader(object):
         return toks[0].strip()
 
     def splitFirst(self,s,delim):
-	toks = []
-	i = s.find(delim)
-	if (i > -1):
-	    toks.append(s[0:i])
-	else:
-	    i = 0
-	toks.append(s[i+1:len(s)])
-	return toks
+        toks = []
+        i = s.find(delim)
+        if (i > -1):
+            toks.append(s[0:i])
+        else:
+            i = 0
+        toks.append(s[i+1:len(s)])
+        return toks
     
     def read(self):
         inObject = False
         isError = False
+        fhand = None
         try:
             fhand = open(self.fname, 'r')
         except Exception as details:
-            print 'ERROR - (%s)' % str(details)
+            print('ERROR - (%s)' % str(details))
             isError = True
         if (isError == False):
             try:
                 for line in fhand:
                     buf = self.parseLine(line)
-		    toks = self.splitFirst(buf,':')
+                    toks = self.splitFirst(buf,':')
                     toks = self.pruneToks(toks)
                     if (inObject == False):
                         inObject = (len(toks) == 1)
@@ -128,7 +130,7 @@ class ymlReader(object):
                     else:
                         if (len(toks) >= 2):
                             self.curObj.add(toks[0],toks[1])
-                            #print '[%s] buf=(%s)' % (str(len(buf)),buf)
+                            #print('[%s] buf=(%s)' % (str(len(buf)),buf))
                         else:
                             if (self.curObj != None):
                                 self.objects.append(self.curObj)
@@ -142,8 +144,8 @@ class ymlReader(object):
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.writr(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
 
     import cProfile
     import gc
@@ -151,9 +153,9 @@ if __name__ == "__main__":
     #gc.disable()
     #cProfile.run('for i in xrange(1000): y.read()')
     y.read()
-    print str(y)
-    print str(y.objects)
-    print '\n'
+    print(str(y))
+    print(str(y.objects))
+    print('\n')
     for y in y.objects:
-        print str(y)
-        print '==========' * 2
+        print(str(y))
+        print('==========' * 2)

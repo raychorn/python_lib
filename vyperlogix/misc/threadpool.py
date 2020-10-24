@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import time
 from threading import Thread
@@ -57,9 +58,9 @@ class ThreadQueue(Queue):
                 func, args, kwargs = self.get()
                 func(*args, **kwargs)
             except Exception as details:
-		import traceback
-                print >>sys.stderr, '(%s._worker).Error :: "%s".' % (self.__class__,str(details))
-		print >>sys.stderr, traceback.format_exc()
+                import traceback
+                sys.stderr.write('(%s._worker).Error :: "%s".' % (self.__class__,str(details)))
+                sys.stderr.write(traceback.format_exc())
                 self.task_done()
                 self.join()
                 raise

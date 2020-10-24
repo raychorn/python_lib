@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This module provides a function that constructs a list containing
 the sizes of directories under a specified directory.
@@ -65,23 +66,23 @@ def ShowBiggestDirectories(directory):
     for dir in listG:
         total_size = total_size + dir[0]
     if total_size != 0:
-        print "For directory '%s':    " % directory,
-        print "[total space = %.1f MB]" % (total_size / 1e6)
-        print "   %     MB   Directory"
-        print "------ -----  " + "-" * 50
+        print("For directory '%s':    " % directory,)
+        print("[total space = %.1f MB]" % (total_size / 1e6))
+        print("   %     MB   Directory")
+        print("------ -----  " + "-" * 50)
         not_shown_count = 0
         for dir in listG:
             percent = 100.0 * dir[0] / total_size
             dir[1] = string.replace(dir[1], "\\\\", "/")
             if percent >= 0.1:
-                print "%6.1f %5d  %s" % (percent, int(dir[0]/1e6), dir[1])
+                print("%6.1f %5d  %s" % (percent, int(dir[0]/1e6), dir[1]))
             else:
                 not_shown_count = not_shown_count + 1
         if not_shown_count > 0:
             if not_shown_count > 1:
-                print "            [%d directories not shown]" % not_shown_count
+                print("            [%d directories not shown]" % not_shown_count)
             else:
-                print "            [%d directory not shown]" % not_shown_count
+                print("            [%d directory not shown]" % not_shown_count)
 
 if __name__ == '__main__':
     import sys

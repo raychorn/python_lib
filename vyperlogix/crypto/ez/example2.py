@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 """
 example2.py
 
@@ -24,6 +24,6 @@ fd = open("ex_mykey.priv", "w")
 fd.write(publicAndPrivateKey)
 fd.close()
 
-print "Keys successfully exported to ex_mykey.pub and ex_mykey.priv"
-print "These keys will be used in later examples"
+print("Keys successfully exported to ex_mykey.pub and ex_mykey.priv")
+print("These keys will be used in later examples")
 

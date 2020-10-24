@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -113,18 +114,18 @@ if (__name__ == '__main__'):
     ##################################################
     #from vyperlogix.misc import GenPasswd
     #_pass_ = GenPasswd.GenPasswd(length=448/8,chars=GenPasswd.chars_printable)
-    #print _pass_
+    #print(_pass_)
     ##################################################
     # END!    Gen a new passphrase 
     ##################################################
 
     #toks = _url_().split('/')
     #t2 = oodb.strToHex(blowfish.encryptData(toks[-2], __passphrase__))
-    #print '%s=%s' % (toks[-2],t2)
+    #print('%s=%s' % (toks[-2],t2))
     #t1 = oodb.strToHex(blowfish.encryptData(toks[-1], __passphrase__))
-    #print '%s=%s' % (toks[-1],t1)
+    #print('%s=%s' % (toks[-1],t1))
     #_u_ = oodb.strToHex(blowfish.encryptData(_url_(), __passphrase__))
-    #print _u_
+    #print(_u_)
 
     #if (0):
         #fname = os.path.abspath('./credentials.txt')
@@ -148,9 +149,9 @@ if (__name__ == '__main__'):
                 #del dE[k]
                 #_v_ = oodb.strToHex(blowfish.encryptData(v, __passphrase__))
                 #dE[_k_] = _v_
-                #print >>io, '%s%s%s' % (k,'=',v)
+                #io.write('%s%s%s\n' % (k,'=',v))
             #_contents_ = weave_into(oodb.strToHex(blowfish.encryptData(io.getvalue(), __passphrase__)),oodb.strToHex(__passphrase__))
-            #print >> f_out, _contents_
+            #f_out.write(_contents_+'\n')
             #f_out.flush()
             #f_out.close()
             #soCredentials2 = __get_aws_credentials__(_contents_,method=method)
@@ -164,7 +165,7 @@ if (__name__ == '__main__'):
                 #assert dP[_k_] == d[_k_], 'WARNING: Expected %s to match %s.' % (dP[_k_],d[_k_])
         #if (os.path.exists(fnameOut)):
             #soCredentials = get_aws_credentials(filename='./credentials_secure.txt',method=method)
-
+    """
     if (1):
         soCredentials = get_aws_credentials(url=_url_(),filename=None,method=Methods.default)
         soCredentials2 = get_aws_credentials(url=_url2_(),filename=None,method=Methods.improved)
@@ -174,5 +175,6 @@ if (__name__ == '__main__'):
     from boto.s3 import connection
     aConnection = connection.S3Connection(aws_access_key_id=soCredentials2.AWSAccessKeyId, aws_secret_access_key=soCredentials2.AWSSecretKey)
     buckets = aConnection.get_all_buckets()
-    print 'buckets=%s' % (buckets)
+    print('buckets=%s\n' % (buckets))
     pass
+    """

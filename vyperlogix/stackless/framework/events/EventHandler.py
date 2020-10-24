@@ -17,7 +17,7 @@ class EventHandler:
                 self.processMessage(val)
                 for output in self.outputs:
                     self.notify(output)
-        except TaskletExit:
+        except Exception:
             pass
                 
     def processMessage(self,val):

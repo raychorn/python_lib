@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys, traceback
 
 from vyperlogix import misc
@@ -62,7 +63,7 @@ class AccountTreeNode(tinytree.Tree,TinyTreeMixIn):
                     n.addChild(node)
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
 
     def Id():
         doc = "Id"
@@ -129,7 +130,7 @@ class MagmaAccountTree(Cooperative):
                     self.__account__ = accounts[0]
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
         if (self.__account__ is None):
             raise ValueError('Invalid value for account attribute, account must be the Id or the Name of the account.')
 
@@ -256,7 +257,7 @@ class SalesForceAccounts(SalesForceAbstract):
                         self._getAccountTree_(child,tree=tree,skip_ancestors=True)
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
         return tree
 
     def getAccountTree(self,account,tree=[],skip_ancestors=False):
@@ -286,7 +287,7 @@ class SalesForceAccounts(SalesForceAbstract):
             root._addChild(AccountTreeNode(account['Id'],account['Name'],account['ParentId']))
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
         return root
 
     def m_getAccountTree(self,account):
@@ -333,8 +334,8 @@ class SalesForceAccounts(SalesForceAbstract):
 
 if (__name__ == "__main__"):
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
 
     #n2 = AccountTreeNode(-1,"root",None)
     #n2._addChild(AccountTreeNode("123456","One",None))
@@ -360,7 +361,7 @@ if (__name__ == "__main__"):
     sf_login_model.perform_login_appropriately()
 
     if (sf_login_model.isLoggedIn):
-        print 'Logged-in Successfully.'
+        print('Logged-in Successfully.')
 
         from vyperlogix.sf.sf import SalesForceQuery
         sfQuery = SalesForceQuery(sf_login_model)
@@ -370,39 +371,39 @@ if (__name__ == "__main__"):
         if (isinstance(accounts,list)):
             for account in accounts:
                 tree = sf_accounts._getAccountTree(account)
-                print 'BEGIN: (%s) %s (%s)' % (account['Id'],account['Name'],account['ParentId'])
+                print('BEGIN: (%s) %s (%s)' % (account['Id'],account['Name'],account['ParentId']))
                 tree.dump()
-                print 'END!'
-                print '-'*40
+                print('END!')
+                print('-'*40)
                 n = tree.findForwards(Id=account['Id'])
                 if (n is not None):
                     n.dump()
                 else:
-                    print '()'
-                print '='*40
-                print 'BEGIN: MoltenPrivileges.Member'
+                    print('()')
+                print('='*40)
+                print('BEGIN: MoltenPrivileges.Member')
                 mat = MagmaAccountTree(sfQuery,account['Id'],role=roles.MoltenPrivileges.Member,tree=tree)
                 accounts = mat.accounts
                 if (accounts is not None):
                     accounts.dump()
-                print 'END!  MoltenPrivileges.Member'
-                print '\n'
-                print 'BEGIN: MoltenPrivileges.Super_User'
+                print('END!  MoltenPrivileges.Member')
+                print('\n')
+                print('BEGIN: MoltenPrivileges.Super_User')
                 mat.role = roles.MoltenPrivileges.Super_User
                 accounts = mat.accounts
                 if (accounts is not None):
                     accounts.dump()
-                print 'END!  MoltenPrivileges.Super_User'
-                print '\n'
-                print 'BEGIN: MoltenPrivileges.User_Manager'
+                print('END!  MoltenPrivileges.Super_User')
+                print('\n')
+                print('BEGIN: MoltenPrivileges.User_Manager')
                 mat.role = roles.MoltenPrivileges.User_Manager
                 accounts = mat.accounts
                 if (accounts is not None):
                     accounts.dump()
-                print 'END!  MoltenPrivileges.User_Manager'
-                print '\n'
+                print('END!  MoltenPrivileges.User_Manager')
+                print('\n')
         pass
     else:
-        print >>sys.stderr, sf_login_model.lastError
-        print str(sf_login_model)
+        sys.stderr.write(sf_login_model.lastError+'\n')
+        print(str(sf_login_model))
 

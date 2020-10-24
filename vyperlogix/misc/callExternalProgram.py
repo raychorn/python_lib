@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 import traceback
@@ -159,14 +160,14 @@ def callExternalProgram(progName,args=''):
     _cmd = normalize(progName)
     if (len(args) > 0):
         _cmd.append(args)
-    print '(callExternalProgram) :: _cmd=%s' % str(_cmd)
+    print('(callExternalProgram) :: _cmd=%s' % str(_cmd))
     try:
         retcode = subprocess.call(_cmd, shell=True)
         if retcode < 0:
-            print >>sys.stderr, "Child was terminated by signal", -retcode
+            sys.stderr.write("Child was terminated by signal %s\n" % (-retcode))
         else:
-            print >>sys.stderr, "Child returned", retcode
-    except OSError, e:
-        print >>sys.stderr, "Execution failed:", e
+            sys.stderr.write("Child returned %s\n" % (retcode))
+    except OSError as e:
+        sys.stderr.write("Execution failed: %s\n" % (e))
         retcode = -9999
     return retcode

@@ -1,3 +1,4 @@
+from __future__ import print_function
 # vim: sw=4:expandtab:foldmethod=marker
 #
 # Copyright (c) 2006, Mathieu Fenniak
@@ -105,6 +106,6 @@ class PdfReadError(Exception):
 if __name__ == "__main__":
     # test RC4
     out = RC4_encrypt("Key", "Plaintext")
-    print repr(out)
+    print(repr(out))
     pt = RC4_encrypt("Key", out)
-    print repr(pt)
+    print(repr(pt))

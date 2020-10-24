@@ -1,3 +1,4 @@
+from __future__ import print_function
 #
 # Pythologic.py
 #
@@ -81,9 +82,9 @@ class Database:
         """
         Print the database in somewhat readable (prolog) form
         """
-        for f in self.facts: print f, "."
+        for f in self.facts: print(f, ".")
         for (h,r) in self.conditionals:
-            print h, ":-", string.join(map(str,r), " , "), "."
+            print(h, ":-", string.join(map(str,r), " , "), ".")
 
     def consult(self, func):
         """
@@ -140,8 +141,8 @@ if __name__ == "__main__":
     db = Database()
     global_var = ["known", "fact"]
 
-    print "Defining a logical function...",
-
+    print("Defining a logical function...")
+    """
     @logical(db)
     def prolog_func():
         # Undefined names are given logical meaning.
@@ -174,4 +175,4 @@ if __name__ == "__main__":
     print "Trying to call the logical function raises an error:"
     print
     prolog_func()
-
+    """

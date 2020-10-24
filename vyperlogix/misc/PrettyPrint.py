@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 from vyperlogix import misc 
@@ -27,20 +28,20 @@ class PrettyPrint:
         '''orient of True means '''
         self.lines = []
         if (not misc.isString(title)):
-            print >>sys.stderr, '(PrettyPrint).ERROR :: title cannot be "%s", it must however be a string instance.' % str(title)
+            sys.stderr.write('(PrettyPrint).ERROR :: title cannot be "%s", it must however be a string instance.\n' % str(title))
         else:
             if (not misc.isList(items)):
-                print >>sys.stderr, '(PrettyPrint).ERROR :: items cannot be "%s", it must however be a list instance.' % str(items)
+                sys.stderr.write('(PrettyPrint).ERROR :: items cannot be "%s", it must however be a list instance.\n' % str(items))
             else:
                 if (not isinstance(orient,bool)):
-                    print >>sys.stderr, '(PrettyPrint).ERROR :: orient cannot be "%s", it must however be a bool instance.' % str(orient)
+                    sys.stderr.write('(PrettyPrint).ERROR :: orient cannot be "%s", it must however be a bool instance.\n' % str(orient))
                 else:
                     if (not misc.isString(delim)):
-                        print >>sys.stderr, '(PrettyPrint).ERROR :: delim cannot be "%s", it must however be a string instance.' % str(delim)
+                        sys.stderr.write('(PrettyPrint).ERROR :: delim cannot be "%s", it must however be a string instance.\n' % str(delim))
                     else:
                         self.title = title
                         self.items = items
-                        print title
+                        print(title)
                         n = 0
                         for p in items:
                             if (misc.isList(p)):
@@ -71,7 +72,7 @@ class PrettyPrint:
                                 self.lines.append(str(p))
 
     def pprint(self):
-        print '\n'.join(self.lines)
+        print('\n'.join(self.lines))
 
     def __repr__(self):
         return 'PrettyPrint for "%s"' % (self.title)

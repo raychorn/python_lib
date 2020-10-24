@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 One of three degrees of enforcement may be specified by passing
 the 'debug' keyword argument to the decorator:
@@ -66,7 +68,7 @@ def accepts(*types, **kw):
                 if argtypes != types:
                     msg = info(f.__name__, types, argtypes, 0)
                     if debug == 1:
-                        print >> sys.stderr, 'TypeWarning: ', msg
+                        sys.stderr.write('TypeWarning: %s\n' % (msg))
                     elif debug == 2:
                         raise TypeError, msg
                 return f(*args)
@@ -106,7 +108,7 @@ def returns(ret_type, **kw):
                 if res_type != ret_type:
                     msg = info(f.__name__, (ret_type,), (res_type,), 1)
                     if debug == 1:
-                        print >> sys.stderr, 'TypeWarning: ', msg
+                        sys.stderr.write('TypeWarning: %s\n' % (msg))
                     elif debug == 2:
                         raise TypeError, msg
                 return result
@@ -123,6 +125,6 @@ def info(fname, expected, actual, flag):
     format = lambda types: ', '.join([str(t).split("'")[1] for t in types])
     expected, actual = format(expected), format(actual)
     msg = "'%s' method " % fname \
-          + ("accepts", "returns")[flag] + " (%s), but " % expected\
-          + ("was given", "result is")[flag] + " (%s)" % actual
+        + ("accepts", "returns")[flag] + " (%s), but " % expected\
+        + ("was given", "result is")[flag] + " (%s)" % actual
     return msg

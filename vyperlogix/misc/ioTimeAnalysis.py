@@ -1,3 +1,4 @@
+from __future__ import print_function
 import time
 import sys
 
@@ -62,13 +63,13 @@ def ioTimeAnalysis(iters=None,callback=None):
         if ( (iters) and (isinstance(iters,int)) ):
             _tpi = ' time/iters=(%2.10f)' % (d[0]/iters)
         try:
-            print '(ioTimeAnalysis) :: Category: "%s" = (%s)%s' % (k,d[0],_tpi)
+            print('(ioTimeAnalysis) :: Category: "%s" = (%s)%s' % (k,d[0],_tpi))
             if (callable(callback)):
                 callback(category=k,elapsed=d[0])
         except Exception as details:
             from vyperlogix import misc
             info_string = misc.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
         _ioElapsedTime += d[0]
     if (callable(callback)):
         callback(ioElapsedTime=_ioElapsedTime)
@@ -77,6 +78,6 @@ def ioTimeAnalysis(iters=None,callback=None):
 def ioTimeAnalysisReport(iters=None,fOut=None,callback=None):
     ioAnalysis = ioTimeAnalysis(iters,callback=callback)
     _msg = "\n\nTime spent doing I/O :: (%s)" % (str(ioAnalysis))
-    print >>fOut, _msg
+    fOut.write(_msg+'\n')
     return _msg
 

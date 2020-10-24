@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 
 __copyright__ = """\
@@ -31,9 +33,9 @@ class debug:
     def __call__(self, f):
         if self.aspects & WHAT_TO_DEBUG:
             def newf(*args, **kwds):
-                print >> sys.stderr, f.func_name, args, kwds
+                sys.stderr.write('%s %s %s' % (f.func_name, args, kwds))
                 f_result = f(*args, **kwds)
-                print >> sys.stderr, f.func_name, "returned", f_result
+                sys.stderr.write('%s %s %s' % (f.func_name, "returned", f_result))
                 return f_result
             newf.__doc__ = f.__doc__
             return newf

@@ -55,8 +55,8 @@ def dumps(data,size=20,io=None,ascii_only=False):
     bytesRead = len(data)
     while index < bytesRead:
         if (not ascii_only):
-            print >> io, '%s' % (__bufferToHex__(data, index, size))
-        print >> io, '|%s|' % (__bufferToAscii__(data, index, size))
+            io.write('%s\n' % (__bufferToHex__(data, index, size)))
+        io.write('|%s|\n' % (__bufferToAscii__(data, index, size)))
         
         index += size
         if bytesRead - index < size:

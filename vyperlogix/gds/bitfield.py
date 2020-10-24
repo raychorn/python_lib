@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Implements a class that allows you to create arbitrarily long 
 bitfields.  The bits are numbered from 0 to N-1, where N is the
@@ -232,7 +233,7 @@ def Test(size):
     b.set_to_zeros()
     if a != b: raise err
     finish = time.time()
-    print "Size %.1e time = %.2f sec" % (size, finish-start)
+    print("Size %.1e time = %.2f sec" % (size, finish-start))
 
 if __name__ == "__main__":
     # Test the class.

@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Back-Propagation Neural Networks
 # 
 # Written in Python.  See http://www.python.org/
@@ -106,7 +107,7 @@ class NN:
                 change = output_deltas[k]*self.ah[j]
                 self.wo[j][k] = self.wo[j][k] + N*change + M*self.co[j][k]
                 self.co[j][k] = change
-                #print N*change, M*self.co[j][k]
+                #print(N*change, M*self.co[j][k])
 
         # update input weights
         for i in range(self.ni):
@@ -124,16 +125,16 @@ class NN:
 
     def test(self, patterns):
         for p in patterns:
-            print p[0], '->', self.update(p[0])
+            print(p[0], '->', self.update(p[0]))
 
     def weights(self):
-        print 'Input weights:'
+        print('Input weights:')
         for i in range(self.ni):
-            print self.wi[i]
-        print
-        print 'Output weights:'
+            print(self.wi[i])
+        print()
+        print('Output weights:')
         for j in range(self.nh):
-            print self.wo[j]
+            print(self.wo[j])
 
     def train(self, patterns, iterations=1000, N=0.5, M=0.1):
         # N: learning rate
@@ -146,7 +147,7 @@ class NN:
                 self.update(inputs)
                 error = error + self.backPropagate(targets, N, M)
             if i % 100 == 0:
-                print 'error %-14f' % error
+                print('error %-14f' % error)
 
 
 def demo():

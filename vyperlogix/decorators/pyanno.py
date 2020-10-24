@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 """
 Pyanno Python Annotations
 
@@ -85,12 +85,12 @@ class ParamTypeError(AnnotationException):
         AnnotationException.__init__(self, description)
 
 PYANNO_ERRORS = (ParamTypeError, 
-                             ReturnTypeError, 
-                             AbstractMethodError, 
-                             AnnotationMethodError, 
-                             PrivateMethodError,
-                             ProtectedMethodError,
-                             )
+                ReturnTypeError, 
+                AbstractMethodError, 
+                AnnotationMethodError, 
+                PrivateMethodError,
+                ProtectedMethodError,
+                )
 
 """
 -----------------------------------------------------
@@ -115,7 +115,7 @@ def noopAnnotation(*positionalParameters, **keywordParameters):
     if not __annotationHasArguments__(positionalParameters, keywordParameters):
         func = positionalParameters[0]
         __addAnnotationDoc__(func, '@noopAnnotation', '@noopAnnotation ' + str(positionalParameters) \
-                             + ', ' + str(keywordParameters) + '')
+                                + ', ' + str(keywordParameters) + '')
         return func
 
     if len(positionalParameters) > 0 or len(keywordParameters) > 0:
@@ -123,7 +123,7 @@ def noopAnnotation(*positionalParameters, **keywordParameters):
     
     def decorator(func):
         __addAnnotationDoc__(func, '@noopAnnotation', '@noopAnnotation ' + str(positionalParameters) \
-                             + ', ' + str(keywordParameters) + '')
+                                + ', ' + str(keywordParameters) + '')
         return func
     return decorator
 
@@ -196,8 +196,8 @@ class __protectedMethodDecorator__:
             if callerModule != self.__funcModule__:
                 import os.path
                 if os.path.dirname( callerModule ) != os.path.dirname( self.__funcModule__ ):
-#                    print 'funcPackage ', funcPackage 
-#                    print 'callerModule', callerModule, self.__funcModule__
+#                    print('funcPackage %s' % (funcPackage)) 
+#                    print('callerModule %s %s' % (callerModule, self.__funcModule__))
                     raise ProtectedMethodError("Protected method called from another module: " + callerModule)
             
             return func(*positionalValues, **keywordValues)
@@ -307,7 +307,7 @@ def __deprecatedMethodDecorator__(func):
         return func
     
     def wrapper(*positionalValues, **keywordValues):
-        print str(func.__name__) + ' is deprecated.'
+        print(str(func.__name__) + ' is deprecated.')
         func(*positionalValues, **keywordValues)
     wrapper.__deprecatedMethod__ = True
 
@@ -341,14 +341,14 @@ def __dumpFunc__(func, prefix = ''):
     print
     if len(prefix) > 0:
         prefix += ' '
-    print prefix + "__dumpFunc__ " + str(func) + " " + str(type(func))
-    print prefix + '\t' + "__call__" + str(func.__call__) + " " + str(type(func.__call__))
+    print(prefix + "__dumpFunc__ " + str(func) + " " + str(type(func)))
+    print(prefix + '\t' + "__call__" + str(func.__call__) + " " + str(type(func.__call__)))
     for name in dir(func):
         if hasattr(func, name):
-            print prefix + "\t" + str(name) + ": " + str(getattr(func, name))
+            print(prefix + "\t" + str(name) + ": " + str(getattr(func, name)))
         else:
-            print prefix + "\t" + str(name)
-    print 
+            print(prefix + "\t" + str(name))
+    print()
     
 def __ParamErrorFactory__(funcName, msg):
     return ParamTypeError(funcName + " received " + msg)
@@ -360,8 +360,7 @@ def __noParamsDecorator__(func):
     def wrapper(*positionalValues, **keywordValues):
         
         if len(positionalValues) >  0 or len(keywordValues) > 0:
-            raise ParamTypeError(func.__name__ + ' has no arguments: ' + str(positionalValues) + \
-                                  ', ' + str(keywordValues))
+            raise(ParamTypeError(func.__name__ + ' has no arguments: ' + str(positionalValues) + ', ' + str(keywordValues)))
         
         return func(*positionalValues, **keywordValues)
     
@@ -406,7 +405,7 @@ def parameterTypes(*positionalParameters, **keywordParameters):
         argspec = __getFunctionArgumentsRecursive__(func)
    
         #__dumpFunc__(func)
-        #print "noResultDecorator: " + str(func) + " " + str(type(func))
+        #print("noResultDecorator: " + str(func) + " " + str(type(func)))
     
         def wrapper(*positionalValues, **keywordValues):
             
@@ -414,28 +413,27 @@ def parameterTypes(*positionalParameters, **keywordParameters):
                 
                 # charles, we want more unique names than __parsedParamTypes__ and __unparsedParamTypes__
                 if not hasattr(func, '__parsedParamTypes__'):
-                    #print 'parsing params'
+                    #print('parsing params')
                     #__dumpFunc__(func)
                     func.__parsedParamTypes__ = __parseParamTypes__(func.__name__, func.func_globals, argspec, func.__unparsedParamTypes__)
                 positionalTypes, keywordTypes = func.__parsedParamTypes__
                 '''
-                print func.__name__ + ' param ' + "__unparsedParamTypes__: " + str(func.__unparsedParamTypes__) + " " + str(type(func.__unparsedParamTypes__))
-                print func.__name__ + ' param ' + "correctTypes: " + str(correctTypes) + " " + str(type(correctTypes))
+                print(func.__name__ + ' param ' + "__unparsedParamTypes__: " + str(func.__unparsedParamTypes__) + " " + str(type(func.__unparsedParamTypes__)))
+                print(func.__name__ + ' param ' + "correctTypes: " + str(correctTypes) + " " + str(type(correctTypes)))
                 '''
                 __checkParamTypes__(func.__name__, __ParamErrorFactory__, positionalValues, keywordValues, positionalTypes, keywordTypes, argspec, False)
                 
                 return func(*positionalValues, **keywordValues)
 
-            except BaseException, e:
-                raise e
+            except BaseException as ex:
+                raise(ex)
             
         wrapper.__func_argspec__ = argspec
         
         __copyPropertiesToWrapper__(func, wrapper)
         func.__unparsedParamTypes__ = positionalParameters
         
-        __addAnnotationDoc__(wrapper, '@parameterTypes', '@parameterTypes ' + str(positionalParameters) \
-                             + ', ' + str(keywordParameters) + '')
+        __addAnnotationDoc__(wrapper, '@parameterTypes', '@parameterTypes ' + str(positionalParameters) + ', ' + str(keywordParameters) + '')
 
         return wrapper
     
@@ -491,7 +489,7 @@ def __checkParamType__(funcName, errorFactory, values, correctTypes, i, value, c
 
         mro = inspect.getmro(value.__class__)
         for item in mro:
-            #print 'item.__name__', item.__name__
+            #print('item.__name__', item.__name__)
             if item.__name__ == correctType.classname:
                 return
         raise errorFactory(*errorFactoryArgs)
@@ -511,7 +509,7 @@ def __checkParamType__(funcName, errorFactory, values, correctTypes, i, value, c
             raise errorFactory(*errorFactoryArgs)
         for key in value.keys():
             __checkParamType__(funcName, errorFactory, values, correctTypes, i, key, keyType, debug)
-#            print 'value[key]', value, type(value), key, type(key)
+#            print('value[key]', value, type(value), key, type(key))
             subvalue = value[key]
             __checkParamType__(funcName, errorFactory, values, correctTypes, i, subvalue, valueType, debug)
         return
@@ -542,20 +540,19 @@ def __checkParamType__(funcName, errorFactory, values, correctTypes, i, value, c
         return
     
     #be more specific about tuple index
-    #print 'problem: ' + funcName +" correctTypes: " + str(correctTypes)
+    #print('problem: ' + funcName +" correctTypes: " + str(correctTypes))
     raise errorFactory(*errorFactoryArgs)
     
     
 
 
     
-def __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues, \
-                              positionalTypes, keywordTypes, argspec, debug = False):
+def __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues, positionalTypes, keywordTypes, argspec, debug = False):
 
 #    debug = True
     if debug:
-        print "__normalizeValues__ funcName: "  + funcName
-        print "__normalizeValues__ argspec: "  + str(argspec) + " "  + str(type(argspec))
+        print("__normalizeValues__ funcName: "  + funcName)
+        print("__normalizeValues__ argspec: "  + str(argspec) + " "  + str(type(argspec)))
 
     args = argspec[0]
     varargs = argspec[1]
@@ -571,10 +568,10 @@ def __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues,
         
     #charles: TODO: not handling varargs, varkw
     if debug:
-        print '\t', 'args', funcName, args
-        print '\t', 'varargs', funcName, varargs
-        print '\t', 'varkw', funcName, varkw
-        print '\t', 'defaults', funcName, defaults
+        print('\t', 'args', funcName, args)
+        print('\t', 'varargs', funcName, varargs)
+        print('\t', 'varkw', funcName, varkw)
+        print('\t', 'defaults', funcName, defaults)
     
     if not defaults:
         requiredParamCount = len(args) 
@@ -582,7 +579,7 @@ def __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues,
         requiredParamCount = len(args) - len(defaults)
 
     if debug:
-        print '\t', 'requiredParamCount', funcName, requiredParamCount
+        print('\t', 'requiredParamCount', funcName, requiredParamCount)
 
     requiredValues = []
     optionalValues = {}
@@ -607,13 +604,13 @@ def __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues,
         requiredValues.extend(positionalValues)
         keywords = keywordValues.keys()
         if debug:
-            print '\t', 'keywords', funcName, keywords, type(keywords)
+            print('\t', 'keywords', funcName, keywords, type(keywords))
         
         while len(requiredValues) < requiredParamCount:
             index = len(requiredValues)
             argname = args[index]
             if debug:
-                print '\t', 'argname', funcName, argname
+                print('\t', 'argname', funcName, argname)
             if argname not in keywords:
                 raise ParamTypeError('function missing required argument: ' + argname)
             value = keywordValues[argname]
@@ -624,65 +621,61 @@ def __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues,
             optionalValues[keyword] = keywordValues[keyword]
         
     if debug:
-        print 'requiredValues', requiredValues
-        print 'optionalValues', optionalValues
+        print('requiredValues %s' % (requiredValues))
+        print('optionalValues %s' % (optionalValues))
         
     return requiredValues, optionalValues
     
-def __checkParamTypes__(funcName, errorFactory, positionalValues, keywordValues, \
-                              positionalTypes, keywordTypes, argspec, debug = False):
+def __checkParamTypes__(funcName, errorFactory, positionalValues, keywordValues, positionalTypes, keywordTypes, argspec, debug = False):
     
     #debug = True
     if debug:
-        print "checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues))
-        print "checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues))
-        print "checkTypes positionalTypes: "  + str(positionalTypes) + " "  + str(type(positionalTypes))
-        print "checkTypes keywordTypes: "  + str(keywordTypes) + " "  + str(type(keywordTypes))
+        print("checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues)))
+        print("checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues)))
+        print("checkTypes positionalTypes: "  + str(positionalTypes) + " "  + str(type(positionalTypes)))
+        print("checkTypes keywordTypes: "  + str(keywordTypes) + " "  + str(type(keywordTypes)))
 
     positionalValues, keywordValues = __normalizeValues__(funcName, errorFactory, positionalValues, keywordValues, \
                               positionalTypes, keywordTypes, argspec, debug)
 
     if debug:
-        print "checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues))
-        print "checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues))
+        print("checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues)))
+        print("checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues)))
     debug = False
         
-    __checkValueTypes__(funcName, errorFactory, positionalValues, keywordValues, \
-                              positionalTypes, keywordTypes, debug)
+    __checkValueTypes__(funcName, errorFactory, positionalValues, keywordValues, positionalTypes, keywordTypes, debug)
     
-def __checkValueTypes__(funcName, errorFactory, positionalValues, keywordValues, \
-                              positionalTypes, keywordTypes, debug = False):
+def __checkValueTypes__(funcName, errorFactory, positionalValues, keywordValues, positionalTypes, keywordTypes, debug = False):
     
     if debug:
-        print "checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues))
-        print "checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues))
-        print "checkTypes positionalTypes: "  + str(positionalTypes) + " "  + str(type(positionalTypes))
-        print "checkTypes keywordTypes: "  + str(keywordTypes) + " "  + str(type(keywordTypes))
+        print("checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues)))
+        print("checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues)))
+        print("checkTypes positionalTypes: "  + str(positionalTypes) + " "  + str(type(positionalTypes)))
+        print("checkTypes keywordTypes: "  + str(keywordTypes) + " "  + str(type(keywordTypes)))
 
     if not positionalTypes:
-         if positionalValues:
+        if positionalValues:
             raise errorFactory(funcName, "unexpected positional arguments (" + str(positionalValues) + ")")
     else:
-         if not positionalValues:
+        if not positionalValues:
             raise errorFactory(funcName, "missing positional arguments (" + str(positionalValues) + ")")
         
-         if len(positionalValues) != len(positionalTypes):
-            print "checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues))
-            print "checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues))
-            print "checkTypes positionalTypes: "  + str(positionalTypes) + " "  + str(type(positionalTypes))
-            print "checkTypes keywordTypes: "  + str(keywordTypes) + " "  + str(type(keywordTypes))
+        if len(positionalValues) != len(positionalTypes):
+            print("checkTypes positionalValues: "  + str(positionalValues) + " "  + str(type(positionalValues)))
+            print("checkTypes keywordValues: "  + str(keywordValues) + " "  + str(type(keywordValues)))
+            print("checkTypes positionalTypes: "  + str(positionalTypes) + " "  + str(type(positionalTypes)))
+            print("checkTypes keywordTypes: "  + str(keywordTypes) + " "  + str(type(keywordTypes)))
             
             if len(positionalValues) < len(positionalTypes):
                 raise errorFactory(funcName, "missing positional arguments (" + str(positionalValues) + ")")
             else:
                 raise errorFactory(funcName, "unexpected positional arguments (" + str(positionalValues) + ")")
 
-         for index in range(len(positionalValues)):
-             positionalValue = positionalValues[index]
-             positionalType = positionalTypes[index]
+        for index in range(len(positionalValues)):
+            positionalValue = positionalValues[index]
+            positionalType = positionalTypes[index]
 
-             __checkParamType__(funcName, errorFactory, positionalValues, positionalTypes, index, \
-                                  positionalValue, positionalType, debug)
+            __checkParamType__(funcName, errorFactory, positionalValues, positionalTypes, index, positionalValue, positionalType, debug)
 
     if keywordValues:
         if not keywordTypes:
@@ -696,10 +689,9 @@ def __checkValueTypes__(funcName, errorFactory, positionalValues, keywordValues,
                                     str(keywordValue) + ")")
             keywordType = keywordTypes[keyword]
 
-            __checkParamType__(funcName, errorFactory, keywordValues, keywordTypes, keyword, \
-                                  keywordValue, keywordType, debug)
+            __checkParamType__(funcName, errorFactory, keywordValues, keywordTypes, keyword, keywordValue, keywordType, debug)
 
-           
+
 def __checkResultTypes__(funcName, errorFactory, values, positionalTypes, debug = False):
     
     if len(positionalTypes) == 1:
@@ -719,12 +711,12 @@ def __parseStringType__(func_name, func_globals, typeString, checkForSelfType):
 
     if checkForSelfType:
         typeString = typeString.strip()
-        #print "checkForSelfType: " + typeString
+        #print("checkForSelfType: " + typeString)
         selfTypeName = 'selfType'
         if typeString.startswith(selfTypeName):
             result.append(selfType)
             typeString = typeString[len(selfTypeName):]
-            #print "checkForSelfType: " + typeString
+            #print("checkForSelfType: " + typeString)
             typeString = typeString.strip()
             canBeEmpty = True
             if len(typeString)>0:
@@ -734,20 +726,20 @@ def __parseStringType__(func_name, func_globals, typeString, checkForSelfType):
             
     
     typeString = typeString.strip()
-    #print '\t\t'+"__parseStringType__: " + str(typeString) + " " + str(type(typeString))
+    #print('\t\t'+"__parseStringType__: " + str(typeString) + " " + str(type(typeString)))
     if len(typeString) < 1:
         return result
     
-    #print '\t\t'+"__parseStringType__: " + str(typeString) + " " + str(type(typeString))
+    #print('\t\t'+"__parseStringType__: " + str(typeString) + " " + str(type(typeString)))
     evals = eval('[' + typeString + ']', func_globals)
     for evaled in evals:
-        #print '\t\t\t'+"evaled.1: " + str(evaled) + " " + str(type(evaled))
+        #print('\t\t\t'+"evaled.1: " + str(evaled) + " " + str(type(evaled)))
         result.append(__parseType__(func_name, evaled))
     return result 
         
 def __parseType__(func_name, arg):
 
-    #print '\t'+"arg: " + str(arg) + " " + str(type(arg))
+    #print('\t'+"arg: " + str(arg) + " " + str(type(arg)))
     if arg in (selfType, ignoreType, classType, callableType) :
         return arg
     elif isinstance(arg, ClassName):
@@ -788,12 +780,12 @@ def __parseReturnTypes__(func_name, func_globals, rawTypes):
     checkForSelfType = False
 
 #    if True:
-#        print '\t'+"__parseReturnTypes__ rawTypes: " + str(rawTypes) + " " + str(type(rawTypes))
+#        print('\t'+"__parseReturnTypes__ rawTypes: " + str(rawTypes) + " " + str(type(rawTypes)))
 
     parsedTypes = __evaluateTypes__(func_name, func_globals, rawTypes, checkForSelfType)
 
 #    if True:
-#        print '\t'+"__parseReturnTypes__ parsedTypes: " + str(parsedTypes) + " " + str(type(parsedTypes))
+#        print('\t'+"__parseReturnTypes__ parsedTypes: " + str(parsedTypes) + " " + str(type(parsedTypes)))
     
     requiredTypes = parsedTypes
     optionalTypes = {}
@@ -812,26 +804,26 @@ def __parseExceptionTypes__(func_name, func_globals, rawTypes):
 def __parseParamTypes__(func_name, func_globals, argspec, rawTypes):
     checkForSelfType = True
     
-#    print 'argspec', argspec, type(argspec)
+#    print('argspec', argspec, type(argspec))
     argumentNames = argspec[0]
     varargs = argspec[1]
     varkw = argspec[2]
     defaults = argspec[3]
 
-#    print '\t', 'argumentNames', argumentNames
-#    print '\t', 'varargs', varargs
-#    print '\t', 'varkw', varkw
-#    print '\t', 'defaults', defaults
+#    print('\t', 'argumentNames', argumentNames)
+#    print('\t', 'varargs', varargs)
+#    print('\t', 'varkw', varkw)
+#    print('\t', 'defaults', defaults)
     
 #    annotation argument: \'' + str(rawPositionalType) + "'")
     
 #    if True:
-#        print '\t'+"__parseParamTypes__ rawTypes: " + str(rawTypes) + " " + str(type(rawTypes))
+#        print('\t'+"__parseParamTypes__ rawTypes: " + str(rawTypes) + " " + str(type(rawTypes)))
 
     parsedTypes = __evaluateTypes__(func_name, func_globals, rawTypes, checkForSelfType)
 
 #    if True:
-#        print '\t'+"__parseParamTypes__ parsedTypes: " + str(parsedTypes) + " " + str(type(parsedTypes))
+#        print('\t'+"__parseParamTypes__ parsedTypes: " + str(parsedTypes) + " " + str(type(parsedTypes)))
 
     if len(parsedTypes) < len(argumentNames):
         raise AnnotationMethodError(func_name + ': Missing param types (' + 
@@ -857,8 +849,8 @@ def __parseParamTypes__(func_name, func_globals, argspec, rawTypes):
             optionalParams[argumentNames[requiredParamCount+index]] = parsedTypes[requiredParamCount+index]
 
 #    if False:
-#        print '\t'+"__parseParamTypes__ requiredParams: " + str(requiredParams) + " " + str(type(requiredParams))
-#        print '\t'+"__parseParamTypes__ optionalParams: " + str(optionalParams) + " " + str(type(optionalParams))
+#        print('\t'+"__parseParamTypes__ requiredParams: " + str(requiredParams) + " " + str(type(requiredParams)))
+#        print('\t'+"__parseParamTypes__ optionalParams: " + str(optionalParams) + " " + str(type(optionalParams)))
 
     return requiredParams, optionalParams
 
@@ -869,8 +861,7 @@ def __evaluateTypes__(func_name, func_globals, rawTypes, checkForSelfType):
     isFirstParsedType = True
     for rawType in rawTypes:
         if type(rawType) is str:
-            parsed = __parseStringType__(func_name, func_globals, rawType, \
-                                           checkForSelfType and isFirstParsedType)
+            parsed = __parseStringType__(func_name, func_globals, rawType, checkForSelfType and isFirstParsedType)
             if parsed is None:
                 #if not canBeEmpty:
                 if len(rawTypes) > 1:
@@ -884,7 +875,7 @@ def __evaluateTypes__(func_name, func_globals, rawTypes, checkForSelfType):
         isFirstParsedType = False
     
     if False:
-        print '\t'+"__evaluateTypes__ parsedTypes: " + str(parsedTypes) + " " + str(type(parsedTypes))
+        print('\t'+"__evaluateTypes__ parsedTypes: " + str(parsedTypes) + " " + str(type(parsedTypes)))
 
     return parsedTypes
 
@@ -893,7 +884,7 @@ def __noResultDecorator__(func):
         return func
 
     #__dumpFunc__(func)
-    #print "noResultDecorator: " + str(func) + " " + str(type(func))
+    #print("noResultDecorator: " + str(func) + " " + str(type(func)))
 
     def wrapper(*positionalValues, **keywordValues):
         
@@ -929,7 +920,7 @@ def __getCallerDescription__():
             break
     
     if not callerFrame:
-        print 'missing callerFrame!'
+        print('missing callerFrame!')
         callerFrame = stack[0]
         
 #    print'frame', frame
@@ -941,7 +932,7 @@ def __getCallerDescription__():
     callerLine = callerFrame[2]
 #    print'callerLine', callerLine
     callerDescription = callerModuleName + '(' + str(callerLine) + '): '
-#    print 'callerDescription', callerDescription
+#    print('callerDescription', callerDescription)
     return callerDescription
 
 '''
@@ -983,7 +974,7 @@ def returnType(*positionalParameters, **keywordParameters):
                 return func
         
             #__dumpFunc__(func)
-            #print "noResultDecorator: " + str(func) + " " + str(type(func))
+            #print("noResultDecorator: " + str(func) + " " + str(type(func)))
         
             def wrapper(*positionalValues, **keywordValues):
                 
@@ -992,13 +983,13 @@ def returnType(*positionalParameters, **keywordParameters):
                     
                     # charles, we want more unique names than __parsedReturnTypes__ and __unparsedReturnTypes__
                     if not hasattr(func, '__parsedReturnTypes__'):
-                        #print 'parsing'
+                        #print('parsing')
                         #__dumpFunc__(func)
                         func.__parsedReturnTypes__ = __parseReturnTypes__(func.__name__, func.func_globals, func.__unparsedReturnTypes__)
                     positionalTypes, keywordTypes = func.__parsedReturnTypes__
                     '''
-                    print "__unparsedReturnTypes__: " + str(func.__unparsedReturnTypes__) + " " + str(type(func.__unparsedReturnTypes__))
-                    print "correctTypes: " + str(correctTypes) + " " + str(type(correctTypes))
+                    print("__unparsedReturnTypes__: " + str(func.__unparsedReturnTypes__) + " " + str(type(func.__unparsedReturnTypes__)))
+                    print("correctTypes: " + str(correctTypes) + " " + str(type(correctTypes)))
                     '''
                     __checkResultTypes__(func.__name__, __ReturnErrorFactory__, values, positionalTypes, False)
                     
@@ -1009,8 +1000,7 @@ def returnType(*positionalParameters, **keywordParameters):
             
             __copyPropertiesToWrapper__(func, wrapper)
             func.__unparsedReturnTypes__ = positionalParameters
-            __addAnnotationDoc__(wrapper, '@returnType', '@returnType ' + str(positionalParameters) \
-                                 + ', ' + str(keywordParameters) + '')
+            __addAnnotationDoc__(wrapper, '@returnType', '@returnType ' + str(positionalParameters) + ', ' + str(keywordParameters) + '')
     
             argspec = __getFunctionArgumentsRecursive__(func)
             wrapper.__func_argspec__ = argspec
@@ -1054,11 +1044,11 @@ def returnType(*positionalParameters, **keywordParameters):
 #            import os.path
 #            modulename = os.path.basename(tbframeModule)
 #            print'modulename', modulename
-#            print 'dir', dir()
-#            print '__file__', __file__
-#            print __file__ == tbframeModule
+#            print('dir', dir())
+#            print('__file__', __file__)
+#            print((__file__ == tbframeModule))
 #            break
 #        
-#        print 'tb', tb
+#        print('tb', tb)
 #        dirDebug('tb', tb)
 #        raise e, None, sys.exc_info()[2]        

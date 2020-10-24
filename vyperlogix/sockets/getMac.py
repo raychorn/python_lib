@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -40,6 +41,6 @@ def getHwAddr(name):
     return _getHwAddr(name)
     
 if (__name__ == '__main__'):
-    print getHwAddr('eth0')
+    print(getHwAddr('eth0'))
 
     

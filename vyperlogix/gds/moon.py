@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Script to print moon phase times for a given year, which should be the
 single parameter passed on the command line.  The times will be converted
@@ -151,7 +152,7 @@ def PrintItem(julian):
         day = day + 1
         decimal_time = decimal_time - 24.0
     minutes = int((decimal_time - int(decimal_time))*60)
-    print "  %02d %s %02d:%02d " %         (Day, month_name[month], int(decimal_time), minutes)
+    print("  %02d %s %02d:%02d " %         (Day, month_name[month], int(decimal_time), minutes))
 
 def main():
     desired_year = 2002
@@ -168,8 +169,8 @@ def main():
     results = results + data
     data = GetPhaseData(desired_year, LAST)
     results = results + data
-    # Print header
-    print "Moon phases for", desired_year
+    # Print(header)
+    print("Moon phases for %s" % (desired_year))
     # Convert to a dictionary keyed by the phase
     dict = {}
     for result in results:
@@ -181,7 +182,7 @@ def main():
             dict[phase] = [julian]
     phases = ["New", "First", "Full", "Last"]
     for phase in range(4):
-        print phases[phase]
+        print(phases[phase])
         for date in dict[phase]:
             PrintItem(date)
             

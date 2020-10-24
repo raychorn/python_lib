@@ -1,3 +1,4 @@
+from __future__ import print_function
 # a simple portscanner with multithreading
 # QUEUE BASED VERSION
 
@@ -48,7 +49,7 @@ def scan(host, start, stop, nthreads=MAX_THREADS):
             results[(nhost, nport)] = nstatus
         status = results[(host, port)]
         if status <> 'CLOSED':
-            print '%s:%d %s' % (host, port, status)
+            print('%s:%d %s' % (host, port, status))
 
 if __name__ == '__main__':
     scan('localhost', 0, 1024)

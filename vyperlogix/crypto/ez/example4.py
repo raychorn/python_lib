@@ -5,7 +5,7 @@ example4.py
 
 Import a private key, and decrypt some data
 """
-
+from __future__ import print_function
 import ezPyCrypto
 
 # Read in a private key
@@ -25,5 +25,5 @@ fd.close()
 dec = k.decString(enc)
 
 # Spill the beans
-print "Decrypted: %s" % dec
+print("Decrypted: %s" % dec)
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 # vim: sw=4:expandtab:foldmethod=marker
 #
 # Copyright (c) 2006, Mathieu Fenniak
@@ -1092,7 +1093,7 @@ class PageObject(DictionaryObject):
                 for i in operands[0]:
                     if isinstance(i, TextStringObject):
                         text[vS] = '%s ' % (_utils.ascii_only(i))
-                #print '%s=%s' % (vS,text[vS])
+                #print('%s=%s' % (vS,text[vS]))
             elif operator == "Tm":
                 aTms.append(operands)
         return process_text_by_row(text)

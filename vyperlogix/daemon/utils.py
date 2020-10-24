@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys
 import traceback
 
@@ -17,7 +18,7 @@ def getDaemons(prefix, fpath):
    files = [f for f in os.listdir(os.path.abspath(fpath)) if _regex.search(f)]
    rejects = [f for f in os.listdir(os.path.abspath(fpath)) if (not _regex.search(f)) and (not svn_regex.search(f)) and (f.find('__init__.') == -1) and (f.find('dlib') == -1)]
    if (len(rejects) > 0):
-      print >>sys.stderr, '(%s) :: Rejected daemon files are "%s" using (not "%s") and (not "%s").  PLS check the file names to ensure your daemons will be executed as planned.' % (_name,rejects,s_regex,s_svn_regex)
+      sys.stderr.write('(%s) :: Rejected daemon files are "%s" using (not "%s") and (not "%s").  PLS check the file names to ensure your daemons will be executed as planned.' % (_name,rejects,s_regex,s_svn_regex))
    return files
 
 def getNormalizedDaemons(prefix, fpath):
@@ -51,24 +52,24 @@ def execDaemon(f, dpath=None, _logging=None):
       if (_logging):
          _logging.error(info_string)
       else:
-         print >>sys.stderr, info_string
+         sys.stderr.write(info_string+'\n')
 
    info_string = '_import_error=%s' % _import_error
    if (_logging):
       _logging.warning(info_string)
    else:
-      print >>sys.stderr, info_string
+      sys.stderr.write(info_string+'\n')
 
    if (not _import_error):
       _metadata[f] = lists.HashedLists2()
       try:
          v = '%s._metadata' % (f)
          vv = eval(v)
-         print '%s=[%s]' % (v,vv)
+         print('%s=[%s]' % (v,vv))
          _metadata[f] = lists.HashedLists2(vv)
          v = '%s.data_hook("%s")' % (f,dpath if (sys.platform[:3] != 'win') else dpath.replace(os.sep,'/'))
          vv = eval(v)
-         print '%s=[%s]' % (v,vv)
+         print('%s=[%s]' % (v,vv))
       except AttributeError:
          pass
       except ImportError:
@@ -77,7 +78,7 @@ def execDaemon(f, dpath=None, _logging=None):
          if (_logging):
             _logging.error(info_string)
          else:
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
 
 def execDaemons(prefix, fpath, dpath=None, _logging=None):
    for f in getNormalizedDaemonNamespaces(prefix, fpath):

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import re
 import string
 import sys
@@ -108,14 +109,14 @@ def read_feed(feedurl):
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
 
     def main(feedname):
         links = read_feed_links(feedname)
-        #print links
+        #print(links)
         objects = read_feed(feedname)
-        print objects
+        print(objects)
 
     #main('http://python2.wordpress.com/feed/') 
     #main('http://rss.slashdot.org/Slashdot/slashdot') 

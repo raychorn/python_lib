@@ -83,12 +83,12 @@ class CSV(Cooperative):
                     s_header = ','.join(header)
                     fOut = open(fname,'w')
                     try:
-                        print >>fOut, s_header
+                        fOut.write(s_header)
                         for rec in list_of_records:
                             l_values = []
                             for h in header:
                                 l_values.append(str(rec[h]) if (str(rec[h]).find(',') == -1) else '"%s"' % (rec[h]))
-                            print >>fOut, ','.join(l_values)
+                            fOut.write(','.join(l_values))
                     except Exception as details:
                         info_string = _utils.formattedException(details=details)
                         info_strings.append(info_string)
@@ -258,7 +258,7 @@ class CSV(Cooperative):
             return codec.__name__.lower().replace('_encode','')
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
         return None
 
     def codec():
@@ -268,7 +268,7 @@ class CSV(Cooperative):
                 return self.__codec_name__(self.__codec__)
             except Exception as details:
                 info_string = _utils.formattedException(details=details)
-                print >>sys.stderr, info_string
+                sys.stderr.write(info_string+'\n')
             return None
         def fset(self, codec):
             if (not misc.isString(codec)):
@@ -279,7 +279,7 @@ class CSV(Cooperative):
                     self.__codec__ = codecs.getencoder(codec)
                 except Exception as details:
                     info_string = _utils.formattedException(details=details)
-                    print >>sys.stderr, info_string
+                    sys.stderr.write(info_string+'\n')
         return locals()
     codec = property(**codec())
 
@@ -475,7 +475,7 @@ class XLS(CSV):
                     pass
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
 
 class XLS2(XLS):
     def decode_and_strip(self,aString):
@@ -493,7 +493,7 @@ class XLS2(XLS):
                 #if (i > -1):
                     #pass
                 info_string = _utils.formattedException(details=details)
-                print >>sys.stderr, info_string
+                sys.stderr.write(info_string+'\n')
         else:
             s = str(aString).strip()
         return s.encode(self.codec)
@@ -524,18 +524,18 @@ class XLS2(XLS):
                                 _k = decode_and_strip(k)
                             except UnicodeEncodeError, details:
                                 info_string = _utils.formattedException(details=details)
-                                print >>sys.stderr, info_string
+                                sys.stderr.write(info_string+'\n')
                             try:
                                 _v = decode_and_strip(v)
                             except UnicodeEncodeError, details:
                                 info_string = _utils.formattedException(details=details)
-                                print >>sys.stderr, info_string
+                                sys.stderr.write(info_string+'\n')
                             _row[_k] = _v
                         d = self.dict2_factory(_row)
                         self.__rows_dicts__.append(d)
         except Exception as details:
             info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            sys.stderr.write(info_string+'\n')
 
     def rowsAsRecords(self):
         return self.__rows_dicts__

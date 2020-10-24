@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -23,7 +25,6 @@ def dumpArgs(func):
     argnames = func.func_code.co_varnames[:func.func_code.co_argcount]
     fname = func.func_name
     def echoFunc(*args,**kwargs):
-        print fname, ":", ', '.join('%s=%r' % entry
-                                    for entry in zip(argnames,args) + kwargs.items())
+        print(fname, ":", ', '.join('%s=%r' % entry for entry in zip(argnames,args) + kwargs.items()))
         return func(*args, **kwargs)
     return echoFunc

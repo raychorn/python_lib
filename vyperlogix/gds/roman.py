@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Provides two functions to convert back and forth between roman and
 decimal numbers.
@@ -115,6 +116,6 @@ if __name__ == "__main__":
         str = DecimalToRomanNumerals(int(num))
         number = RomanNumeralsToDecimal(str)
         if number != num:
-            print "Routines failed for", num
+            print("Routines failed for %s" % (num))
             raise "Test failure"
-    print "Test passed."
+    print("Test passed.")

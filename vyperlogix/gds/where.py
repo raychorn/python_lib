@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Given one or more regular expressions on the command line, searches
 the PATH for all files that match.
@@ -57,14 +58,14 @@ def main():
     try:
         optlist, regexps = getopt.getopt(sys.argv[1:], "i")
     except getopt.error, str:
-        print str
+        print(str)
         sys.exit(1)
     for opt in optlist:
         if opt[0] == "-i":
             ignore_caseG = 1
     if len(regexps) == 0:
-        print "Usage:  where [-i] regexp1 [regexp2...]"
-        print "  regexps are python re style"
+        print("Usage:  where [-i] regexp1 [regexp2...]")
+        print("  regexps are python re style")
         sys.exit(1)
     # Get a list of the directories in the path
     sep = ":"
@@ -75,7 +76,7 @@ def main():
         PATH = os.environ[key]
         path = re.split(sep, os.environ[key]) 
     else:
-        print "No PATH variable in environment"
+        print("No PATH variable in environment")
         sys.exit(1)
     # Make a list of compiled regular expressions
     regexp_list = []
@@ -92,6 +93,6 @@ def main():
         list.append(key)
     list.sort()
     for file in list:
-        print string.replace(file, "\\", "/")
+        print(string.replace(file, "\\", "/"))
 
 main()

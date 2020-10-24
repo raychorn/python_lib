@@ -1,3 +1,4 @@
+from __future__ import print_function
 """
 A simple class to represent a Quicken (QIF) file, and a parser to
 load a QIF file into a sequence of those classes.
@@ -14,7 +15,7 @@ from vyperlogix.oodb import *
 from vyperlogix.money import floatValue
 
 const_money_symbol = 'money'
- 
+
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -68,7 +69,7 @@ class QifItem(CooperativeClass.Cooperative):
                     self.__dict__[p[0]] = v
                 pass
             else:
-                print 'ERROR :: Invalid object spec "%s".  The expected class name is "%s" however this class name was not detected in the object spec that was passed into this function.' % (s,cname)
+                print('ERROR :: Invalid object spec "%s".  The expected class name is "%s" however this class name was not detected in the object spec that was passed into this function.' % (s,cname))
             pass
         self.order = self.__dict__.keys()
         
@@ -320,8 +321,8 @@ class QifReader(CooperativeClass.Cooperative):
     
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
 
     import _psyco
     _psyco.importPsycoIfPossible()
@@ -329,7 +330,7 @@ if __name__ == "__main__":
     fname = 'Z:/#zDisk/#IRS/Microsoft Money (1996-2007).qif'
     qif = QifReader(fname,['1/1/2006','12/31/2006'])
     _items = qif.items[0:1000]
-    print repr(_items[0])
+    print(repr(_items[0]))
     for item in _items[1:]:
-        print item.dataString()
+        print(item.dataString())
 

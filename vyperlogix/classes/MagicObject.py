@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -104,30 +105,30 @@ class Wrapper(MagicObject2):
         MagicObject2.__init__(self)
 
     def __getattr__(self,name,*args,**kwargs):
-	self.__reset_magic__()
-	return MagicObject2.__getattr__(self,name)
+        self.__reset_magic__()
+        return MagicObject2.__getattr__(self,name)
     
     def __setitem__(self,name,value):
-	return self.__object__.set(name,value)
+        return self.__object__.set(name,value)
     
     def __getitem__(self,name):
-	value = self.__object__.get(name)
-	if (callable(self.__callback__)):
-	    try:
-		value = self.__callback__(value)
-	    except:
-		pass
-	return value
+        value = self.__object__.get(name)
+        if (callable(self.__callback__)):
+            try:
+                value = self.__callback__(value)
+            except:
+                pass
+        return value
     
     def __call__(self,*args,**kwargs):
         n = self.n[0] if misc.isList(self.n) else self.n
-	s = 'self.__object__.%s(*args,**kwargs)' % (n)
-	try:
-	    results = eval(s)
-	except Exception as details:
-	    results = None
-	    print >> sys.stderr, _utils.formattedException(details=details)
-	return results
+        s = 'self.__object__.%s(*args,**kwargs)' % (n)
+        try:
+            results = eval(s)
+        except Exception as details:
+            results = None
+            sys.stderr.write(_utils.formattedException(details=details)+'\n')
+        return results
 
 
 

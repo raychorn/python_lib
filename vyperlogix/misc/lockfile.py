@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 """
 lockfile.py - Platform-independent advisory file locks.
 
@@ -11,30 +11,30 @@ Usage:
 >>> try:
 ...     lock.acquire()
 ... except AlreadyLocked:
-...     print _testfile(), 'is locked already.'
+...     print(_testfile(), 'is locked already.')
 ... except LockFailed:
-...     print _testfile(), 'can\\'t be locked.'
+...     print(_testfile(), 'can\\'t be locked.')
 ... else:
-...     print 'got lock'
+...     print('got lock')
 got lock
->>> print lock.is_locked()
+>>> print(lock.is_locked())
 True
 >>> lock.release()
 
 >>> lock = FileLock(_testfile())
->>> print lock.is_locked()
+>>> print(lock.is_locked())
 False
 >>> with lock:
-...    print lock.is_locked()
+...    print(lock.is_locked())
 True
->>> print lock.is_locked()
+>>> print(lock.is_locked())
 False
 >>> # It is okay to lock twice from the same thread...
 >>> with lock:
 ...     lock.acquire()
 ...
 >>> # Though no counter is kept, so you can't unlock multiple times...
->>> print lock.is_locked()
+>>> print(lock.is_locked())
 False
 
 Exceptions:
@@ -198,10 +198,10 @@ class LockBase:
         ... except AlreadyLocked:
         ...   pass
         ... except Exception as e:
-        ...   print 'unexpected exception', repr(e)
+        ...   print('unexpected exception', repr(e))
         ... else:
-        ...   print 'thread', threading.currentThread().getName(),
-        ...   print 'erroneously locked an already locked file.'
+        ...   print('thread', threading.currentThread().getName(),)
+        ...   print('erroneously locked an already locked file.')
         ...   lock2.release()
         ...
         >>> e2.set()          # tell thread t to release lock
@@ -219,11 +219,11 @@ class LockBase:
         ... except LockTimeout:
         ...   pass
         ... except Exception as e:
-        ...   print 'unexpected exception', repr(e)
+        ...   print('unexpected exception', repr(e))
         ... else:
         ...   lock2.release()
-        ...   print 'thread', threading.currentThread().getName(),
-        ...   print 'erroneously locked an already locked file.'
+        ...   print('thread', threading.currentThread().getName(),)
+        ...   print('erroneously locked an already locked file.')
         ...
         >>> e2.set()
         >>> t.join()
@@ -247,11 +247,11 @@ class LockBase:
         ... except NotLocked:
         ...   pass
         ... except NotMyLock:
-        ...   print 'unexpected exception', NotMyLock
+        ...   print('unexpected exception', NotMyLock)
         ... except Exception as e:
-        ...   print 'unexpected exception', repr(e)
+        ...   print('unexpected exception', repr(e))
         ... else:
-        ...   print 'erroneously unlocked file'
+        ...   print('erroneously unlocked file')
 
         >>> e1, e2 = threading.Event(), threading.Event()
         >>> t = _in_thread(_lock_wait_unlock, e1, e2)
@@ -266,9 +266,9 @@ class LockBase:
         ... except NotMyLock:
         ...   pass
         ... except Exception as e:
-        ...   print 'unexpected exception', repr(e)
+        ...   print('unexpected exception', repr(e))
         ... else:
-        ...   print 'erroneously unlocked a file locked by another thread.'
+        ...   print('erroneously unlocked a file locked by another thread.')
         ...
         >>> e2.set()
         >>> t.join()
@@ -306,7 +306,7 @@ class LockBase:
         ...   lock1.is_locked()
         ...   lock2.acquire()
         ... else:
-        ...   print 'expected LockTimeout...'
+        ...   print('expected LockTimeout...')
         ...
         False
         False
@@ -334,9 +334,9 @@ class LockBase:
         ... except NotLocked:
         ...   pass
         ... except Exception as e:
-        ...   print 'unexpected exception', repr(e)
+        ...   print('unexpected exception', repr(e))
         ... else:
-        ...   print 'break lock failed'
+        ...   print('break lock failed')
         """
         pass
 
@@ -378,7 +378,7 @@ class LinkFileLock(LockBase):
         ...     pass
         ...   else:
         ...     lock.release()
-        ...     print 'erroneously locked', os.path.join(d, 'test')
+        ...     print('erroneously locked', os.path.join(d, 'test'))
         ... finally:
         ...   os.chmod(d, 0664)
         ...   os.rmdir(d)
@@ -684,8 +684,8 @@ def _test():
     def test_object(c):
         nfailed = ntests = 0
         for (obj, recurse) in ((c, True),
-                               (LockBase, True),
-                               (sys.modules["__main__"], False)):
+                                (LockBase, True),
+                                (sys.modules["__main__"], False)):
             tests = doctest.DocTestFinder(recurse=recurse).find(obj)
             runner = doctest.DocTestRunner(verbose="-v" in sys.argv)
             tests.sort(key = lambda test: test.name)
@@ -693,7 +693,7 @@ def _test():
                 f, t = runner.run(test)
                 nfailed += f
                 ntests += t
-        print FileLock.__name__, "tests:", ntests, "failed:", nfailed
+        print(FileLock.__name__ + " tests: " + ntests + " failed: " + nfailed)
         return nfailed, ntests
 
     nfailed = ntests = 0
@@ -713,16 +713,16 @@ def _test():
     try:
         import sqlite3
     except ImportError:
-        print "SQLite3 is unavailable - not testing SQLiteFileLock."
+        print("SQLite3 is unavailable - not testing SQLiteFileLock.")
     else:
-        print "Testing SQLiteFileLock with sqlite", sqlite3.sqlite_version,
-        print "& pysqlite", sqlite3.version
+        sys.stdout.write("Testing SQLiteFileLock with sqlite", sqlite3.sqlite_version)
+        print("& pysqlite " + sqlite3.version)
         FileLock = SQLiteFileLock
         f, t = test_object(FileLock)
         nfailed += f
         ntests += t
 
-    print "total tests:", ntests, "total failed:", nfailed
+    print("total tests: " + ntests + " total failed: " + nfailed)
 
 if __name__ == "__main__":
     _test()

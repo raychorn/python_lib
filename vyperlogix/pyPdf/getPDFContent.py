@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 def getPDFContent(path,delimiter='   '):
     import pyPdf
     from vyperlogix.hash import lists
@@ -15,7 +17,7 @@ def getPDFContent(path,delimiter='   '):
 	from vyperlogix import misc
         exc_info = sys.exc_info()
         info_string = '\n'.join(traceback.format_exception(*exc_info))
-	print >>sys.stderr, '(%s) Error due to "%s".' % (misc.funcName(),info_string)
+	sys.stderr.write('(%s) Error due to "%s".\n' % (misc.funcName(),info_string))
     finally:
 	fIn.close()
     return d_content

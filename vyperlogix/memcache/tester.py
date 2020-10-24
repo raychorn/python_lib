@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -24,21 +25,21 @@ def __test_using_pylibmc__(__host__,verbose=False):
     try:
         import pylibmc
         if (verbose):
-            print 'Testing <pylibmc> ... %s' % (__host__)
+            print('Testing <pylibmc> ... %s' % (__host__))
         mc = pylibmc.Client([__host__], binary=True, behaviors={"tcp_nodelay": True,"ketama": True})
         if (verbose):
-            print mc
+            print(mc)
     
         if (verbose):
             mc["some_key"] = "Some value"
-            print mc["some_key"]
+            print(mc["some_key"])
     
         assert(mc["some_key"] == "Some value")
         if (verbose):
-            print 'DONE !!!'
-    except ImportError, ex:
+            print('DONE !!!')
+    except ImportError as ex:
         if (verbose):
-            print 'WARNING: %s' % (ex.message)
+            print('WARNING: %s' % (ex.message))
     return results
 
 def __test_using_umemcache__(__host__,verbose=False,timeout=None):
@@ -54,35 +55,35 @@ def __test_using_umemcache__(__host__,verbose=False,timeout=None):
         for host in __host__:
             if (verbose):
                 __activity__ = 'Testing <umemcache> ... %s' % (host)
-                print __activity__
+                print(__activity__)
         
             #mc = umemcache.Client(host)
             __mc__ = umemcache.Client(host)
             mc = Wrapper(__mc__,callback=lambda value:value[0] if (misc.isTuple(value) and (value[-1] == 0)) else value)
             mc.connect()
-            print mc
+            print(mc)
 
             if (verbose):
                 mc.set('key', 'Some value')
-                print mc.get('key')[0]
+                print(mc.get('key')[0])
             
             mc['a'] = '1'
             if (verbose):
-                print mc['a']
+                print(mc['a'])
             mc.incr('a',1)
             if (verbose):
-                print mc['a']
+                print(mc['a'])
             mc.incr('a',10)
             if (verbose):
-                print mc['a']
+                print(mc['a'])
         
             assert(mc.get('key')[0] == "Some value")
             if (verbose):
-                print 'DONE %s !!!' % (__activity__)
+                print('DONE %s !!!' % (__activity__))
             results = True
     except Exception as ex:
         if (verbose):
-            print 'WARNING: %s' % (ex.message)
+            print('WARNING: %s' % (ex.message))
     return results
 
 if (__name__ == '__main__'):
@@ -90,13 +91,13 @@ if (__name__ == '__main__'):
         __test_using_pylibmc__('127.0.0.1:11211')
         #__test1__('memcached1.fs7l9z.cfg.use1.cache.amazonaws.com:11211')
     except:
-        print 'ERROR #1'
+        print('ERROR #1')
     
     try:
         __test_using_umemcache__('127.0.0.1:11211')
         #__test2__('memcached1.fs7l9z.cfg.use1.cache.amazonaws.com:11211')
     except:
-        print 'ERROR #2'
+        print('ERROR #2')
 
-    print "Test complete."
+    print("Test complete.")
     

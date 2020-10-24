@@ -217,7 +217,7 @@ class DstTzInfo(BaseTzInfo):
         >>> try:
         ...     loc_dt1 = amdam.localize(dt, is_dst=None)
         ... except AmbiguousTimeError:
-        ...     print 'Oops'
+        ...     print('Oops')
         Oops
 
         >>> loc_dt1 = amdam.localize(dt, is_dst=None)

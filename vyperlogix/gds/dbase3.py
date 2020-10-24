@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Copyright (C) 2002 GDS Software
 
@@ -196,31 +197,31 @@ class dBase3:
         spaces = 30
         template  = "%%-%ds %%d" % spaces
         template1 = "%%-%ds 0x%%02x" % spaces
-        print "File:  %s" % self.file_name
-        print template1 % ("Version info", self.version_number),
+        print("File:  %s" % self.file_name)
+        print(template1 % ("Version info", self.version_number),)
         if self.version_number == 0x83:
-            print " (with a .DBT memo file)"
+            print(" (with a .DBT memo file)")
         else:
-            print " (without a .DBT memo file)"
-        print template % ("Last update year", self.last_update_yy+1900)
-        print template % ("Last update month", self.last_update_mm)
-        print template % ("Last update day", self.last_update_dd)
-        print template % ("Number of records", self.num_records)
-        print template % ("Header length", self.header_length)
-        print template % ("Record length", self.record_length)
-        print template % ("Number of fields", self.num_fields)
-        print "\nDump of field info:\n"
-        print "   Num   Name        Type  Length"
-        print "   ---   ----        ----  ------"
+            print(" (without a .DBT memo file)")
+        print(template % ("Last update year", self.last_update_yy+1900))
+        print(template % ("Last update month", self.last_update_mm))
+        print(template % ("Last update day", self.last_update_dd))
+        print(template % ("Number of records", self.num_records))
+        print(template % ("Header length", self.header_length))
+        print(template % ("Record length", self.record_length))
+        print(template % ("Number of fields", self.num_fields))
+        print("\nDump of field info:\n")
+        print("   Num   Name        Type  Length")
+        print("   ---   ----        ----  ------")
         for ix in range(self.num_fields):
-            print "    %2d" % ix,            # Field number
+            sys.stdout.write("    %2d" % ix)            # Field number
             s = self.fields[ix]
-            print "  %-12s" % s[0],          # Name
-            print " %-1s"   % s[1],          # Type
-            #print " \"%-4s\""   % s[2],
-            print "   %3d"    % s[3]         # Length
-            #print " %3d"    % s[4],
-            #print " %-14s"  % s[5]
+            sys.stdout.write("  %-12s" % s[0])          # Name
+            sys.stdout.write(" %-1s"   % s[1])          # Type
+            #sys.stdout.write(" \"%-4s\""   % s[2]),
+            sys.stdout.write("   %3d"    % s[3])         # Length
+            #sys.stdout.write(" %3d"    % s[4])
+            #sys.stdout.write(" %-14s"  % s[5])
                 
     def GetFileHandle(self):
         return self.fp
@@ -326,8 +327,8 @@ class dBase3:
 if __name__ == '__main__':
     import sys, string
     if len(sys.argv) < 2:
-        print "Usage:  dbase3 <dbase_file>"
-        print "  Will dump the header and data of a dbase3 file."
+        print("Usage:  dbase3 <dbase_file>")
+        print("  Will dump the header and data of a dbase3 file.")
         sys.exit(1)
     db = dBase3(sys.argv[1])
     db.DumpHeader()

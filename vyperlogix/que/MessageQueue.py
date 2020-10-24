@@ -1,3 +1,4 @@
+from __future__ import print_function
 import socket
 import struct
 
@@ -86,8 +87,8 @@ def main():
             raise NoMatch, buf
 
     while 1:
-        print 'match!', q.receive(patterna)
-        print 'match!', q.receive(patternb)
+        print('match!', q.receive(patterna))
+        print('match!', q.receive(patternb))
 
 def test():
     import socket

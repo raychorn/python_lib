@@ -1,3 +1,4 @@
+from __future__ import print_function
 import urllib
 import httplib
 from vyperlogix.hash import lists
@@ -113,10 +114,10 @@ class TargetedHTMLParser(Cooperative,HTMLParser):
             items = [t for t in self.get_starttag_text().split('"') if t.startswith('http://') or t.startswith('https://')]
             if (len(items) > 0):
                 self.tagContents.append(items[0])
-                print "Encountered the beginning of a '%s' tag [%s]" % (tag,attrs)
+                print("Encountered the beginning of a '%s' tag [%s]" % (tag,attrs))
 
     def handle_endtag(self, tag, state='END'):
         if (self.isInterestInThisTag(tag,state=state) == True):
-            print "Encountered the end of a '%s' tag" % tag
+            print("Encountered the end of a '%s' tag" % tag)
             pass
 

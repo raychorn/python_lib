@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This module contains functions to do sampling with and without 
 replacement and random shuffling.  The algorithms are from
@@ -129,7 +130,7 @@ def deal_deck(num_hands, num_per_hand):
         for card_num in cards[hand]:
             # We subtract 1 from card_num because cards are numbered 1 to 52
             suit_index, card_index = divmod(card_num-1, 13)
-            #print "suit_index =", suit_index, " card_index =", card_index, " card_num =", card_num
+            #print("suit_index =", suit_index, " card_index =", card_index, " card_num =", card_num)
             suit = suit_name[suit_index]
             card = ("1" * (card_index == 9)) + card_name[card_index]
             new_hand.append(card + suit)

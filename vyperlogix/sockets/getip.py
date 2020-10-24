@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -34,7 +35,7 @@ def get_ip_address(ifname):
     except:
         import platform
         from vyperlogix import misc
-        print >> sys.stderr, '%s.WARNING: Cannot use this function in %s.' % (misc.funcName(),platform.uname()[0])
+        sys.stderr.write('%s.WARNING: Cannot use this function in %s.\n' % (misc.funcName(),platform.uname()[0]))
     return None
 
 def get_ip_address_by_socket():
@@ -44,7 +45,7 @@ if (__name__ == '__main__'):
     import platform
     from vyperlogix.misc import _utils
     if (_utils.isUsingWindows):
-        print >> sys.stderr, '%s.WARNING: Cannot use this function in %s.' % (misc.funcName(),platform.uname()[0])
+        sys.stderr.write('%s.WARNING: Cannot use this function in %s.\n' % (misc.funcName(),platform.uname()[0]))
     else:
-        print get_ip_address('eth0')
+        print(get_ip_address('eth0'))
     

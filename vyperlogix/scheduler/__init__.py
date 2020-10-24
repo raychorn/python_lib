@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Created on Oct 5, 2011
 
@@ -206,7 +207,7 @@ class Scheduler():
         __Q__.join()
 
 if (__name__ == '__main__'):
-    print today_localtime()
+    print(today_localtime())
     scheduler = Scheduler(interval=1)
     scheduler.run()
     __Q__.join()

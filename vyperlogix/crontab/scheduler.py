@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 """
 See also: http://code.activestate.com/recipes/577466-cron-like-triggers/
 
@@ -33,7 +34,7 @@ True
 >>> job.check_trigger((2010, 5, 2, 1, 0), utc_offset=-6)
 True
 """
-
+import time
 import datetime
 import calendar
 
@@ -52,8 +53,9 @@ MONTHS = (1, 12)
 DAYS_OF_WEEK = (0, 6)
 L_FIELDS = (DAYS_OF_WEEK, DAYS_OF_MONTH)
 FIELD_RANGES = (MINUTES, HOURS, DAYS_OF_MONTH, MONTHS, DAYS_OF_WEEK)
-MONTH_NAMES = zip(('jan', 'feb', 'mar', 'apr', 'may', 'jun',
-                   'jul', 'aug', 'sep', 'oct', 'nov', 'dec'), xrange(1, 13))
+MONTH_NAMES = zip(
+    ('jan', 'feb', 'mar', 'apr', 'may', 'jun',
+    'jul', 'aug', 'sep', 'oct', 'nov', 'dec'), xrange(1, 13))
 DEFAULT_EPOCH = (1970, 1, 1, 0, 0, 0)
 SUBSTITUTIONS = {
     "@yearly": "0 0 1 1 *",
@@ -177,8 +179,7 @@ class CronExpression(object):
             (mins, hour, day, month, given_dow),
             self.numerical_tab,
             self.string_tab,
-            (mod_delta_min, mod_delta_hrs, mod_delta_day, mod_delta_mon,
-             mod_delta_day),
+            (mod_delta_min, mod_delta_hrs, mod_delta_day, mod_delta_mon, mod_delta_day),
             FIELD_RANGES)
 
         for value, valid_values, field_str, delta_t, field_type in quintuple:
@@ -316,92 +317,92 @@ def crontab(config,jsonHandler=None,callback=None,logging_callback=None,default=
     normalize = lambda items:[s for s in [''.join(ll[0:ll.findFirstMatching('#') if (ll.findFirstMatching('#') > -1) else len(ll)]).strip() for ll in [ListWrapper(l) for l in items if (len(l) > 0)]] if (len(s) > 0)]
     
     def __logger__(msg):
-	if (callable(logging_callback)):
-	    try:
-		logging_callback(msg)
-	    except:
-		pass
+        if (callable(logging_callback)):
+            try:
+                logging_callback(msg)
+            except:
+                pass
 
     def __crontab__(config,jsonHandler=jsonHandler,callback=callback,logging_callback=logging_callback,default=default):
         __lines__ = ''
         
-	__logger__('INFO.1.1: verbose="%s" (%s).' % (config.verbose,ObjectTypeName.typeClassName(config.verbose)))
-	try:
-	    __logger__('INFO.1.2: config="%s".' % (config))
-	    if (config.verbose):
-		__logger__('INFO.1.3: JSON FPath ?: "%s".' % (config.jsonFpath))
-	    if (callable(jsonHandler)):
-		try:
-		    __config__ = jsonHandler(config.jsonFpath)
-		except Exception as ex:
-		    __config__ = SmartObject()
-	    __file__ = config.schedulefpath if (misc.isStringValid(config.schedulefpath)) else None
-	    if (config.verbose):
-		__logger__('INFO.1.4: Crontab ?: "%s".' % (__file__))
-	    if (os.path.exists(__file__)):
-		if (config.verbose):
-		    __logger__('INFO.1.5: Crontab Exists: "%s".' % (__file__))
-		__lines__ = _utils._readFileFrom(__file__)
-		if (config.verbose):
-		    __logger__('INFO.1.6: Crontab Content: "%s".' % (__lines__))
-	except Exception as ex:
-	    __logger__('EXCEPTION.1: "%s".' % (_utils.formattedException(details=ex)))
+        __logger__('INFO.1.1: verbose="%s" (%s).' % (config.verbose,ObjectTypeName.typeClassName(config.verbose)))
+        try:
+            __logger__('INFO.1.2: config="%s".' % (config))
+            if (config.verbose):
+                __logger__('INFO.1.3: JSON FPath ?: "%s".' % (config.jsonFpath))
+            if (callable(jsonHandler)):
+                try:
+                    __config__ = jsonHandler(config.jsonFpath)
+                except Exception as ex:
+                    __config__ = SmartObject()
+            __file__ = config.schedulefpath if (misc.isStringValid(config.schedulefpath)) else None
+            if (config.verbose):
+                __logger__('INFO.1.4: Crontab ?: "%s".' % (__file__))
+            if (os.path.exists(__file__)):
+                if (config.verbose):
+                    __logger__('INFO.1.5: Crontab Exists: "%s".' % (__file__))
+                __lines__ = _utils._readFileFrom(__file__)
+                if (config.verbose):
+                    __logger__('INFO.1.6: Crontab Content: "%s".' % (__lines__))
+        except Exception as ex:
+            __logger__('EXCEPTION.1: "%s".' % (_utils.formattedException(details=ex)))
         
-	__logger__('INFO.1.6.1: config.isRunning="%s".' % (config.isRunning))
+        __logger__('INFO.1.6.1: config.isRunning="%s".' % (config.isRunning))
         while (config.isRunning and threaded):
             jobs = [CronExpression(__line__) for __line__ in normalize(__lines__) if (misc.isStringValid(__line__))]
             config.isRunning = callback(jobs) if (callable(callback)) else True
             if (config.isRunning):
                 for job in jobs:
                     if (config.verbose):
-			__logger__('INFO.1.7: Job: "%s".' % (job))
+                        __logger__('INFO.1.7: Job: "%s".' % (job))
                     if job.check_trigger(time.gmtime(time.time())[:5]):
                         if (config.dryrun):
-			    __logger__('INFO.1.8: Execute: %s' % (job.comment))
-                        else:
-			    import tempfile
-			    __cmd__ = tempfile.NamedTemporaryFile().name
-			    __sysout__ = _utils.stringIO()
+                    __logger__('INFO.1.8: Execute: %s' % (job.comment))
+            else:
+                import tempfile
+                __cmd__ = tempfile.NamedTemporaryFile().name
+                __sysout__ = _utils.stringIO()
 
-			    def __callback__(ss,data=None):
-				global __begin__
-				if (data) and (misc.isString(data)) and (len(data) > 0):
-				    __logger__('INFO.1.9: %s' % (data))
-				return
-			
-			    def __onExit__(ss):
-				__logger__('INFO.1.10: __onExit__')
-				__logger__('INFO.1.11: %s' % (__sysout__.getvalue()))
-				if (os.path.exists(__cmd__)):
-				    os.remove(__cmd__)
-    
-			    wfHandle = open(__cmd__,'w')
-			    print >>wfHandle, '@echo on\n'
-			    print >>wfHandle, '%s\n' % (job.comment)
-			    wfHandle.flush()
-			    wfHandle.close()
-			    ss = SmartShell(__cmd__,callback=__callback__,isDebugging=True,onExit=__onExit__,sysout=__sysout__)
-			    ss.execute()
+                def __callback__(ss,data=None):
+                    global __begin__
+                    if (data) and (misc.isString(data)) and (len(data) > 0):
+                        __logger__('INFO.1.9: %s' % (data))
+                    return
             
-		if (threaded):
-		    if (config.verbose):
-			__logger__('INFO.1.12: Sleeping for %s secs...' % (config.resolution))
-		    time.sleep(config.resolution if (isinstance(config.resolution,float) or isinstance(config.resolution,int)) else 60)
-		    
-		    if (callable(jsonHandler)):
-			try:
-			    __config__ = jsonHandler(config.jsonFpath)
-			except Exception as ex:
-			    __config__ = SmartObject()
-		    __file__ = config.schedulefpath if (misc.isStringValid(config.schedulefpath)) else None
-		    if (os.path.exists(__file__)):
-			if (config.verbose):
-			    __logger__('INFO.1.13: Crontab Exists: "%s".' % (__file__))
-			__lines__ = _utils._readFileFrom(__file__)
-			if (config.verbose):
-			    __logger__('INFO.1.14: Crontab Content: "%s".' % (__lines__))
-	else:
-	    __logger__('WARNING.1.15: Cannot execute crontab unless threaded is %s (true).' % (threaded))
+                def __onExit__(ss):
+                    __logger__('INFO.1.10: __onExit__')
+                    __logger__('INFO.1.11: %s' % (__sysout__.getvalue()))
+                    if (os.path.exists(__cmd__)):
+                        os.remove(__cmd__)
+
+                    wfHandle = open(__cmd__,'w')
+                    wfHandle.write('@echo on\n')
+                    wfHandle.write('%s\n' % (job.comment))
+                    wfHandle.flush()
+                    wfHandle.close()
+                    ss = SmartShell(__cmd__,callback=__callback__,isDebugging=True,onExit=__onExit__,sysout=__sysout__)
+                    ss.execute()
+            
+        if (threaded):
+            if (config.verbose):
+                __logger__('INFO.1.12: Sleeping for %s secs...' % (config.resolution))
+                time.sleep(config.resolution if (isinstance(config.resolution,float) or isinstance(config.resolution,int)) else 60)
+            
+            if (callable(jsonHandler)):
+                try:
+                    __config__ = jsonHandler(config.jsonFpath)
+                except Exception as ex:
+                    __config__ = SmartObject()
+            __file__ = config.schedulefpath if (misc.isStringValid(config.schedulefpath)) else None
+            if (os.path.exists(__file__)):
+                if (config.verbose):
+                    __logger__('INFO.1.13: Crontab Exists: "%s".' % (__file__))
+                __lines__ = _utils._readFileFrom(__file__)
+                if (config.verbose):
+                    __logger__('INFO.1.14: Crontab Content: "%s".' % (__lines__))
+        else:
+            __logger__('WARNING.1.15: Cannot execute crontab unless threaded is %s (true).' % (threaded))
         return config.isRunning
             
     __logger__('INFO.1: threaded="%s".' % (threaded))
@@ -410,7 +411,7 @@ def crontab(config,jsonHandler=None,callback=None,logging_callback=None,default=
         def threaded_crontab(config,jsonHandler=jsonHandler,callback=callback,logging_callback=logging_callback,default=default):
             return __crontab__(config,jsonHandler=jsonHandler,callback=callback,logging_callback=logging_callback,default=default)
         threaded_crontab(config,jsonHandler=jsonHandler,callback=callback,logging_callback=logging_callback,default=default)
-	__logger__('INFO.2: isRunning="%s".' % (config.isRunning))
+        __logger__('INFO.2: isRunning="%s".' % (config.isRunning))
         if (not config.isRunning):
             if (config.verbose):
                 if (callable(logging_callback)):
@@ -418,11 +419,11 @@ def crontab(config,jsonHandler=None,callback=None,logging_callback=None,default=
                         logging_callback('INFO: Cannot run due to application defined criteria expressed via the callback.')
                     except:
                         pass
-	    __logger__('INFO.3: TERMINATING !!!')
-            pid = os.getpid()
-            os.kill(pid,signal.SIGTERM)
+        __logger__('INFO.3: TERMINATING !!!')
+        pid = os.getpid()
+        os.kill(pid,signal.SIGTERM)
     else:
-	__logger__('INFO.3: threaded="%s".' % (threaded))
+        __logger__('INFO.3: threaded="%s".' % (threaded))
         __crontab__(config,jsonHandler=jsonHandler,callback=callback,logging_callback=logging_callback,default=default)
         
 if (__name__ == '__main__'):
@@ -437,5 +438,5 @@ if (__name__ == '__main__'):
         
     s_begin = time.time()
     while ((time.time() - s_begin) < 900.0):
-        print '(+++)'
+        print('(+++)')
         time.sleep(10)

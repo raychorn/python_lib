@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -828,16 +829,16 @@ class PickledHash(CooperativeClass.Cooperative):
             tName = os.sep.join([os.path.dirname(self.fileName),'.'.join([os.path.basename(self.fileName).split('.')[0],'txt'])])
             fHand = open(tName,'w')
             pp = pprint.PrettyPrinter(indent=4,width=80)
-            print >>fHand, '(%s) :: (%s) :: dbx=(%s)' % (__name__,self.fileName,str(self))
+            fHand.write('(%s) :: (%s) :: dbx=(%s)\n' % (__name__,self.fileName,str(self)))
             for k,v in self.iteritems():
                 if (callback):
                     try:
-                        print >>fHand, '%s :: %s' % (k,callback(v))
+                        fHand.write('%s :: %s\n' % (k,callback(v)))
                     except:
-                        print >>fHand, '%s :: %s' % (k,pp.pformat(v))
-            print >>fHand
-            print >>fHand, '='*60
-            print >>fHand
+                        fHand.write('%s :: %s\n' % (k,pp.pformat(v)))
+            fHand.write('\n')
+            fHand.write('='*60)
+            fHand.write('\n')
             fHand.flush()
             fHand.close()
 
@@ -1001,7 +1002,7 @@ def put_data(_fname,key,value,fOut=None,isUnique=True):
     except Exception as details:
         from vyperlogix.misc import _utils
         fOut = sys.stderr if (fOut is None) else fOut
-        print >>fOut, _utils.formattedException(details)
+        fOut.write(_utils.formattedException(details)+'\n')
     finally:
         dbx.close()
 
@@ -1015,7 +1016,7 @@ def get_data(_fname,key,fOut=None,isUnique=True):
     except Exception as details:
         from vyperlogix.misc import _utils
         fOut = sys.stderr if (fOut is None) else fOut
-        print >>fOut, _utils.formattedException(details)
+        fOut.write(_utils.formattedException(details)+'\n')
     finally:
         dbx.close()
     return value

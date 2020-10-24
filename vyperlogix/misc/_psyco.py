@@ -1,3 +1,4 @@
+from __future__ import print_function
 from os import environ
 from vyperlogix.misc import _utils
 from vyperlogix import misc
@@ -41,10 +42,10 @@ def importPsycoIfPossible(func=None,isVerbose=False):
             elif (_isMachineBits32):
                 import psyco_linux
             else:
-                print '%s :: psyco cannot be imported because target machine has %s bits and is not a Windows box !' % (misc.funcName(),_bits)
+                print('%s :: psyco cannot be imported because target machine has %s bits and is not a Windows box !' % (misc.funcName(),_bits))
                 return
             if (isVerbose):
-                print '%s :: psyco has been imported !' % (misc.funcName())
+                print('%s :: psyco has been imported !' % (misc.funcName()))
             if (func):
                 if (misc.isList(func)):
                     for f in func:
@@ -60,7 +61,7 @@ def importPsycoIfPossible(func=None,isVerbose=False):
                 psyco.full()
         except Exception as details:
             if (isVerbose):
-                print '%s :: psyco has not been imported because "%s" !' % (misc.funcName(),str(details))
+                print('%s :: psyco has not been imported because "%s" !' % (misc.funcName(),str(details)))
     else:
         if (isVerbose):
-            print '%s :: psyco has not been imported because Wing IDE is Active and psyco does not run with Wing !' % (misc.funcName())
+            print('%s :: psyco has not been imported because Wing IDE is Active and psyco does not run with Wing !' % (misc.funcName()))

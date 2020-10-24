@@ -1,3 +1,4 @@
+from __future__ import print_function
 import urllib2
 import re
 import time
@@ -52,8 +53,7 @@ def GoogleHash(value):
 
 def make_url(host, site_url):
     url = "info:" + site_url
-    params = dict(client="navclient-auto", ch="%s" % GoogleHash(url),
-                  ie="UTF-8", oe="UTF-8", features="Rank", q=url)
+    params = dict(client="navclient-auto", ch="%s" % GoogleHash(url), ie="UTF-8", oe="UTF-8", features="Rank", q=url)
     return "http://%s/search?%s" % (host, urlencode(params))
 
 def page_rank(url):
@@ -61,19 +61,19 @@ def page_rank(url):
         url = 'http://%s' % url
 
     url = make_url(HOST, url)
-    print url
+    print(url)
     req = urllib2.Request(url)
     try:
         f = urllib2.urlopen(req)
         response = f.readline()
     except Exception as err:
-        print err
+        print(err)
         sys.exit(1)
 
     try:
         rank = re.match(r'^Rank_\d+:\d+:(\d+)', response.strip()).group(1)
     except AttributeError:
-        print "This page is not ranked"
+        print("This page is not ranked")
         rank = -1
         
     return rank
@@ -85,4 +85,4 @@ if (__name__ == "__main__"):
         url = sys.argv[1]
 
     rank = page_rank(url)
-    print "PagerRank: %d\tURL: %s" % (int(rank), url)
+    print("PagerRank: %d\tURL: %s" % (int(rank), url))

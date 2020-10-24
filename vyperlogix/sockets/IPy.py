@@ -95,13 +95,13 @@ class IPint:
         If make_net is True, an IP address will be transformed into the network
         address by applying the specified netmask.
 
-        >>> print IP('127.0.0.0/8')
+        >>> print(IP('127.0.0.0/8'))
         127.0.0.0/8
-        >>> print IP('127.0.0.0/255.0.0.0')
+        >>> print(IP('127.0.0.0/255.0.0.0'))
         127.0.0.0/8
-        >>> print IP('127.0.0.0-127.255.255.255')
+        >>> print(IP('127.0.0.0-127.255.255.255'))
         127.0.0.0/8
-        >>> print IP('127.0.0.1/255.0.0.0', make_net=True)
+        >>> print(IP('127.0.0.1/255.0.0.0', make_net=True))
         127.0.0.0/8
 
         See module documentation for more examples.
@@ -289,7 +289,7 @@ class IPint:
     def strBin(self, wantprefixlen = None):
         """Return a string representation as a binary value.
 
-        >>> print IP('127.0.0.1').strBin()
+        >>> print(IP('127.0.0.1').strBin())
         01111111000000000000000000000001
         """
 
@@ -352,9 +352,9 @@ class IPint:
     def strNormal(self, wantprefixlen = None):
         """Return a string representation in the usual format.
 
-        >>> print IP('127.0.0.1').strNormal()
+        >>> print(IP('127.0.0.1').strNormal())
         127.0.0.1
-        >>> print IP('2001:0658:022a:cafe:0200::1').strNormal()
+        >>> print(IP('2001:0658:022a:cafe:0200::1').strNormal())
         2001:658:22a:cafe:200:0:0:1
         """
 
@@ -375,9 +375,9 @@ class IPint:
     def strFullsize(self, wantprefixlen = None):
         """Return a string representation in the non-mangled format.
 
-        >>> print IP('127.0.0.1').strFullsize()
+        >>> print(IP('127.0.0.1').strFullsize())
         127.0.0.1
-        >>> print IP('2001:0658:022a:cafe:0200::1').strFullsize()
+        >>> print(IP('2001:0658:022a:cafe:0200::1').strFullsize())
         2001:0658:022a:cafe:0200:0000:0000:0001
         """
 
@@ -406,9 +406,9 @@ class IPint:
     def strDec(self, wantprefixlen = None):
         """Return a string representation in decimal format.
 
-        >>> print IP('127.0.0.1').strDec()
+        >>> print(IP('127.0.0.1').strDec())
         2130706433
-        >>> print IP('2001:0658:022a:cafe:0200::1').strDec()
+        >>> print(IP('2001:0658:022a:cafe:0200::1').strDec())
         42540616829182469433547762482097946625
         """
 
@@ -423,15 +423,15 @@ class IPint:
     def iptype(self):
         """Return a description of the IP type ('PRIVATE', 'RESERVERD', etc).
 
-        >>> print IP('127.0.0.1').iptype()
+        >>> print(IP('127.0.0.1').iptype())
         PRIVATE
-        >>> print IP('192.168.1.1').iptype()
+        >>> print(IP('192.168.1.1').iptype())
         PRIVATE
-        >>> print IP('195.185.1.2').iptype()
+        >>> print(IP('195.185.1.2').iptype())
         PUBLIC
-        >>> print IP('::1').iptype()
+        >>> prin( IP('::1').iptype())
         LOOPBACK
-        >>> print IP('2001:0658:022a:cafe:0200::1').iptype()
+        >>> print(IP('2001:0658:022a:cafe:0200::1').iptype())
         ASSIGNABLE RIPE
 
         The type information for IPv6 is out of sync with reality.
@@ -474,9 +474,9 @@ class IPint:
     def strNetmask(self):
         """Return netmask as an string. Mostly useful for IPv6.
 
-        >>> print IP('195.185.0.0/16').strNetmask()
+        >>> print(IP('195.185.0.0/16').strNetmask())
         255.255.0.0
-        >>> print IP('2001:0658:022a:cafe::0/64').strNetmask()
+        >>> print(IP('2001:0658:022a:cafe::0/64').strNetmask())
         /64
         """
 
@@ -493,9 +493,9 @@ class IPint:
     def len(self):
         """Return the length of a subnet.
 
-        >>> print IP('195.185.1.0/28').len()
+        >>> print(IP('195.185.1.0/28').len())
         16
-        >>> print IP('195.185.1.0/24').len()
+        >>> print(IP('195.185.1.0/24').len())
         256
         """
 
@@ -535,7 +535,7 @@ class IPint:
 
         >>> ip=IP('127.0.0.0/30')
         >>> for x in ip:
-        ...  print repr(x)
+        ...  print(repr(x))
         ...
         IP('127.0.0.0')
         IP('127.0.0.1')
@@ -625,7 +625,7 @@ class IPint:
         to an identical Object (without the wantprefixlen stuff - see
         module docstring.
 
-        >>> print repr(IP('10.0.0.0/24'))
+        >>> print(repr(IP('10.0.0.0/24')))
         IP('10.0.0.0/24')
         """
 
@@ -799,9 +799,9 @@ class IP(IPint):
         for /23. Do not use it. Better set up a zone for every
         address. See reverseName for a way to achieve that.
 
-        >>> print IP('195.185.1.1').reverseName()
+        >>> print(IP('195.185.1.1').reverseName())
         1.1.185.195.in-addr.arpa.
-        >>> print IP('195.185.1.0/28').reverseName()
+        >>> print(IP('195.185.1.0/28').reverseName())
         0-15.1.185.195.in-addr.arpa.
         """
 
@@ -846,7 +846,7 @@ class IP(IPint):
 
         Returns a new IP instance.
 
-        >>> print IP('127.0.0.1').make_net('255.0.0.0')
+        >>> print(IP('127.0.0.1').make_net('255.0.0.0'))
         127.0.0.0/8
         """
         if '/' in str(netmask):
@@ -858,15 +858,15 @@ class IP(IPint):
 
         >>> ip=IP('127.0.0.0/30')
         >>> for x in ip:
-        ...  print str(x)
+        ...  print(str(x))
         ...
         127.0.0.0
         127.0.0.1
         127.0.0.2
         127.0.0.3
-        >>> print str(ip[2])
+        >>> print(str(ip[2]))
         127.0.0.2
-        >>> print str(ip[-1])
+        >>> print(str(ip[-1]))
         127.0.0.3
         """
         return IP(IPint.__getitem__(self, key))

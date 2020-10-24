@@ -1,3 +1,4 @@
+from __future__ import print_function
 from vyperlogix.classes.CooperativeClass import Cooperative
 
 import os, sys, traceback
@@ -278,5 +279,5 @@ class SalesForceAbstract(Cooperative):
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys
 
 __copyright__ = """\
@@ -26,7 +27,7 @@ def profile(fpath):
 
     @profile(fpath)
     def method(item):
-        print item
+        print(item)
     '''
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -43,9 +44,9 @@ def profile(fpath):
             from util import writes
             writes.to_file(fp, fOut.getvalue())
             fOut = StringIO.StringIO()
-            print >>fOut, '@echo off'
-            print >>fOut, ''
-            print >>fOut, 'python -m pstats "%s"' % (fname)
+            fOut.write('@echo off\n')
+            fOut.write('\n')
+            fOut.write('python -m pstats "%s"\n' % (fname))
             fname2 = 'pstat_%s.cmd' % (n.replace('.','_'))
             fp2 = os.sep.join([fpath,fname2])
             writes.to_file(fp2, fOut.getvalue())

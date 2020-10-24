@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -33,15 +34,15 @@ class MySQLConnectionSniffer():
         try:
             import MySQLdb
         except ImportError:
-            print >> sys.stderr, 'ERROR: Cannot import MySQLdb and this is required.'
+            sys.stderr.write('ERROR: Cannot import MySQLdb and this is required.\n')
             return False
         results = True
         try:
             db = MySQLdb.connect(host=self.host, port=int(str(self.port)),
-                                 user=self.username,
-                                  passwd=self.password,
-                                  db=self.db)
-            print '#1 (%s:%s)-(%s)@(%s,%s)' % (self.host,self.port,self.db,self.username,self.password)
+                                    user=self.username,
+                                    passwd=self.password,
+                                    db=self.db)
+            print('#1 (%s:%s)-(%s)@(%s,%s)' % (self.host,self.port,self.db,self.username,self.password))
             db.close
         except:
             results = False

@@ -1,3 +1,4 @@
+from __future__ import print_function
 """
 
 The soundex algorithm takes an English word, and returns an easily-computed
@@ -130,8 +131,7 @@ def _test():
         got = get_soundex(name)
         if got != expected:
             nerrors = nerrors + 1
-            print "error in Soundex test: name", name, \
-                  "expected", expected, "got", got
+            print("error in Soundex test: name " + name + " expected " + expected + " got " + got)
     nerrors = 0
     NDIGITS = 3
     check("Euler", "E460")
@@ -167,7 +167,7 @@ def _test():
         raise SystemError("soundex test failed with " + `nerrors` +
                           " errors")
     else:
-        print "all tests passed"
+        print("all tests passed")
         
 if __name__ == "__main__":
     _test()

@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Counts the number of lines in the input file.  The input file is assumbed
 to be text, but it doesn't have to be.
@@ -33,7 +34,7 @@ def count_lines(files):
             fp = open(file, "rb")
             lines = fp.readlines()
             fp.close()
-            print "%-8d  %s" % (len(lines), file)
+            print("%-8d  %s" % (len(lines), file))
         except:
             sys.stderr.write("Couldn't read \"%s\"\n" % file)
             retval = 1
@@ -51,7 +52,7 @@ def IsFile(file_name):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "Usage:  lc file1 [file2...]"
+        print("Usage:  lc file1 [file2...]")
         sys.exit(1)
     sys.exit(count_lines(sys.argv[1:]))
 

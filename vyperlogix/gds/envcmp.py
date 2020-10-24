@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Tool to compare shell environment variable settings
 
@@ -48,14 +49,14 @@ def Usage():
     and exit.
     '''
     if len(sys.argv) != 3:
-        print '''Usage:  %s  A  B
+        print('''Usage:  %s  A  B
   Compares two files A and B containing the output of a shell 'set' 
   command and reports:
 
     * Those environment variables in A but not in B
     * Those environment variables in B but not in A
     * Those environment variables that are common and equal
-    * Those environment variables that are common but unequal''' %     sys.argv[0]
+    * Those environment variables that are common but unequal''' %     sys.argv[0])
         sys.exit(1)
     global A, B
     A = sys.argv[1]
@@ -82,23 +83,23 @@ def Compare(dictA, dictB):
             only_in_B[key] = 0
     # Print report
     if len(common_equal) > 0:
-        print "Common and equal variables:"
+        print("Common and equal variables:")
         PrintKeys(common_equal)
     if len(common_unequal) > 0:
-        print "Common and unequal variables:"
+        print("Common and unequal variables:")
         PrintKeys(common_unequal)
     if len(only_in_A) > 0:
-        print "Only in file %s:" % A
+        print("Only in file %s:" % A)
         PrintKeys(only_in_A)
     if len(only_in_B) > 0:
-        print "Only in file %s:" % B
+        print("Only in file %s:" % B)
         PrintKeys(only_in_B)
 
 def PrintKeys(dict):
     keys = dict.keys()
     keys.sort()
     for key in keys:
-        print " ", key
+        print(" %s" % (key))
 
 def BuildDict(file):
     stream = open(file)
@@ -116,7 +117,7 @@ def BuildDict(file):
             sys.stderr.write("Bad line %d of file %s\n" % (lineno, file))
             continue
         if bash_func.match(line) and            line != "DIRSTACK=()" and            line != "GROUPS=()":
-            print "matched", line
+            print("matched %s" % (line))
             # First line of a bash function listing; we're done
             break
         name  = line[:pos]

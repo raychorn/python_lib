@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -66,16 +67,16 @@ if (__name__ == '__main__'):
     # convert to json string
     s = json.dumps(mem, indent=2)
     
-    #print mem
-    print s
-    print
+    #print(mem)
+    print(s)
+    print()
     
     # json.loads converts to nested dicts, need to walk them
     for (path, dicts, items) in walk(json.loads(s)):
         # this will print every path
-        print '[%s]' % path
+        print('[%s]' % path)
         for key,val in items:
             # this will print every key,value pair (skips empty paths)
-            print '%s = %s' % (path+key,val)
+            print('%s = %s' % (path+key,val))
         print
     

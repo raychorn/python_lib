@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -68,4 +69,4 @@ def localifs():
             for i in xrange(0, outbytes, var2)]
 
 if (__name__ == '__main__'):
-    print localifs()
+    print(localifs())

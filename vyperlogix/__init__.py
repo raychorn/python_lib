@@ -32,4 +32,4 @@ class Str(str):
 
 __version__ = '1.0.0.0'
 
-#print 'Loaded... %s v%s' % (str(__name__).capitalize(),__version__)
+#print('Loaded... %s v%s' % (str(__name__).capitalize(),__version__))

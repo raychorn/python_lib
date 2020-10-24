@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import functools
 
 from vyperlogix.misc import ioTimeAnalysis
@@ -28,7 +30,7 @@ def analyze(reason):
 
     @analyze(reason)
     def method(item):
-        print item
+        print(item)
     '''
     def decorator(func):
         def proxy(*args, **kwargs):

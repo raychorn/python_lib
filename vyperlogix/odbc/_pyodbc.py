@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pyodbc
 import logging
 
@@ -11,7 +12,7 @@ def exec_and_process_sql(cnnStr,sql,callback,useCommit=True,useClose=True):
 				callback(rows)
 			except Exception as details:
 				_info = '(exec_and_process_sql).1 :: Error in callback "%s".\ncnnStr=(%s)\nsql=(%s).\n' % (str(details),cnnStr,sql)
-				print _info
+				print(_info)
 				logging.warning(_info)
 		if (useCommit):
 			_dbh.commit()
@@ -19,5 +20,5 @@ def exec_and_process_sql(cnnStr,sql,callback,useCommit=True,useClose=True):
 			_dbh.close()
 	except Exception as details:
 		_info = '(exec_and_process_sql).2 :: Error "%s" cnnStr=(%s), sql=(%s).' % (str(details),cnnStr,sql)
-		print _info
+		print(_info)
 		logging.warning(_info)

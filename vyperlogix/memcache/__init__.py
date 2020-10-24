@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -35,7 +36,7 @@ class MemcacheConnectionSniffer():
         try:
             uri = '%s:%s'%(self.host,self.port)
             tester.__test_using_umemcache__(uri,timeout=self.timeout)
-            print '#1 (%s)' % (uri)
+            print('#1 (%s)' % (uri))
             results = True
         except:
             results = False

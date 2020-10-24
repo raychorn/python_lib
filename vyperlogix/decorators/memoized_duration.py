@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import time
 from threading import Lock
 
@@ -69,12 +71,12 @@ class MemoizeForDuration(object):
             try:
                 v = _cache[key]
                 if (self.isDebugging):
-                    print '\n%s :: cache :: "%s"' % (ObjectTypeName.objectSignature(self),key)
+                    print('\n%s :: cache :: "%s"' % (ObjectTypeName.objectSignature(self),key))
                 if (time.time() - v[1]) > self.timeout:
                     raise KeyError
             except KeyError:
                 if (self.isDebugging):
-                    print '\n%s :: new (%d) :: "%s"' % (ObjectTypeName.objectSignature(self),len(_cache),key)
+                    print('\n%s :: new (%d) :: "%s"' % (ObjectTypeName.objectSignature(self),len(_cache),key))
                 v = _cache[key] = f(*args,**kwargs),time.time()
             return v[0]
         func.func_name = f.func_name
@@ -97,13 +99,13 @@ class MemoizeStrictForDuration(MemoizeForDuration):
                 v = _cache[key]
                 et = time.time() - v[1]
                 if (self.isDebugging):
-                    print '\n%s :: cache :: "%s"' % (ObjectTypeName.objectSignature(self),key)
+                    print('\n%s :: cache :: "%s"' % (ObjectTypeName.objectSignature(self),key))
                 if (et) > self.timeout:
                     raise KeyError
             except KeyError:
                 v = _cache[key] = f(*args,**kwargs),time.time()
                 if (self.isDebugging):
-                    print '\n%s :: new (%d) :: "%s"' % (ObjectTypeName.objectSignature(self),len(_cache),key)
+                    print('\n%s :: new (%d) :: "%s"' % (ObjectTypeName.objectSignature(self),len(_cache),key))
             return v[0]
         func.func_name = f.func_name
         

@@ -703,7 +703,7 @@ class Recurrence(object):
     firstDate = datetime.date(2004, 1, 7)
     lastDate = datetime.date(2004, 2, 11)
     for eachDate in recur.Recurrence(firstDate, "Saturday", lastDate):
-        print eachDate
+        print(eachDate)
     
     2004-01-10
     2004-01-17

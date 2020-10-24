@@ -5,7 +5,7 @@ example6.py
 
 Verify a signature against a document
 """
-
+from __future__ import print_function
 import ezPyCrypto
 
 # Read in a public key
@@ -28,6 +28,6 @@ fd.close()
 
 # Now try to verify
 if k.verifyString(doc, sig):
-	print "Verification successful - signature is authentic"
+	print("Verification successful - signature is authentic")
 else:
-	print "Verification failed - bad signature"
+	print("Verification failed - bad signature")

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import types
 
@@ -155,6 +156,6 @@ class HTMLMessage(Message):
 	    idContent.html_simple_table(body)
 	    pass
 	else:
-	    print >>sys.stderr, '%s :: "subj" parm must be of type str and "body" parm must be of type list rather than of types "%s" and "%s", respectively.' % (ObjectTypeName.objectSignature(self),type(subj),type(body))
+	    sys.stderr.write('%s :: "subj" parm must be of type str and "body" parm must be of type list rather than of types "%s" and "%s", respectively.\n' % (ObjectTypeName.objectSignature(self),type(subj),type(body)))
 	return h_html.toHtml()
         

@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Implements a text spinner.  Prints to stdout.
 
@@ -46,14 +47,14 @@ if __name__ == "__main__":
     num_times  = 50
     delay_time = 0.08 # seconds
 
-    print "Demo of type=0 spinner:"
+    print("Demo of type=0 spinner:")
     s = Spinner(type=0)
     for jx in xrange(num_times):
         s.Print()
         time.sleep(delay_time)
     s.Done()
 
-    print "Demo of type=1 spinner:"
+    print("Demo of type=1 spinner:")
     s = Spinner(type=1)
     for jx in xrange(num_times):
         s.Print()

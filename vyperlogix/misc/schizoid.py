@@ -1,3 +1,4 @@
+from __future__ import print_function
 ###############################################################################
 
 import inspect, new, sys
@@ -105,12 +106,12 @@ if __name__=='__main__':
       
       @schizophrenic
       def run(self):
-         print
-         print 'kant:\t\t\t',		kant.status()
-         print 'heidegger:\t\t',		heidegger.status()
-         print 'wittgenstein:\t\t',	wittgenstein.status()
-         print 'schlegel:\t\t',		schlegel.status()
-         print
+         print()
+         print('kant:\t\t\t' + kant.status())
+         print('heidegger:\t\t' + heidegger.status())
+         print('wittgenstein:\t\t' + wittgenstein.status())
+         print('schlegel:\t\t' + schlegel.status())
+         print()
 
    s = myschizoid()
    s.run()

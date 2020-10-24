@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -23,11 +24,11 @@ def uniqueMACSignature():
     from vyperlogix.sockets import getMac
     from vyperlogix.misc import _utils
     u = ''.join(str(uuid.uuid4()).split('-'))
-    print u
+    print(u)
     m = ''.join(getMac.getHwAddr('eth0').split(':'))
-    print m
+    print(m)
     d = time.time()
-    print '%s --> %s' % (d,time.ctime(d))
+    print('%s --> %s' % (d,time.ctime(d)))
     md = '%s%s' % (m,d)
     len_u = len(u)
     len_md = len(md)
@@ -59,7 +60,7 @@ def unpackUniqueMACSignature(sig):
 
 if (__name__ == '__main__'):
     sig = uniqueMACSignature()
-    print sig
+    print(sig)
     u,m,d = unpackUniqueMACSignature(sig)
-    print u,m,d
+    print(u,m,d)
 

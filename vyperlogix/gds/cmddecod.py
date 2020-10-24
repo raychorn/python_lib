@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Copyright (C) 2002 GDS Software
 
@@ -36,15 +37,15 @@ class CommandDecode:
         user_string = GetUserString()
         command = id_cmd.identify_cmd(user_string)
         if command == None:
-            print "\"%s\" not recognized" % user_string
+            print("\"%s\" not recognized" % user_string)
         elif type(command) == type(""):
-            print "\"%s\" is unique command '%s'" % (user_string, command)
+            print("\"%s\" is unique command '%s'" % (user_string, command))
             finished = ExecuteCommand(command)
         else:
-            print "\"%s\" is ambiguous" % user_string
-            print "It matched the following commands:"
+            print("\"%s\" is ambiguous" % user_string)
+            print("It matched the following commands:")
             for cmd in command:
-                print "  ", cmd
+                print("  ", cmd)
 
     This shows that the identify_cmd() method will return 
     None if the user's string is not recognized, a single
@@ -103,41 +104,41 @@ class CommandDecode:
 if __name__ == "__main__":
     # Test the class; use some typical UNIX program names.
     d = { "ar" : "", "awk" : "", "banner" : "", "basename" : "", "bc" : "",
-          "cal" : "", "cat" : "", "cc" : "", "chmod" : "", "cksum" : "",
-          "clear" : "", "cmp" : "", "compress" : "", "cp" : "", "cpio" : "",
-          "crypt" : "", "ctags" : "", "cut" : "", "date" : "", "dc" : "",
-          "dd" : "", "df" : "", "diff" : "", "dirname" : "", "du" : "",
-          "echo" : "", "ed" : "", "egrep" : "", "env" : "", "ex" : "",
-          "expand" : "", "expr" : "", "false" : "", "fgrep" : "", "file" : "",
-          "find" : "", "fmt" : "", "fold" : "", "getopt" : "", "grep" : "",
-          "gzip" : "", "head" : "", "id" : "", "join" : "", "kill" : "",
-          "ksh" : "", "ln" : "", "logname" : "", "ls" : "", "m4" : "",
-          "mailx" : "", "make" : "", "man" : "", "mkdir" : "", "more" : "",
-          "mt" : "", "mv" : "", "nl" : "", "nm" : "", "od" : "", "paste" : "",
-          "patch" : "", "perl" : "", "pg" : "", "pr" : "", "printf" : "",
-          "ps" : "", "pwd" : "", "rev" : "", "rm" : "", "rmdir" : "",
-          "rsh" : "", "sed" : "", "sh" : "", "sleep" : "", "sort" : "",
-          "spell" : "", "split" : "", "strings" : "", "strip" : "",
-          "stty" : "", "sum" : "", "sync" : "", "tail" : "", "tar" : "",
-          "tee" : "", "test" : "", "touch" : "", "tr" : "", "true" : "",
-          "tsort" : "", "tty" : "", "uname" : "", "uncompress" : "",
-          "unexpand" : "", "uniq" : "", "uudecode" : "", "uuencode" : "",
-          "vi" : "", "wc" : "", "which" : "", "who" : "", "xargs" : "",
-          "zcat" : ""
+            "cal" : "", "cat" : "", "cc" : "", "chmod" : "", "cksum" : "",
+            "clear" : "", "cmp" : "", "compress" : "", "cp" : "", "cpio" : "",
+            "crypt" : "", "ctags" : "", "cut" : "", "date" : "", "dc" : "",
+            "dd" : "", "df" : "", "diff" : "", "dirname" : "", "du" : "",
+            "echo" : "", "ed" : "", "egrep" : "", "env" : "", "ex" : "",
+            "expand" : "", "expr" : "", "false" : "", "fgrep" : "", "file" : "",
+            "find" : "", "fmt" : "", "fold" : "", "getopt" : "", "grep" : "",
+            "gzip" : "", "head" : "", "id" : "", "join" : "", "kill" : "",
+            "ksh" : "", "ln" : "", "logname" : "", "ls" : "", "m4" : "",
+            "mailx" : "", "make" : "", "man" : "", "mkdir" : "", "more" : "",
+            "mt" : "", "mv" : "", "nl" : "", "nm" : "", "od" : "", "paste" : "",
+            "patch" : "", "perl" : "", "pg" : "", "pr" : "", "printf" : "",
+            "ps" : "", "pwd" : "", "rev" : "", "rm" : "", "rmdir" : "",
+            "rsh" : "", "sed" : "", "sh" : "", "sleep" : "", "sort" : "",
+            "spell" : "", "split" : "", "strings" : "", "strip" : "",
+            "stty" : "", "sum" : "", "sync" : "", "tail" : "", "tar" : "",
+            "tee" : "", "test" : "", "touch" : "", "tr" : "", "true" : "",
+            "tsort" : "", "tty" : "", "uname" : "", "uncompress" : "",
+            "unexpand" : "", "uniq" : "", "uudecode" : "", "uuencode" : "",
+            "vi" : "", "wc" : "", "which" : "", "who" : "", "xargs" : "",
+            "zcat" : ""
         }
 
     ignore_case = 1
     c = CommandDecode(d, ignore_case)
-    print "Enter some commands, 'q' to quit:"
+    print("Enter some commands, 'q' to quit:")
     cmd = raw_input()
     while cmd != "q":
         x = c.identify_cmd(cmd)
         if x == None:
-            print "'%s' unrecognized" % cmd
+            print("'%s' unrecognized" % cmd)
         elif type(x) == type(""):
-            print "'%s' was an exact match to '%s'" % (cmd, x)
+            print("'%s' was an exact match to '%s'" % (cmd, x))
         else:
             x.sort()
-            print "'%s' is ambiguous:  %s" % (cmd, `x`)
+            print("'%s' is ambiguous:  %s" % (cmd, `x`))
         cmd = raw_input()
             

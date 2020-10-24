@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 http://crazedmonkey.com/blog/python/pkg_resources-with-py2exe.html
 '''
@@ -26,15 +27,15 @@ __regex_libname__ = re.compile(r"(?P<libname>.*)_2_7\.zip", re.MULTILINE)
 def handle_frozen_bootstrap(verbose=False):
     import imp
     if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__")):
-	import zipfile
-	import pkg_resources
+		import zipfile
+		import pkg_resources
     
 	import re
 	__regex_libname__ = re.compile(r"(?P<libname>.*)_2_7\.zip", re.MULTILINE)
     
 	my_file = pkg_resources.resource_stream('__main__',sys.executable)
 	if (verbose):
-	    print '%s' % (my_file)
+		print('%s' % (my_file))
     
 	import tempfile
 	__dirname__ = os.path.dirname(tempfile.NamedTemporaryFile().name)
@@ -42,106 +43,106 @@ def handle_frozen_bootstrap(verbose=False):
 	zip = zipfile.ZipFile(my_file)
 	files = [z for z in zip.filelist if (__regex_libname__.match(z.filename))]
 	for f in files:
-	    libname = f.filename
-	    if (verbose):
-		print '1. libname=%s' % (libname)
-	    data = zip.read(libname)
-	    fpath = os.sep.join([__dirname__,os.path.splitext(libname)[0]])
-	    __is__ = False
-	    if (not os.path.exists(fpath)):
+		libname = f.filename
 		if (verbose):
-		    print '2. os.mkdir("%s")' % (fpath)
-		os.mkdir(fpath)
-	    else:
-		fsize = os.path.getsize(fpath)
-		if (verbose):
-		    print '3. fsize=%s' % (fsize)
-		    print '4. f.file_size=%s' % (f.file_size)
-		if (fsize != f.file_size):
-		    __is__ = True
-		    if (verbose):
-			print '5. __is__=%s' % (__is__)
-	    fname = os.sep.join([fpath,libname])
-	    if (not os.path.exists(fname)) or (__is__):
-		if (verbose):
-		    print '6. fname=%s' % (fname)
+			print('1. libname=%s' % (libname))
+		data = zip.read(libname)
+		fpath = os.sep.join([__dirname__,os.path.splitext(libname)[0]])
+		__is__ = False
+		if (not os.path.exists(fpath)):
+			if (verbose):
+				print('2. os.mkdir("%s")' % (fpath))
+			os.mkdir(fpath)
+		else:
+			fsize = os.path.getsize(fpath)
+			if (verbose):
+				print('3. fsize=%s' % (fsize))
+				print('4. f.file_size=%s' % (f.file_size))
+			if (fsize != f.file_size):
+				__is__ = True
+				if (verbose):
+					print('5. __is__=%s' % (__is__))
+		fname = os.sep.join([fpath,libname])
+		if (not os.path.exists(fname)) or (__is__):
+			if (verbose):
+				print('6. fname=%s' % (fname))
 		file = open(fname, 'wb')
 		file.write(data)
 		file.flush()
 		file.close()
-	    __module__ = fname
-	    if (verbose):
-		print '7. __module__=%s' % (__module__)
+		__module__ = fname
+		if (verbose):
+			print('7. __module__=%s' % (__module__))
     
-	    if (verbose):
-		print '__module__ --> "%s".' % (__module__)
+		if (verbose):
+			print('__module__ --> "%s".' % (__module__))
     
-	    import zipextimporter
-	    zipextimporter.install()
-	    sys.path.insert(0, __module__)
+		import zipextimporter
+		zipextimporter.install()
+		sys.path.insert(0, __module__)
 
 
 def copy_extensions_for_media_collector(self, extensions):
     build_exe.copy_extensions(self, extensions)
 
-    libs = 'libs'
-    full = os.path.join(self.collect_dir, libs)
-    print 'DEBUG: copy_extensions_for_media_collector.1 --> full=%s' % (full)
-    if not os.path.exists(full):
-	self.mkpath(full)
+	libs = 'libs'
+	full = os.path.join(self.collect_dir, libs)
+	print('DEBUG: copy_extensions_for_media_collector.1 --> full=%s' % (full))
+	if not os.path.exists(full):
+		self.mkpath(full)
 
-    for f in glob.glob('libs/*'):
-	name = os.path.basename(f)
-	dest = os.path.join(full, name)
-	print 'DEBUG: copy_extensions_for_media_collector.2 --> source=%s, dest=%s' % (f, dest)
-	self.copy_file(f, dest)
-	self.compiled_files.append(os.path.join(libs, name))
+	for f in glob.glob('libs/*'):
+		name = os.path.basename(f)
+		dest = os.path.join(full, name)
+		print('DEBUG: copy_extensions_for_media_collector.2 --> source=%s, dest=%s' % (f, dest))
+		self.copy_file(f, dest)
+		self.compiled_files.append(os.path.join(libs, name))
 
 def copy_extensions_for_zips_collector(self, extensions):
     build_exe.copy_extensions(self, extensions)
 
     zips = 'zips'
     full = os.path.join(self.collect_dir, zips)
-    print 'DEBUG: copy_extensions_for_zips_collector.1 --> full=%s' % (full)
+    print('DEBUG: copy_extensions_for_zips_collector.1 --> full=%s' % (full))
     if not os.path.exists(full):
-	self.mkpath(full)
+		self.mkpath(full)
 
     for f in glob.glob('zips/*'):
-	name = os.path.basename(f)
-	dest = os.path.join(full, name)
-	print 'DEBUG: copy_extensions_for_zips_collector.2 --> source=%s, dest=%s' % (f, dest)
-	self.copy_file(f, dest)
-	self.compiled_files.append(os.path.join(zips, name))
+		name = os.path.basename(f)
+		dest = os.path.join(full, name)
+		print('DEBUG: copy_extensions_for_zips_collector.2 --> source=%s, dest=%s' % (f, dest))
+		self.copy_file(f, dest)
+		self.compiled_files.append(os.path.join(zips, name))
 	
 def is_file_embeddable_document(filename):
     __is__ = False
     if (filename.endswith('README')):
-	__is__ = True
+		__is__ = True
     elif (filename.endswith('README.txt')):
-	__is__ = True
+		__is__ = True
     elif (filename.endswith('README.md')):
-	__is__ = True
+		__is__ = True
     if (filename.endswith('LICENSE')):
-	__is__ = True
+		__is__ = True
     return __is__
 
 def copy_extensions_for_docs_collector(self, extensions):
-    build_exe.copy_extensions(self, extensions)
+	build_exe.copy_extensions(self, extensions)
 
-    full = self.collect_dir
-    print 'DEBUG: copy_extensions_for_docs_collector.1 --> full=%s' % (full)
+	full = self.collect_dir
+	print('DEBUG: copy_extensions_for_docs_collector.1 --> full=%s' % (full))
 
-    for f in glob.glob('*'):
-	if (is_file_embeddable_document(f)):
-	    name = os.path.basename(f)
-	    dest = os.path.join(full, name)
-	    print 'DEBUG: copy_extensions_for_docs_collector.2 --> source=%s, dest=%s' % (f, dest)
-	    self.copy_file(f, dest)
-	    self.compiled_files.append(name)
+	for f in glob.glob('*'):
+		if (is_file_embeddable_document(f)):
+			name = os.path.basename(f)
+			dest = os.path.join(full, name)
+			print('DEBUG: copy_extensions_for_docs_collector.2 --> source=%s, dest=%s' % (f, dest))
+			self.copy_file(f, dest)
+			self.compiled_files.append(name)
 	
 class MediaCollector(build_exe):
-    def copy_extensions(self, extensions):
-	copy_extensions_for_media_collector(self, extensions)
+	def copy_extensions(self, extensions):
+		copy_extensions_for_media_collector(self, extensions)
 
 class VyperLogixLibraryCollector(build_exe):
     compiled_excludes = []
@@ -152,116 +153,116 @@ class VyperLogixLibraryCollector(build_exe):
 	from vyperlogix.misc import _utils
 	
 	dirname = os.path.dirname(os.path.dirname(vyperlogix.__file__))
-	print 'VyperLogixLibraryCollector.%s.1 --> dirname=%s' % (misc.callersName(),dirname)
+	print('VyperLogixLibraryCollector.%s.1 --> dirname=%s' % (misc.callersName(),dirname))
 
 	has_vyperlogix_lib = False
-	print 'VyperLogixLibraryCollector.%s.2 --> BEGIN: compiled_files' % (misc.callersName())
+	print('VyperLogixLibraryCollector.%s.2 --> BEGIN: compiled_files' % (misc.callersName()))
 	for f in self.compiled_files:
-	    if (not has_vyperlogix_lib) and (f.find('vyperlogix%s' % (os.sep)) > -1):
-		has_vyperlogix_lib = True
-		print 'VyperLogixLibraryCollector.%s.3 --> has_vyperlogix_lib=%s' % (misc.callersName(),has_vyperlogix_lib)
-	    print f
-	print 'VyperLogixLibraryCollector.%s.4 --> END!!! compiled_files' % (misc.callersName())
-	print '\n'
+		if (not has_vyperlogix_lib) and (f.find('vyperlogix%s' % (os.sep)) > -1):
+			has_vyperlogix_lib = True
+			print('VyperLogixLibraryCollector.%s.3 --> has_vyperlogix_lib=%s' % (misc.callersName(),has_vyperlogix_lib))
+			print(f)
+	print('VyperLogixLibraryCollector.%s.4 --> END!!! compiled_files' % (misc.callersName()))
+	print('\n')
 	
 	__files__ = []
 	__packages_bucket2__ = [n.lower() for n in __packages_bucket__]
 	was_vyperlogix_lib_included = False
-	print 'VyperLogixLibraryCollector.%s.5 --> __packages_bucket2__=%s' % (misc.callersName(),__packages_bucket2__)
+	print('VyperLogixLibraryCollector.%s.5 --> __packages_bucket2__=%s' % (misc.callersName(),__packages_bucket2__))
 	for top,dirs,files in _utils.walk(dirname):
 	    for f in files:
-		m = __regex_libname__.match(f)
-		#print 'VyperLogixLibraryCollector.%s.6 --> f=%s, m=%s' % (misc.callersName(),f,m)
-		if (m):
-		    __g__ = SmartObject(m.groupdict())
-		    __isVyperlogix__ = (vyperlogix.__file__.lower().find(__g__.libname.lower()) > -1)
-		    __isPackage__ = (__g__.libname.lower() in __packages_bucket2__)
-		    __is__ = (__isPackage__ or ( (not has_vyperlogix_lib) and (__isVyperlogix__) ) )
-		    print 'VyperLogixLibraryCollector.%s.7 --> __isPackage__=%s, has_vyperlogix_lib=%s, __isVyperlogix__=%s, __is__=%s' % (misc.callersName(),__isPackage__,has_vyperlogix_lib,__isVyperlogix__,__is__)
-		    if (__is__):
-			__files__.append(os.sep.join([top,f]))
-			if (not was_vyperlogix_lib_included):
-			    was_vyperlogix_lib_included = __isVyperlogix__
-			print 'VyperLogixLibraryCollector.%s.8 --> __files__=%s' % (misc.callersName(),__files__)
-	files = __files__
-	print 'VyperLogixLibraryCollector.%s.9 --> files=%s' % (misc.callersName(),files)
-	print 'VyperLogixLibraryCollector.%s.10 --> vyperlogix.__file__=%s' % (misc.callersName(),vyperlogix.__file__)
-	print 'VyperLogixLibraryCollector.%s.11 --> has_vyperlogix_lib=%s, was_vyperlogix_lib_included=%s' % (misc.callersName(),has_vyperlogix_lib,was_vyperlogix_lib_included)
+			m = __regex_libname__.match(f)
+			#print('VyperLogixLibraryCollector.%s.6 --> f=%s, m=%s' % (misc.callersName(),f,m))
+			if (m):
+				__g__ = SmartObject(m.groupdict())
+				__isVyperlogix__ = (vyperlogix.__file__.lower().find(__g__.libname.lower()) > -1)
+				__isPackage__ = (__g__.libname.lower() in __packages_bucket2__)
+				__is__ = (__isPackage__ or ( (not has_vyperlogix_lib) and (__isVyperlogix__) ) )
+				print('VyperLogixLibraryCollector.%s.7 --> __isPackage__=%s, has_vyperlogix_lib=%s, __isVyperlogix__=%s, __is__=%s' % (misc.callersName(),__isPackage__,has_vyperlogix_lib,__isVyperlogix__,__is__))
+				if (__is__):
+				__files__.append(os.sep.join([top,f]))
+				if (not was_vyperlogix_lib_included):
+					was_vyperlogix_lib_included = __isVyperlogix__
+				print('VyperLogixLibraryCollector.%s.8 --> __files__=%s' % (misc.callersName(),__files__))
+		files = __files__
+		print('VyperLogixLibraryCollector.%s.9 --> files=%s' % (misc.callersName(),files))
+		print('VyperLogixLibraryCollector.%s.10 --> vyperlogix.__file__=%s' % (misc.callersName(),vyperlogix.__file__))
+		print('VyperLogixLibraryCollector.%s.11 --> has_vyperlogix_lib=%s, was_vyperlogix_lib_included=%s' % (misc.callersName(),has_vyperlogix_lib,was_vyperlogix_lib_included))
 	
 	for f in files:
-	    print 'VyperLogixLibraryCollector.%s.12 --> package=%s' % (misc.callersName(),f)
+	    print('VyperLogixLibraryCollector.%s.12 --> package=%s' % (misc.callersName(),f))
 	    if (os.path.exists(f)):
 		fname = os.path.basename(f)
-		print 'VyperLogixLibraryCollector.%s.13 --> package fname=%s' % (misc.callersName(),fname)
+		print('VyperLogixLibraryCollector.%s.13 --> package fname=%s' % (misc.callersName(),fname))
 		full = os.path.join(self.collect_dir, fname)
-		print 'VyperLogixLibraryCollector.%s.14 --> copy_file source=%s dest=%s' % (misc.callersName(),f,full)
+		print('VyperLogixLibraryCollector.%s.14 --> copy_file source=%s dest=%s' % (misc.callersName(),f,full))
 		self.copy_file(f,full)
-		print 'VyperLogixLibraryCollector.%s.15 --> compiled_files.append --> %s' % (misc.callersName(),os.path.basename(full))
+		print('VyperLogixLibraryCollector.%s.15 --> compiled_files.append --> %s' % (misc.callersName(),os.path.basename(full)))
 		self.compiled_files.append(os.path.basename(full))
-	print '%s\n' % ('='*40)
+	print('%s\n' % ('='*40))
 	    
 	__files__ = [os.path.basename(f).split('_')[0] for f in files]
 	retirees = []
-	print 'VyperLogixLibraryCollector.%s.20 --> BEGIN: compiled_files' % (misc.callersName())
-	print 'VyperLogixLibraryCollector.%s.21 --> VyperLogixLibraryCollector.compiled_excludes=%s' % (misc.callersName(),VyperLogixLibraryCollector.compiled_excludes)
+	print('VyperLogixLibraryCollector.%s.20 --> BEGIN: compiled_files' % (misc.callersName()))
+	print('VyperLogixLibraryCollector.%s.21 --> VyperLogixLibraryCollector.compiled_excludes=%s' % (misc.callersName(),VyperLogixLibraryCollector.compiled_excludes))
 	for f in self.compiled_files:
 	    m = [f.replace('/',os.sep).startswith(__f__+os.sep) for __f__ in __files__ if (not f.startswith('vyperlogix'+os.sep))]
 	    if (any(m)):
-		print 'VyperLogixLibraryCollector.%s.22 --> retirees.append(%s)' % (misc.callersName(),f)
+		print('VyperLogixLibraryCollector.%s.22 --> retirees.append(%s)' % (misc.callersName(),f))
 		retirees.append(f)
 	    m = [f.replace('/',os.sep).find(__f__+os.sep) > -1 for __f__ in VyperLogixLibraryCollector.compiled_excludes]
 	    if (any(m)):
-		print 'VyperLogixLibraryCollector.%s.23 --> retirees.append(%s)' % (misc.callersName(),f)
+		print('VyperLogixLibraryCollector.%s.23 --> retirees.append(%s)' % (misc.callersName(),f))
 		retirees.append(f)
-	    print f
-	print 'VyperLogixLibraryCollector.%s.24 --> END!!! compiled_files' % (misc.callersName())
-	print '\n'
+	    print(f)
+	print('VyperLogixLibraryCollector.%s.24 --> END!!! compiled_files' % (misc.callersName()))
+	print('\n')
 	
-	print 'VyperLogixLibraryCollector.%s.30 --> BEGIN: retirees' % (misc.callersName())
+	print('VyperLogixLibraryCollector.%s.30 --> BEGIN: retirees' % (misc.callersName()))
 	for f in retirees:
-	    print f
-	print 'VyperLogixLibraryCollector.%s.31 --> END!!! retirees' % (misc.callersName())
-	print '\n'
+	    print(f)
+	print('VyperLogixLibraryCollector.%s.31 --> END!!! retirees' % (misc.callersName()))
+	print('\n')
 	
-	print 'VyperLogixLibraryCollector.%s.40 --> (+++) Before Retirement Party self.compiled_files has %s items' % (misc.callersName(),len(self.compiled_files))
+	print('VyperLogixLibraryCollector.%s.40 --> (+++) Before Retirement Party self.compiled_files has %s items' % (misc.callersName(),len(self.compiled_files)))
 	self.compiled_files = [f for f in self.compiled_files if (f not in retirees)]
-	print 'VyperLogixLibraryCollector.%s.41 --> (+++) After Retirement Party self.compiled_files has %s items' % (misc.callersName(),len(self.compiled_files))
-	print '\n'
+	print('VyperLogixLibraryCollector.%s.41 --> (+++) After Retirement Party self.compiled_files has %s items' % (misc.callersName(),len(self.compiled_files)))
+	print('\n')
 
-	print 'VyperLogixLibraryCollector.%s.50 --> BEGIN: compiled_files' % (misc.callersName())
+	print('VyperLogixLibraryCollector.%s.50 --> BEGIN: compiled_files' % (misc.callersName()))
 	for f in self.compiled_files:
-	    print f
-	print 'VyperLogixLibraryCollector.%s.51 --> END!!! compiled_files' % (misc.callersName())
-	print '\n'
+	    print(f)
+	print('VyperLogixLibraryCollector.%s.51 --> END!!! compiled_files' % (misc.callersName()))
+	print('\n')
 
 class VyperLogixLibraryMediaCollector(VyperLogixLibraryCollector):
     def copy_extensions(self, extensions):
-	print 'DEBUG: VyperLogixLibraryMediaCollector.1'
+	print('DEBUG: VyperLogixLibraryMediaCollector.1')
 	copy_extensions_for_media_collector(self, extensions)
 	VyperLogixLibraryCollector.copy_extensions(self, extensions)
 
 class VyperLogixLibraryDocsMediaCollector(VyperLogixLibraryCollector):
     def copy_extensions(self, extensions):
-	print 'DEBUG: VyperLogixLibraryMediaCollector.1'
+	print('DEBUG: VyperLogixLibraryMediaCollector.1')
 	copy_extensions_for_media_collector(self, extensions)
 	copy_extensions_for_docs_collector(self, extensions)
 	VyperLogixLibraryCollector.copy_extensions(self, extensions)
 
 class VyperLogixLibraryDocsCollector(VyperLogixLibraryCollector):
     def copy_extensions(self, extensions):
-	print 'DEBUG: VyperLogixLibraryZipsCollector.1'
+	print('DEBUG: VyperLogixLibraryZipsCollector.1')
 	copy_extensions_for_docs_collector(self, extensions)
 	VyperLogixLibraryCollector.copy_extensions(self, extensions)
 
 class VyperLogixLibraryZipsCollector(VyperLogixLibraryCollector):
     def copy_extensions(self, extensions):
-	print 'DEBUG: VyperLogixLibraryZipsCollector.1'
+	print('DEBUG: VyperLogixLibraryZipsCollector.1')
 	copy_extensions_for_zips_collector(self, extensions)
 	VyperLogixLibraryCollector.copy_extensions(self, extensions)
 
 class VyperLogixLibraryDocsZipsCollector(VyperLogixLibraryCollector):
     def copy_extensions(self, extensions):
-	print 'DEBUG: VyperLogixLibraryZipsCollector.1'
+	print('DEBUG: VyperLogixLibraryZipsCollector.1')
 	copy_extensions_for_zips_collector(self, extensions)
 	copy_extensions_for_docs_collector(self, extensions)
 	VyperLogixLibraryCollector.copy_extensions(self, extensions)
@@ -284,17 +285,17 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
     
     if (not program_name) or (not company_name) or (not product_name) or (not description) or (not icon) or (not product_version):
 	if (not program_name):
-	    print >>sys.stderr, 'ERROR: Cannot proceed without program_name.'
+	    sys.stderr.write('ERROR: Cannot proceed without program_name.\n')
 	if (not company_name):
-	    print >>sys.stderr, 'ERROR: Cannot proceed without company_name.'
+	    sys.stderr.write('ERROR: Cannot proceed without company_name.\n')
 	if (not product_name):
-	    print >>sys.stderr, 'ERROR: Cannot proceed without product_name.'
+	    sys.stderr.write('ERROR: Cannot proceed without product_name.\n')
 	if (not description):
-	    print >>sys.stderr, 'ERROR: Cannot proceed without description.'
+	    sys.stderr.write('ERROR: Cannot proceed without description.\n')
 	if (not icon):
-	    print >>sys.stderr, 'ERROR: Cannot proceed without icon.'
+	    sys.stderr.write('ERROR: Cannot proceed without icon.\n')
 	if (not product_version):
-	    print >>sys.stderr, 'ERROR: Cannot proceed without product_version.'
+	    sys.stderr.write('ERROR: Cannot proceed without product_version.\n')
 	return
     __program_name__ = program_name
     __company_name__ = company_name
@@ -348,7 +349,7 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    __target__ = __vyperlogix__
     
 	libdate = latest = get_libdate_for(fpath)
-	#print '(+++) __has_vyperlogix__=%s' % (__has_vyperlogix__)
+	#print('(+++) __has_vyperlogix__=%s' % (__has_vyperlogix__))
 	if (__has_vyperlogix__):
 	    libdate = os.path.getmtime(__vyperlogix__)
 	else:
@@ -356,9 +357,9 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    __has_vyperlogix__ = os.path.exists(__vyperlogix__)
 	    if (__has_vyperlogix__):
 		libdate = os.path.getmtime(__vyperlogix__)
-	#print '(+++) latest=%s, libdate=%s, (not __has_vyperlogix__)=%s, (latest > libdate)=%s' % (latest,libdate,(not __has_vyperlogix__),(latest > libdate))
+	#print('(+++) latest=%s, libdate=%s, (not __has_vyperlogix__)=%s, (latest > libdate)=%s' % (latest,libdate,(not __has_vyperlogix__),(latest > libdate)))
 	__is__ = (not __has_vyperlogix__) or (latest > libdate) 
-	#print '(+++) __is__=%s' % (__is__)
+	#print('(+++) __is__=%s' % (__is__))
 	if (1):
 	    __fpath__ = os.path.dirname(fpath)
 	    __vyperlogix__ = os.path.join(__fpath__,'dist_%s'%(__v__),'vyperlogix_%s.zip'%(__v__.replace('.','_')))
@@ -366,7 +367,7 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    __command_egg__ = os.path.join(__fpath__,'compile-egg%s.cmd'%(__v__))
 	    __has_vyperlogix__ = os.path.exists(__fpath__)
 	    __has_command__ = os.path.exists(__command__)
-	    #print '(+++) __has_vyperlogix__=%s' % (__has_vyperlogix__)
+	    #print('(+++) __has_vyperlogix__=%s' % (__has_vyperlogix__))
 	    if (__has_vyperlogix__) and (__has_command__):
 		__compiles__ = []
 
@@ -374,37 +375,37 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 		dirName = os.path.dirname(__command__).replace(os.sep,'/')
 		cmd = 'cd "%s"' % (dirName)
 		fOut = open('compile.cmd','w')
-		print >>fOut, '@echo on\n'
-		print >>fOut, 'cd "%s"\n' % (dirName)
-		print >>fOut, '%s\n' % (os.path.splitdrive(dirName)[0])
+		fOut.write('@echo on\n')
+		fOut.write('cd "%s"\n' % (dirName))
+		fOut.write('%s\n' % (os.path.splitdrive(dirName)[0]))
 		if (__is__):
-		    print 'Compile "%s"...' % (__vyperlogix__)
-		    print >>fOut, 'START "%s" /SEPARATE /HIGH "%s" END\n' % (os.path.splitext(os.path.basename(__command__))[0],os.path.basename(__command__))
+		    print('Compile "%s"...' % (__vyperlogix__))
+		    fOut.write('START "%s" /SEPARATE /HIGH "%s" END\n' % (os.path.splitext(os.path.basename(__command__))[0],os.path.basename(__command__)))
 		else:
-		    print 'INFO: No need to compile %s into ZIP.' % (__vyperlogix__)
+		    print('INFO: No need to compile %s into ZIP.' % (__vyperlogix__))
 		
 		__compiles__.append(os.path.basename(__command__))
 		
 		if (misc.isDict(packagedir)):
 		    from vyperlogix.lists.ListWrapper import ListWrapper
 		    handled_eggs = []
-		    print '(+++)  __packages_bucket__=%s' % (__packages_bucket__)
+		    print('(+++)  __packages_bucket__=%s' % (__packages_bucket__))
 		    for k,v in packagedir.iteritems():
-			print '(+++)  %s=%s' % (k,v)
-			print '(+++) os.path.exists("%s")=%s' % (v,os.path.exists(v))
-			print '(+++) os.path.isdir("%s")=%s' % (v,os.path.isdir(v))
+			print('(+++)  %s=%s' % (k,v))
+			print('(+++) os.path.exists("%s")=%s' % (v,os.path.exists(v)))
+			print('(+++) os.path.isdir("%s")=%s' % (v,os.path.isdir(v)))
 			p = '%s/EGG-INFO'%(os.path.dirname(v).replace(os.sep,'/'))
-			print '(+++) p=%s' % (p)
+			print('(+++) p=%s' % (p))
 			__files__ = []
 			if (not os.path.exists(p)):
 			    __files__ = [f for f in os.listdir(os.path.dirname(p)) if ( (os.path.splitext(f)[0].find(k) > -1) or (os.path.splitext(f)[0].find(os.path.basename(v)) > -1) ) and (os.path.splitext(f)[-1].lower() == '.egg-info')]
-			    print '(+++) __files__=%s' % (__files__)
-			print '(+++) "%s".endswith(\'.egg\')=%s' % (os.path.dirname(v),os.path.dirname(v).endswith('.egg'))
+			    print('(+++) __files__=%s' % (__files__))
+			print('(+++) "%s".endswith(\'.egg\')=%s' % (os.path.dirname(v),os.path.dirname(v).endswith('.egg')))
 			so = SmartObject()
 			if (os.path.exists(v)) and (os.path.isdir(v)) and ( ( (os.path.exists(p) and (os.path.dirname(v).endswith('.egg')) ) or (len(__files__) > 0) ) ):
 			    __dirname__ = os.path.dirname(__vyperlogix__)
 			    if (os.path.exists(__dirname__) and os.path.isdir(__dirname__)):
-				print '(+++).1 vyperlogix target path=%s' % (__dirname__)
+				print('(+++).1 vyperlogix target path=%s' % (__dirname__))
 				for f in os.listdir(__dirname__):
 				    mm = __regex_libname__.match(f)
 				    if (mm) and (mm.groupdict().get('libname',None) == k):
@@ -413,44 +414,44 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 					so.libpath = lpath
 					so.datetime = dt
 					so.libdate = dt
-				print '(+++).2 so=%s' % (str(so))
+				print('(+++).2 so=%s' % (str(so)))
 			    else:
-				print 'WARNING: Cannot determine if the egg "%s" has been compiled into a ZIP or not.' % (k)
-				print '(+++) egg source path=%s' % (v)
+				print('WARNING: Cannot determine if the egg "%s" has been compiled into a ZIP or not.' % (k))
+				print('(+++) egg source path=%s' % (v))
 			    if (os.path.exists(v) and os.path.isdir(v)):
 				so.libdate = get_libdate_for(v)
-				print '(+++).3 so.libdate=%s' % (so.libdate)
+				print('(+++).3 so.libdate=%s' % (so.libdate))
 			    else:
-				print 'WARNING: Cannot determine if the egg "%s" has source files or not in "%s".' % (k,v)
-			    print '(+++).4 so.datetime=%s isNone=(%s), so.libdate=%s isGreater=%s' % (so.datetime,(so.datetime is None),so.libdate,(so.libdate > so.datetime))
+				print('WARNING: Cannot determine if the egg "%s" has source files or not in "%s".' % (k,v))
+			    print('(+++).4 so.datetime=%s isNone=(%s), so.libdate=%s isGreater=%s' % (so.datetime,(so.datetime is None),so.libdate,(so.libdate > so.datetime)))
 			    if (so.datetime is None) or (so.libdate > so.datetime):
-				print '(+++).5 Schedule the compile... for %s from "%s".' % (k,v)
-				print >>fOut, 'START "%s" /SEPARATE /HIGH %s "%s" %s END\n' % (os.path.splitext(os.path.basename(__command_egg__))[0],os.path.basename(__command_egg__),v,k)
+				print('(+++).5 Schedule the compile... for %s from "%s".' % (k,v))
+				fOut.write('START "%s" /SEPARATE /HIGH %s "%s" %s END\n' % (os.path.splitext(os.path.basename(__command_egg__))[0],os.path.basename(__command_egg__),v,k))
 				__compiles__.append(os.path.basename(__command_egg__))
 			    else:
-				print 'INFO: No need to compile the egg "%s" because it has already been compiled from source at "%s".' % (k,v)
+				print('INFO: No need to compile the egg "%s" because it has already been compiled from source at "%s".' % (k,v))
 			    __packages_bucket__.append(k)
 			    handled_eggs.append(k)
-		    print '(+++)  __packages_bucket__=%s' % (__packages_bucket__)
-		    print '(+++)  handled_eggs=%s' % (handled_eggs)
+		    print('(+++)  __packages_bucket__=%s' % (__packages_bucket__))
+		    print('(+++)  handled_eggs=%s' % (handled_eggs))
 		    l = ListWrapper(packages)
 		    for k in handled_eggs:
-			print '(+++)  del "%s"' % (packagedir[k])
+			print('(+++)  del "%s"' % (packagedir[k]))
 			del packagedir[k]
 			i = l.findFirstMatching(k)
-			print '(+++)  k=%s' % (k)
-			print '(+++)  i=%s' % (i)
+			print('(+++)  k=%s' % (k))
+			print('(+++)  i=%s' % (i))
 			if (i > -1):
-			    print '(+++)  del "%s"' % (packages[i])
+			    print('(+++)  del "%s"' % (packages[i]))
 			    del packages[i]
 			    l = ListWrapper(packages)
 		
 		fOut.flush()
 		fOut.close()
 		Popen.Shell(fOut.name, shell=None, env=None, isExit=True, isWait=True, isVerbose=True, fOut=ioBuf)
-		print >>sys.stdout, ioBuf.getvalue()
+		sys.stdout.write(ioBuf.getvalue()+'\n')
 		
-		#print '(+++) __vyperlogix__=%s' % (__vyperlogix__)
+		#print('(+++) __vyperlogix__=%s' % (__vyperlogix__))
 		dirname = os.path.dirname(os.path.dirname(__vyperlogix__)) #str(os.sep.join([os.path.dirname(os.path.dirname(__vyperlogix__)),'compile%s.log'%(v)]))
 
 		from vyperlogix.win import WinProcesses
@@ -460,11 +461,11 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 		s_begin = time.time()
 		while (1):
 		    #__l__ = [pr for pr in p.listProcNames() if (any([pr.find(os.path.splitext(c)[0]) > -1 for c in __compiles__])) or (pr.find('cmd') > -1) or (pr.find('python') > -1)]
-		    #print '(+++) __l__=%s' % (__l__)
+		    #print('(+++) __l__=%s' % (__l__))
 		    __re__ = re.compile(r"compile.*\.log", re.MULTILINE)
-		    #print '(+++) dirname=%s' % (dirname)
+		    #print('(+++) dirname=%s' % (dirname))
 		    files = ['/'.join([dirname,f]) for f in os.listdir(dirname) if (__re__.match(f))]
-		    #print '(+++) files=%s' % (files)
+		    #print('(+++) files=%s' % (files))
 
 		    __files__ = []
 		    for f in files:
@@ -473,55 +474,55 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 			if (len(toks) > 1):
 			    del toks[1]
 			    _f_ = ''.join([t for t in toks if (len(t) > 0)])
-			#print '(+++) _f_=%s' % (_f_)
-			#print '(+++) __compiles__=%s' % (__compiles__)
+			#print('(+++) _f_=%s' % (_f_))
+			#print('(+++) __compiles__=%s' % (__compiles__))
 			if (_f_+'.cmd' in __compiles__):
 			    __files__.append(f)
-			    #print '(+++) __files__=%s' % (__files__)
+			    #print('(+++) __files__=%s' % (__files__))
 			print
 		    files = __files__
-		    #print '(+++) files=%s' % (files)
+		    #print('(+++) files=%s' % (files))
 		    
 		    d_done = {}
 		    d_errors = {}
 		    
 		    __re__ = re.compile(r"\[\s*Errno\s*\d*\]", re.MULTILINE)
-		    #print '(+++) len(files)=%s, len(__compiles__)=%s' % (len(files),len(__compiles__))
+		    #print('(+++) len(files)=%s, len(__compiles__)=%s' % (len(files),len(__compiles__)))
 		    if (len(files) == len(__compiles__)):
 			for fname in files:
-			    #print >>sys.stderr, '(+++) os.path.exists("%s")=%s' % (fname,os.path.exists(fname))
+			    #sys.stderr.write('(+++) os.path.exists("%s")=%s\n' % (fname,os.path.exists(fname)))
 			    if (os.path.exists(fname)):
-				#print >>sys.stderr, '(+++) fname=%s' % (fname)
+				#sys.stderr.write('(+++) fname=%s\n' % (fname))
 				results = _utils.readFileFrom(fname)
 				__matches2__ = results.find('Done !\n\nEND !') > -1
-				#print >>sys.stderr, '(+++) __matches2__=%s' % (__matches2__)
+				#sys.stderr.write('(+++) __matches2__=%s\n' % (__matches2__))
 				if (__matches2__):
 				    d_done[fname] = __matches2__
-				    print sys.stdout, results
+				    sys.stdout.write(results+'\n')
 				    __matches__ = __re__.match(results)
-				    #print >>sys.stderr, '(+++) __matches__=%s' % (__matches__)
+				    #sys.stderr.write('(+++) __matches__=%s\n' % (__matches__))
 				    if (__matches__):
 					d_errors[fname] = __matches__
-					print >>sys.stderr, 'WARNING: Required Compile Failed in "%s".' % (fname)
+					sys.stderr.write('WARNING: Required Compile Failed in "%s\n".' % (fname))
 			    else:
-				print >>sys.stderr, 'WARNING: Cannot locate "%s".' % (fname)
-			#print >>sys.stderr, '(+++) len(d_done.keys())=%s' % (len(d_done.keys()))
-			#print >>sys.stderr, '(+++) len(d_errors.keys())=%s' % (len(d_errors.keys()))
-			#print >>sys.stderr, '(+++) len(__compiles__)=%s' % (len(__compiles__))
+				sys.stderr.write('WARNING: Cannot locate "%s".\n' % (fname))
+			#sys.stderr.write('(+++) len(d_done.keys())=%s\n' % (len(d_done.keys())))
+			#sys.stderr.write('(+++) len(d_errors.keys())=%s\n' % (len(d_errors.keys())))
+			#sys.stderr.write('(+++) len(__compiles__)=%s\n' % (len(__compiles__)))
 			if ((len(d_done.keys())+len(d_errors.keys())) == len(__compiles__)):
-			    print >>sys.stderr, 'INFO: Seems like the compile jobs have completed.'
+			    sys.stderr.write('INFO: Seems like the compile jobs have completed.\n')
 			    break
 
 		    s_end = time.time()
 		    s_et = s_end - s_begin
-		    print '(+++) s_et=%s' % (s_et)
+		    print('(+++) s_et=%s\n' % (s_et))
 		    if (s_et > 300):
 			break
 	    else:
-		print >>sys.stderr, 'Missing "%s" or missing "%s" or missing "%s".' % (__vyperlogix__,__command__,__command_egg__)
+		sys.stderr.write('Missing "%s" or missing "%s" or missing "%s".\n' % (__vyperlogix__,__command__,__command_egg__))
 	__has_vyperlogix__ = os.path.exists(__vyperlogix__)
-	print >>sys.stderr, 'INFO: __vyperlogix__=%s' % (__vyperlogix__)
-	print >>sys.stderr, 'INFO: __has_vyperlogix__=%s' % (__has_vyperlogix__)
+	sys.stderr.write('INFO: __vyperlogix__=%s\n' % (__vyperlogix__))
+	sys.stderr.write('INFO: __has_vyperlogix__=%s\n' % (__has_vyperlogix__))
 	return
 
     import vyperlogix # required for the path information from the module...
@@ -535,11 +536,11 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 
     normalize = lambda *args:os.path.normpath(os.path.join(*args))
     def find_data_files(srcdir, *wildcards, **kw):
-	print '(+++).0 srcdir=%s, wildcards=%s, **kw=%s' % (srcdir,wildcards,kw)
+	print('(+++).0 srcdir=%s, wildcards=%s, **kw=%s\n' % (srcdir,wildcards,kw))
 	if (isinstance(srcdir,tuple)):
 	    wildcards = srcdir[-1]
 	    srcdir = srcdir[0]
-	    print '(+++).1 srcdir=%s, wildcards=%s' % (srcdir,wildcards)
+	    print('(+++).1 srcdir=%s, wildcards=%s\n' % (srcdir,wildcards))
 	def walk_helper(arg, dirname, files):
 	    if '.svn' in dirname:
 		return
@@ -557,45 +558,45 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
     
 	file_list = []
 	recursive = kw.get('recursive', True)
-	print '(+++).3 recursive=%s' % (recursive)
+	print('(+++).3 recursive=%s\n' % (recursive))
 	if recursive:
 	    os.path.walk(srcdir, walk_helper, (file_list, wildcards))
 	else:
 	    walk_helper((file_list, wildcards),
 		        srcdir,
 		        [os.path.basename(f) for f in glob.glob(normalize(srcdir, '*'))])
-	print '(+++).2 file_list=%s' % (file_list)
+	print('(+++).2 file_list=%s\n' % (file_list))
 	return file_list[0] if (file_list and misc.isList(file_list)) else file_list
 
     __packages__ =      [] if (not misc.isList(packages)) else packages
     __datafiles__ = [ ('.', ['run.cmd']) ] if (not initialize_datafiles and os.path.exists(os.path.abspath('./run.cmd'))) else []
-    print '(1). __datafiles__=%s' % (__datafiles__)
+    print('(1). __datafiles__=%s\n' % (__datafiles__))
     
     if (os.path.exists(__program_name__+'.py')):
-	print '(+++) --> source=%s' % (__program_name__+'.py')
+	print('(+++) --> source=%s\n' % (__program_name__+'.py'))
 
     def handle_service_file(key,fname):
 	fOut = open(fname,'w')
-	print >> fOut, '@echo off\n'
-	print >> fOut, 'echo %COMPUTERNAME%\n'
-	print '(@@@).cmdline_style = %s' % (cmdline_style)
+	fOut.write('@echo off\n')
+	fOut.write('echo %COMPUTERNAME%\n')
+	print('(@@@).cmdline_style = %s\n' % (cmdline_style))
 	if (cmdline_style == CommandLineTypes.py2exe):
 	    if (os.path.splitext(key)[0] == 'start'):
-		print >> fOut, 'net start %s\n' % (__program_name__)
+		fOut.write('net start %s\n' % (__program_name__))
 	    elif (os.path.splitext(key)[0] == 'stop'):
-		print >> fOut, 'net stop %s\n' % (__program_name__)
-		print >> fOut, 'taskkill /F /IM %s\n' % (__program_name__)
+		fOut.write('net stop %s\n' % (__program_name__))
+		fOut.write('taskkill /F /IM %s\n' % (__program_name__))
 	    elif (os.path.splitext(key)[0] == 'restart'):
-		print >> fOut, 'net stop %s\n' % (__program_name__)
-		print >> fOut, 'net start %s\n' % (__program_name__)
+		fOut.write('net stop %s\n' % (__program_name__))
+		fOut.write('net start %s\n' % (__program_name__))
 	    else:
-		print >> fOut, '%s -%s\n' % (__program_name__,os.path.splitext(key)[0])
+		fOut.write('%s -%s\n' % (__program_name__,os.path.splitext(key)[0]))
 		if (os.path.splitext(key)[0] == 'remove'):
-		    print >> fOut, 'taskkill /F /IM %s\n' % (__program_name__)
+		    fOut.write('taskkill /F /IM %s\n' % (__program_name__))
 	elif (cmdline_style == CommandLineTypes.custom):
-	    print >> fOut, '%s %s %s\n' % (__program_name__,cmdline_extra,os.path.splitext(key)[0])
+	    fOut.write('%s %s %s\n' % (__program_name__,cmdline_extra,os.path.splitext(key)[0]))
 	    if (os.path.splitext(key)[0] == 'remove'):
-		print >> fOut, 'taskkill /F /IM %s\n' % (__program_name__)
+		fOut.write('taskkill /F /IM %s\n' % (__program_name__))
 	fOut.flush()
 	fOut.close()
     
@@ -613,29 +614,29 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    if (not misc.isTuple(df)):
 		l = df.replace(os.sep,'/').split('/')
 		df = tuple([os.sep.join(l[0:-1]),l[-1]])
-	    print '(@@@).1 df[1:]=%s' % (df[1:])
+	    print('(@@@).1 df[1:]=%s' % (df[1:]))
 	    for dfl in df[1:]:
 		for f in [os.sep.join([dfp,f]) for f in dfl]:
 		    if (os.path.exists(f) and os.path.isfile(f) and (not is_file_embeddable_document(os.path.basename(f)))):
-			print '(@@@).2 __is_service__=%s' % (__is_service__)
+			print('(@@@).2 __is_service__=%s' % (__is_service__))
 			if (__is_service__):
 			    for ff in __service_files__.keys():
-				print '(@@@).3 "%s".find("%s")=%s' % (f,os.sep+ff,f.find(os.sep+ff) > -1)
+				print('(@@@).3 "%s".find("%s")=%s' % (f,os.sep+ff,f.find(os.sep+ff) > -1))
 				if (f.find(os.sep+ff) > -1):
 				    handle_service_file(ff,f)
-				    print '(@@@).4 special-service-file=%s' % (f)
+				    print('(@@@).4 special-service-file=%s' % (f))
 			_l_.append(f)
 	    __datafiles__.append(tuple([df[0],_l_]))
     except Exception as ex:
-	print >> sys.stderr, _utils.formattedException(details=ex)
+		sys.stderr.write(_utils.formattedException(details=ex)+'\n')
     try:
 	for df in data_files:
 	    __df__ = find_data_files(df)
 	    if (len(__df__) > 0):
 		__datafiles__.append(__df__)
     except Exception as ex:
-	print >> sys.stderr, _utils.formattedException(details=ex)
-    print '(2). __datafiles__=%s' % (__datafiles__)
+		sys.stderr.write(_utils.formattedException(details=ex)+'\n')
+    print('(2). __datafiles__=%s' % (__datafiles__))
     __excludes__ = ["pywin", "pywin.debugger", "pywin.debugger.dbgcon",
 	        "pywin.dialogs", "pywin.dialogs.list", 'MySQLdb' ] # , "vyperlogix", 'paramiko'
     for exc in excludes:
@@ -682,7 +683,7 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
     __includes__ = list(set(__includes__))
     
     VyperLogixLibraryCollector.compiled_excludes = list(set(VyperLogixLibraryCollector.compiled_excludes)-set(compiled_excludes))+compiled_excludes
-    print 'DEBUG: (+++) VyperLogixLibraryCollector.compiled_excludes=%s' % (VyperLogixLibraryCollector.compiled_excludes)
+    print('DEBUG: (+++) VyperLogixLibraryCollector.compiled_excludes=%s' % (VyperLogixLibraryCollector.compiled_excludes))
 
     if (misc.isList(extra_packages)):
 	try:
@@ -760,14 +761,14 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    </assembly>
 	    '''
 	    RT_MANIFEST = 24
-	    #print 'DEBUG: cmdline_style=%s' % (cmdline_style)
+	    #print('DEBUG: cmdline_style=%s' % (cmdline_style))
 	    __cmdline_style__ = CommandLineTypes.pywin32.name
-	    #print 'DEBUG: __cmdline_style__=%s' % (__cmdline_style__)
+	    #print('DEBUG: __cmdline_style__=%s' % (__cmdline_style__))
 	    try:
 		__cmdline_style__ = cmdline_style.name
 	    except:
 		__cmdline_style__ = cmdline_style
-	    #print 'DEBUG: __cmdline_style__=%s' % (__cmdline_style__)
+	    #print('DEBUG: __cmdline_style__=%s' % (__cmdline_style__))
 	    windows_service = Target(
 		# used for the versioninfo resource
 		description = __product_description__,
@@ -847,7 +848,7 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    #from vyperlogix.misc import ObjectTypeName
 	    callback = minion.callback
 	    so = minion.__data__
-	    print >> sys.stdout, 'DEBUG: so.__class__=%s' % (so.__class__)
+	    sys.stdout.write('DEBUG: so.__class__=%s\n' % (so.__class__))
 	    so.program_name = __program_name__
 	    so.company_name = __company_name__
 	    so.product_name = __product_name__
@@ -857,9 +858,9 @@ def do_setup(program_name=None,company_name=None,product_name=None,description=N
 	    so.icon = __icon__
 	if (callable(callback)):
 	    try:
-		callback(dist_dir)
+			callback(dist_dir)
 	    except Exception as ex:
-		print >> sys.stderr, 'EXCEPTION: %s' % (_utils.formattedException(details=ex))
+			sys.stderr.write('EXCEPTION: %s' % (_utils.formattedException(details=ex))+'\n')
 
 import os, sys
 
@@ -895,12 +896,12 @@ class Py2EXEUtils():
     def __normalize__(self,dest,target):
 	bias = ''
 	__dest__ = dest if (os.path.isdir(dest)) else os.path.dirname(dest)
-	print '(%s).1 --> dest=%s' % (misc.funcName(),__dest__)
+	print('(%s).1 --> dest=%s' % (misc.funcName(),__dest__))
 	toks = [str(t).lower() for t in __dest__.split(os.sep) if (len(t) > 0)]
-	print '(%s).2 --> toks=%s' % (misc.funcName(),toks)
+	print('(%s).2 --> toks=%s' % (misc.funcName(),toks))
 	if ('dist' in toks):
 	    bias = os.sep+'dist'
-	    print '(%s).3 --> bias=%s' % (misc.funcName(),bias)
+	    print('(%s).3 --> bias=%s' % (misc.funcName(),bias))
 	return dest.replace(target+bias,'')
 	
     def callback(self,dist_dir):
@@ -911,33 +912,33 @@ class Py2EXEUtils():
 	    fIn = open(fpath,'r')
 	    fOut = open(fpath+'.new', mode='w')
 	    __is_dirty__ = False
-	    #print >>sys.stdout, 'DEBUG: fpath=%s' % (fpath)
-	    #print >>sys.stdout, 'DEBUG: self.__data__=%s' % (self.__data__)
+	    #sys.stdout.write('DEBUG: fpath=%s\n' % (fpath))
+	    #sys.stdout.write('DEBUG: self.__data__=%s\n' % (self.__data__))
 	    for aLine in fIn:
 		aLine = aLine.rstrip()
-		#print >>sys.stdout, 'DEBUG: aLine=%s' % (aLine)
+		#sys.stdout.write('DEBUG: aLine=%s\n' % (aLine))
 		matches = self.regex1.search(aLine)
-		#print >>sys.stdout, 'DEBUG: matches=%s' % (matches)
+		#sys.stdout.write('DEBUG: matches=%s\n' % (matches))
 		if (matches and matches.groupdict() and matches.groupdict().has_key('name')):
-		    #print >>sys.stdout, 'DEBUG: matches=%s, matches.groupdict()=%s' % (matches,matches.groupdict())
+		    #sys.stdout.write('DEBUG: matches=%s, matches.groupdict()=%s\n' % (matches,matches.groupdict()))
 		    for k,v in matches.groupdict().iteritems():
 			v = str(v).strip()
-			#print >>sys.stdout, 'DEBUG: self.__data__["%s"]=%s' % (v,self.__data__[v])
+			#sys.stdout.write('DEBUG: self.__data__["%s"]=%s\n' % (v,self.__data__[v]))
 			if (self.__data__[v]):
 			    aLine = aLine.replace('{{ %s }}' % (v),self.__data__[v])
-			    #print >>sys.stdout, 'DEBUG: --> aLine=%s' % (aLine)
+			    #sys.stdout.write('DEBUG: --> aLine=%s\n' % (aLine))
 			    __is_dirty__ = True
-		print >>fOut, aLine
+		fOut.write(aLine+'\n')
 	    fIn.close()
 	    fOut.flush()
 	    fOut.close()
-	    #print >> sys.stdout, 'DEBUG: __is_dirty__=%s' % (__is_dirty__)
+	    #sys.stdout.write('DEBUG: __is_dirty__=%s\n' % (__is_dirty__))
 	    if (__is_dirty__):
-		#print >> sys.stdout, 'DEBUG: fpath=%s, fOut.name=%s' % (fpath,fOut.name)
+		#sys.stdout.write('DEBUG: fpath=%s, fOut.name=%s\n' % (fpath,fOut.name))
 		os.remove(fpath)
-		#print >> sys.stdout, 'DEBUG: os.remove("%s")' % (fpath)
+		#sys.stdout.write('DEBUG: os.remove("%s")\n' % (fpath))
 		os.rename(fOut.name,fpath)
-		#print >> sys.stdout, 'DEBUG: os.rename("%s","%s")' % (fOut.name,fpath)
+		#sys.stdout.write('DEBUG: os.rename("%s","%s")\n' % (fOut.name,fpath))
 	    else:
 		os.remove(fOut.name)
 
@@ -947,83 +948,83 @@ class CopyFilesToTarget(Py2EXEUtils):
 	from vyperlogix import misc
 	from vyperlogix.misc import _utils
 	dist_dir = os.path.abspath(dist_dir.replace('/',os.sep))
-	print '(%s).1 --> dist_dir=%s' % (misc.funcName(),dist_dir)
+	print('(%s).1 --> dist_dir=%s' % (misc.funcName(),dist_dir))
 	if (not os.path.exists(self.target)) or (not os.path.isdir(self.target)):
-	    print '(DEBUG) Making dirs --> %s' % (self.target)
+	    print('(DEBUG) Making dirs --> %s' % (self.target))
 	    os.makedirs(self.target)
 	if (self.isZIP):
-	    print '(DEBUG) dist_dir=%s, self.target=%s' % (dist_dir,self.target)
+	    print('(DEBUG) dist_dir=%s, self.target=%s' % (dist_dir,self.target))
 	    toks = [t for t in dist_dir.split(os.sep) if (len(t) > 0)][0:-1]
-	    print '(DEBUG) toks=%s' % (toks)
+	    print('(DEBUG) toks=%s' % (toks))
 	    zf_name = os.sep.join([self.target,toks[-1]+'.zip'])
-	    print '(DEBUG) zf_name=%s' % (zf_name)
+	    print('(DEBUG) zf_name=%s' % (zf_name))
 	    zf = zipfile.PyZipFile(zf_name, mode='w')
 	if (os.path.exists(self.target)) and (os.path.isdir(self.target)):
 	    if (os.path.exists(dist_dir)):
 		#files = [os.sep.join([dist_dir,f]) for f in os.listdir(dist_dir)]
 		files_d = _utils.filesAsDict(dist_dir)
 		files = [os.path.abspath(f) for f in dictutils.flatten(files_d)]
-		print '(%s).2 --> files=%s' % (misc.funcName(),files)
-		#print '(%s).2a --> files_d=%s' % (misc.funcName(),files_d)
-		#print '(%s).2b --> fd=%s' % (misc.funcName(),fd)
+		print('(%s).2 --> files=%s' % (misc.funcName(),files))
+		#print('(%s).2a --> files_d=%s' % (misc.funcName(),files_d))
+		#print('(%s).2b --> fd=%s' % (misc.funcName(),fd))
 		nonexes = [f for f in files if (self.isNonExe(f))]
 		exes = [f for f in files if (f not in nonexes) and (not self.isTrash(f))]
 		others = list(set(files) - set(exes) - set(nonexes))
-		print '(%s).3 --> exes=%s' % (misc.funcName(),exes)
+		print('(%s).3 --> exes=%s' % (misc.funcName(),exes))
 		if (len(exes) == 1):
-		    print '(%s).4 --> exes=%s' % (misc.funcName(),exes)
+		    print('(%s).4 --> exes=%s' % (misc.funcName(),exes))
 		    for f in exes:
 			_f_ = os.path.abspath(f)
 			dest = self.normalize(f,dist_dir,self.target)
-			print '(%s).5 --> _utils.copyFile("%s","%s",verbose=True)' % (misc.funcName(),_f_,dest)
+			print('(%s).5 --> _utils.copyFile("%s","%s",verbose=True)' % (misc.funcName(),_f_,dest))
 			if (not os.path.exists(os.path.dirname(dest))):
 			    _utils.makeDirs(dest)
 			_utils.copy_binary_files_by_chunks(_f_,dest)
 			if (self.isZIP):
 			    t = self.__normalize__(dest,self.target)
-			    print '(%s).5a --> _f_=%s, t=%s' % (misc.funcName(),_f_,t)
+			    print('(%s).5a --> _f_=%s, t=%s' % (misc.funcName(),_f_,t))
 			    zf.write(_f_, t)
 			assert(_utils.fileSize(_f_) == _utils.fileSize(dest))
-		print '(%s).6 --> nonexes=%s' % (misc.funcName(),nonexes)
+		print('(%s).6 --> nonexes=%s' % (misc.funcName(),nonexes))
 		for f in nonexes:
 		    _f_ = os.path.abspath(f)
 		    if (os.path.exists(_f_)):
 			if os.path.isfile(_f_):
 			    dest = self.normalize(f,dist_dir,self.target)
-			    print '(%s).7 --> _utils.copyFile("%s","%s",verbose=True)' % (misc.funcName(),_f_,dest)
-			    #print '(%s).7a --> os.path.isfile("%s"))=%s' % (misc.funcName(),dest,os.path.isfile(dest))
-			    #print '(%s).7b --> os.path.exists("%s")=%s' % (misc.funcName(),os.path.dirname(dest),os.path.exists(os.path.dirname(dest)))
+			    print('(%s).7 --> _utils.copyFile("%s","%s",verbose=True)' % (misc.funcName(),_f_,dest))
+			    #print('(%s).7a --> os.path.isfile("%s"))=%s' % (misc.funcName(),dest,os.path.isfile(dest)))
+			    #print('(%s).7b --> os.path.exists("%s")=%s' % (misc.funcName(),os.path.dirname(dest),os.path.exists(os.path.dirname(dest))))
 			    if (not os.path.exists(os.path.dirname(dest))):
 				_utils.makeDirs(dest)
 			    _utils.copy_binary_files_by_chunks(_f_,dest)
 			    self.process_templates(dest)
 			    if (self.isZIP):
 				t = self.__normalize__(dest,self.target)
-				print '(%s).7a --> _f_=%s, t=%s' % (misc.funcName(),_f_,t)
+				print('(%s).7a --> _f_=%s, t=%s' % (misc.funcName(),_f_,t))
 				zf.write(dest,t)
 			    assert(_utils.fileSize(_f_) == _utils.fileSize(dest))
 		    else:
-			print '(%s).8 WARNING --> _f_ is "%s" and seems to be inaccessible as a file that could be copied, it was not copied however.' % (misc.funcName(),_f_)
-		print '(%s).9 --> others=%s' % (misc.funcName(),others)
+			print('(%s).8 WARNING --> _f_ is "%s" and seems to be inaccessible as a file that could be copied, it was not copied however.' % (misc.funcName(),_f_))
+		print('(%s).9 --> others=%s' % (misc.funcName(),others))
 		for f in others:
 		    _f_ = os.path.abspath(f)
 		    dest = self.normalize(f,dist_dir,self.target)
-		    print '(%s).10 --> remove("%s")' % (misc.funcName(),_f_)
+		    print('(%s).10 --> remove("%s")' % (misc.funcName(),_f_))
 		    if (os.path.exists(_f_)):
 			os.remove(_f_)
 		    else:
-			print >> sys.stderr, 'WARNING: Nothing to do remove cuz "%s" does not seem to exist.' % (_f_)
-		    print '(%s).11 --> remove("%s")' % (misc.funcName(),dest)
+			sys.stderr.write('WARNING: Nothing to do remove cuz "%s" does not seem to exist.\n' % (_f_))
+		    print('(%s).11 --> remove("%s")' % (misc.funcName(),dest))
 		    if (os.path.exists(dest)):
 			os.remove(dest)
 		    else:
-			print >> sys.stderr, 'WARNING: Nothing to do remove cuz "%s" does not seem to exist.' % (dest)
+			sys.stderr.write('WARNING: Nothing to do remove cuz "%s" does not seem to exist.\n' % (dest))
 		if (self.isZIP):
 		    zf.close()
 	    else:
-		print >> sys.stderr, 'WARNING: Nothing to do cuz "%s" does not seem to exist or is not a directory.' % (dist_dir)
+			sys.stderr.write('WARNING: Nothing to do cuz "%s" does not seem to exist or is not a directory.\n' % (dist_dir))
 	else:
-	    print >> sys.stderr, 'WARNING: Nothing to do cuz "%s" does not seem to exist or is not a directory.' % (self.target)
+	    sys.stderr.write('WARNING: Nothing to do cuz "%s" does not seem to exist or is not a directory.\n' % (self.target))
 
 
 if (__name__ == '__main__'):
@@ -1032,5 +1033,5 @@ if (__name__ == '__main__'):
     nonexes = ['.\\dist\\restart.cmd', '.\\dist\\install.cmd', '.\\dist\\Microsoft.VC90.CRT\\msvcp90.dll', '.\\dist\\Microsoft.VC90.CRT\\msvcr90.dll', '.\\dist\\stop.cmd', '.\\dist\\remove.cmd', '.\\dist\\start.cmd', '.\\dist\\Microsoft.VC90.CRT\\msvcm90.dll', '.\\dist\\Microsoft.VC90.CRT\\Microsoft.VC90.CRT.manifest', '.\\dist\\service_config.json']
     nonexes = [f.replace('.\\dist\\',dist_dir+os.sep) for f in nonexes]
     n_nonexes = [normalize(f,dist_dir,r"c:\@vm1") for f in nonexes]
-    print n_nonexes
+    print(n_nonexes)
     

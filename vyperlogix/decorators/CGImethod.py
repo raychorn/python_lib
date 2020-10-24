@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -23,16 +24,16 @@ class CGImethod(object):
         self.title = title
     def __call__(self,fn):
         def wrappedFn(*args):
-            print "Content-Type: text/html\n\n"
-            print "<HTML>"
-            print "<HEAD><TITLE>%s</TITLE></HEAD>" % self.title
-            print "<BODY>"
+            print("Content-Type: text/html\n\n")
+            print("<HTML>")
+            print("<HEAD><TITLE>%s</TITLE></HEAD>" % self.title)
+            print("<BODY>")
             try:
                 fn(*args)
-            except Exception ase:
-                print
-                print e
-            print
-            print "</BODY></HTML>"
+            except Exception as e:
+                print()
+                print(e)
+            print()
+            print("</BODY></HTML>")
 
         return wrappedFn

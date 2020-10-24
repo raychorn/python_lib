@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 """
 example5.py
 
@@ -36,6 +36,6 @@ fd = open("ex_signeddoc.txt.sig", "w")
 fd.write(sig)
 fd.close()
 
-print "Document created as ex_signeddoc.txt"
-print "Signature written to ex_signeddoc.txt.sig"
-print "This signature will be verified in example6"
+print("Document created as ex_signeddoc.txt")
+print("Signature written to ex_signeddoc.txt.sig")
+print("This signature will be verified in example6")

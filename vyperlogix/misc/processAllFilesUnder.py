@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 __copyright__ = """\
@@ -30,13 +31,13 @@ def processAllFilesUnder(top,action=None,tag=''):
                 try:
                     action(root,dirs,files,tag)
                 except Exception as details:
-                    print '(processAllFilesUnder) :: ERROR.2 :: (%s).' % (str(details))
+                    print('(processAllFilesUnder) :: ERROR.2 :: (%s).' % (str(details)))
     except Exception as details:
-        print '(processAllFilesUnder) :: ERROR.1 :: (%s).' % (str(details))
+        print('(processAllFilesUnder) :: ERROR.1 :: (%s).' % (str(details)))
 
 def copyOSFileFromTo(source,dest):
     try:
-        print 'CMD /K XCOPY "%s" "%s" /V' % (source,dest)
+        print('CMD /K XCOPY "%s" "%s" /V' % (source,dest))
         #os.system()
     except:
         pass
@@ -52,8 +53,8 @@ def copyAllFilesUnderTo(source,target,action=None):
                     try:
                         action(srcFName,dstFName)
                     except Exception as details:
-                        print '(copyAllFilesUnderTo) :: ERROR.2 :: (%s).' % (str(details))
+                        print('(copyAllFilesUnderTo) :: ERROR.2 :: (%s).' % (str(details)))
                 else:
                     copyOSFileFromTo(srcFName,dstFName)
     except Exception as details:
-        print '(copyAllFilesUnderTo) :: ERROR.1 :: (%s).' % (str(details))
+        print('(copyAllFilesUnderTo) :: ERROR.1 :: (%s).' % (str(details)))

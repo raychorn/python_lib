@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Utility for extracting specified lines from a file.
 
@@ -32,7 +33,7 @@ number_lines     = no
 reverse_sense    = no
 
 def Usage():
-    print '''Usage:  fcut [options] file n:m [n1:m2 ...]
+    print('''Usage:  fcut [options] file n:m [n1:m2 ...]
 
 Prints specified line number ranges of a file.  Line numbering is 1-based
 and ranges are inclusive.
@@ -58,7 +59,7 @@ Examples:
 
     fcut -n file :
         Number all the lines of the file
-'''
+''')
     sys.exit(1)
 
 def ProcessLineSpecs(line_specs, num_lines):
@@ -102,7 +103,7 @@ def ProcessLineSpecs(line_specs, num_lines):
         else:
             specs.append((low-1, high-1))
     if debug == yes:
-        print "+ specs =", specs
+        print("+ specs =", specs)
     return specs
 
 def MatchesSpec(line_num, specs):
@@ -111,7 +112,7 @@ def MatchesSpec(line_num, specs):
     return no.
     '''
     if debug == yes:
-            print "+ Checking line %d" % line_num
+        print("+ Checking line %d" % line_num)
     for spec in specs:
         low  = spec[0]
         high = spec[1]
@@ -127,7 +128,7 @@ def main():
     try:
         optlist, symbols = getopt.getopt(sys.argv[1:], "nr")
     except getopt.error, str:
-        print str
+        print(str)
         sys.exit(1)
     for opt in optlist:
         if opt[0] == "-n":

@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Microsoft Installer Library
 # (C) 2003 Martin v. Loewis
 
@@ -57,8 +58,7 @@ def MakeInstaller():
     global _Installer
     if _Installer is None:
         EnsureMSI()
-        _Installer = win32com.client.Dispatch('WindowsInstaller.Installer',
-                     resultCLSID='{000C1090-0000-0000-C000-000000000046}')
+        _Installer = win32com.client.Dispatch('WindowsInstaller.Installer', resultCLSID='{000C1090-0000-0000-C000-000000000046}')
     return _Installer
 
 class Table:
@@ -78,7 +78,7 @@ class Table:
             index -= 1
             unk = type & ~knownbits
             if unk:
-                print "%s.%s unknown bits %x" % (self.name, name, unk)
+                print("%s.%s unknown bits %x" % (self.name, name, unk))
             size = type & datasizemask
             dtype = type & typemask
             if dtype == type_string:
@@ -97,7 +97,7 @@ class Table:
                 tname="OBJECT"
             else:
                 tname="unknown"
-                print "%s.%sunknown integer type %d" % (self.name, name, size)
+                print("%s.%sunknown integer type %d" % (self.name, name, size))
             if type & type_nullable:
                 flags = ""
             else:
@@ -185,7 +185,7 @@ def gen_sequence(destpath, msipath):
     v = seqmsi.OpenView("SELECT * FROM _Tables");
     v.Execute(None)
     f = open(destpath, "w")
-    print >>f, "import msilib,os;dirname=os.path.dirname(__file__)"
+    f.write("import msilib,os;dirname=os.path.dirname(__file__)\n")
     tables = []
     while 1:
         r = v.Fetch()
@@ -227,7 +227,7 @@ def gen_sequence(destpath, msipath):
     f.close()
 
 def add_data(db, table, values):
-    print '(add_data).1 :: db=(%s)' % (str(db))
+    print('(add_data).1 :: db=(%s)' % (str(db)))
     d = MakeInstaller()
     v = db.OpenView("SELECT * FROM `%s`" % table)
     count = v.ColumnInfo(0).FieldCount
@@ -335,9 +335,9 @@ class CAB:
             logical = self.gen_id(dir, file)
         self.index += 1
         if full.find(" ")!=-1:
-            print >>self.file, '"%s" %s' % (full, logical)
+            self.file.write('"%s" %s\n' % (full, logical))
         else:
-            print >>self.file, '%s %s' % (full, logical)
+            self.file.write('%s %s\n' % (full, logical))
         return self.index, logical
 
     def commit(self, db):
@@ -354,7 +354,7 @@ class CAB:
                 sys.stdout.write(line)
             sys.stdout.flush()
         if not os.path.exists(self.name+".cab"):
-            raise IOError, "cabarc failed"
+            raise IOError("cabarc failed")
         add_data(db, "Media", [(1, self.index, None, "#"+self.name, None, None)])
         add_stream(db, self.name, self.name+".cab")
         os.unlink(self.name+".txt")
@@ -420,7 +420,7 @@ class Directory:
             try:
                 assert file not in self.short_names
             except Exception as details:
-                print '(make_short) :: ERROR "%s" because file (%s) is not unique.' % (str(details),file)
+                print((make_short) :: ERROR "%s" because file (%s) is not unique.' % (str(details),file))
         else:
             prefix = prefix[:6]
             if suffix:
@@ -437,7 +437,7 @@ class Directory:
                 if pos in (10, 100, 1000):
                     prefix = prefix[:-1]
         self.short_names.add(file)
-        print '(make_short) :: re.search() :: file=(%s)' % (str(file))
+        print('(make_short) :: re.search() :: file=(%s)' % (str(file)))
         assert not re.search(r'[\?|><:/*"+,;=\[\]]', file) # restrictions on short names
         return file
 

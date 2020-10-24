@@ -106,10 +106,10 @@ class ExceptionHandler:
         hasSentEmail = False
         if (_computer_name.lower() in self.notifyMachineNames):
             notice = \
-                   """An unhandled exception occurred. Please report the problem"""\
-                   """ using the error reporting dialog or via email to <%s>."""\
-                   """ A log has been written to "%s".\n\nError information:\n""" % \
-                   (self.emailsTo, logFile)
+                    """An unhandled exception occurred. Please report the problem"""\
+                    """ using the error reporting dialog or via email to <%s>."""\
+                    """ A log has been written to "%s".\n\nError information:\n""" % \
+                    (self.emailsTo, logFile)
             try:
                 msg = message.Message('do-not-reply@vyperlogix.com', 'support@vyperlogix.com', '%s\n%s' % (notice,msg), 'Error Handler from "%s".' % sys.argv[0])
                 smtp = mailServer.MailServer(mailServer.development_config)
@@ -118,19 +118,19 @@ class ExceptionHandler:
             except Exception as details:
                 exc_info = sys.exc_info()
                 info_string = '\n'.join(traceback.format_exception(*exc_info))
-                print >> sys.stderr, 'EMAIL_ERROR :: Unable to send email due to "%s\n%s".' % (details,info_string)
+                sys.stderr.write('EMAIL_ERROR :: Unable to send email due to "%s\n%s\n".' % (details,info_string))
                 sections.insert(len(sections)-1,'EMAIL_ERROR=[%s]' % info_string)
             sections.insert(len(sections)-1,'hasSentEmail=[%s]' % hasSentEmail)
         else:
-            print >> sys.stderr, msg
+            sys.stderr.write(msg+'\n')
 
         if (callable(self.callback)):
             try:
                 self.callback(sections)
-            except:
+            except Exception as details:
                 exc_info = sys.exc_info()
                 info_string = '\n'.join(traceback.format_exception(*exc_info))
-                print >> sys.stderr, 'CALLBACK_ERROR :: Unable to fire callback due to "%s\n%s".' % (details,info_string)
+                sys.stderr.write('CALLBACK_ERROR :: Unable to fire callback due to "%s\n%s".' % (details,info_string))
                 sections.insert(len(sections)-1,'CALLBACK_ERROR=[%s]' % info_string)
 
         msg = '\n'.join(sections)

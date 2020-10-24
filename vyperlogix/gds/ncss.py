@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Counts lines of non-commented source code for C and C++.  Strips
 out comments, then counts non-empty lines.  Prints a report to stdout.
@@ -32,7 +33,7 @@ cpp_comment          = re.compile(".*(//.*$)")
 total_lines = 0
 
 def Usage():
-    print "Usage:  %s source_file1 [source_file2 ...]"
+    print("Usage:  %s source_file1 [source_file2 ...]")
     sys.exit(1)
 
 def RemoveCComments(lines):
@@ -78,7 +79,7 @@ def ProcessFile(file):
         line = string.strip(lines[ix])
         if len(line) == 0:
             del lines[ix]
-    print "%8d  %s" % (len(lines), file)
+    print("%8d  %s" % (len(lines), file))
     total_lines = total_lines + len(lines)
 
 def main():
@@ -86,8 +87,8 @@ def main():
         Usage()
     for file in sys.argv[1:]:
         ProcessFile(file)
-    print ""
-    print "%8d  %s" % (total_lines, "Total")
+    print("")
+    print("%8d  %s" % (total_lines, "Total"))
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2013, Vyper Logix Corp., 
 
@@ -26,7 +27,7 @@ def seedPassword(passPhrase=''):
         s = ''.join([chr(random.randint(0,254)) for ch in xrange(1024)])
     else:
         s = passPhrase
-    #print 's=[%s]' % ','.join(['%d' % ord(ch) for ch in s])
+    #print('s=[%s]' % ','.join(['%d' % ord(ch) for ch in s]))
     return s
 
 #s = [110,111,119,105,115,116,104,101,116,105,109,101,102,111,114,97,108,108,103,111,111,100,109,101,110,116,111,99,111,109,101,116,111,116,104,101,97,105,100,111,102,116,104,101,105,114,99,111,117,110,116,114,121]
@@ -59,7 +60,7 @@ def encryptCBC(key,iv,plain):
     m = len(plain)
     n = 8-divmod(m,8)[-1]
     plain += '\0'*n
-    print len(plain)
+    print(len(plain))
     return obj.encrypt(plain)
 
 def decryptCBC(key,iv,cipher):
@@ -72,9 +73,9 @@ def test():
     iv = '12345678'
     plain = 'now is the time for all good men to come to the aid of their country'
     cipher = encryptCBC(key,iv,plain)
-    print cipher
+    print(cipher)
     
     p = decryptCBC(key,iv,cipher)
-    print p
+    print(p)
     
     assert p==plain, 'Oops, something went wrong with the blowfish thingy.'

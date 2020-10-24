@@ -20,13 +20,13 @@ USE AT YOUR OWN RISK.
 
 def updateSalesForceObject(objProxy):
     try:
-	objProxy.update()
+        objProxy.update()
     except Exception as details:
-	from vyperlogix.misc import _utils
-	info_string = _utils.formattedException(details=details)
-	print >>sys.stderr, info_string
+        from vyperlogix.misc import _utils
+        info_string = _utils.formattedException(details=details)
+        sys.stderr.write(info_string+'\n')
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write( __copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')

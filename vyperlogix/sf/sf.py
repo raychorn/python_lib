@@ -36,19 +36,19 @@ class SalesForceBaseQuery(Cooperative):
         self.__password__ = password
         self.__sfdc__ = None
 
-	from pyax.connection import Connection
-	from pyax.exceptions import ApiFault
+        from pyax.connection import Connection
+        from pyax.exceptions import ApiFault
         try:
             self.__sfdc__ = Connection.connect(self.username, self.password)
             return True
         except AttributeError, details:
-	    from vyperlogix.misc import _utils
-	    info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            from vyperlogix.misc import _utils
+            info_string = _utils.formattedException(details=details)
+            sys.stderr.write(info_string+'\n')
         except ApiFault, details:
-	    from vyperlogix.misc import _utils
-	    info_string = _utils.formattedException(details=details)
-            print >>sys.stderr, info_string
+            from vyperlogix.misc import _utils
+            info_string = _utils.formattedException(details=details)
+            sys.stderr.write(info_string+'\n')
         return False
 
     def dictFromSOQL(self, ret):
@@ -59,8 +59,8 @@ class SalesForceBaseQuery(Cooperative):
                 for vk in v.keys():
                     d[vk] = v[vk]
         except Exception as details:
-	    from vyperlogix.misc import _utils
-	    info_string = _utils.formattedException(details=details)
+            from vyperlogix.misc import _utils
+            info_string = _utils.formattedException(details=details)
             logging.warning(info_string)
         return d
 
@@ -146,5 +146,5 @@ class SalesForceQuery(Cooperative):
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write( __copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')

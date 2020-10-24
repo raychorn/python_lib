@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Synchronization classes using decorators. Provides synchronized, semaphore
 # and event classes which provide transparent decorator patterns for
 # Lock, BoundedSemaphore and Event objects in Python.
@@ -19,14 +20,14 @@ class synchronized(object):
         def lockedfunc(*args, **kwargs):
             try:
                 self.lock.acquire()
-                print 'Acquired lock=>',currentThread()
+                print('Acquired lock=> %s' % (currentThread()))
                 try:
                     return f(*args, **kwargs)
                 except Exception as e:
                     raise
             finally:
                 self.lock.release()
-                print 'Released lock=>',currentThread()
+                print('Released lock=> %s' % (currentThread()))
 
         return lockedfunc
 
@@ -41,16 +42,16 @@ class semaphore(object):
     def __call__(self, f):
         def semfunc(*args, **kwargs):
             try:
-                print 'Trying to acquire sem=>',currentThread()
+                print('Trying to acquire sem=> %s' % (currentThread()))
                 self.sem.acquire()
-                print 'Acquired sem=>',currentThread()
+                print('Acquired sem=> %s' % (currentThread()))
                 try:
                     return f(*args, **kwargs)
                 except Exception as e:
                     raise
             finally:
                 self.sem.release()
-                print 'Released sem=>',currentThread()
+                print('Released sem=> %s' % (currentThread()))
 
 
         return semfunc
@@ -66,7 +67,7 @@ class event(object):
     def __call__(self, f):
         def eventfunc(*args, **kwargs):
             try:
-                print 'Waiting on event =>',currentThread()
+                print('Waiting on event => %s' % (currentThread()))
                 self.evt.wait()
                 # First thread will clear the event and
                 # make others wait, once it is done with the
@@ -75,7 +76,7 @@ class event(object):
                 # This provides sequential access to a
                 # resource...
                 self.evt.clear()
-                print 'Cleared event =>',currentThread()
+                print('Cleared event => %s' % (currentThread()))
                 try:
                     return f(*args, **kwargs)
                 except Exception as e:
@@ -83,6 +84,6 @@ class event(object):
             finally:
                 # Wake up another thread...
                 self.evt.set()
-                print 'Set event=>',currentThread()
+                print('Set event=> %s' % (currentThread()))
 
         return eventfunc

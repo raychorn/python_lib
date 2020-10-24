@@ -15,8 +15,7 @@ def trace(f):
             lineno = frame.f_lineno
 
             bname = os.path.basename(filename)
-            print "%s(%d): %s" % (bname, lineno,
-                                  linecache.getline(filename, lineno)),
+            sys.stdout.write("%s(%d): %s\n" % (bname, lineno, linecache.getline(filename, lineno)))
         return localtrace
 
     def _f(*args, **kwds):

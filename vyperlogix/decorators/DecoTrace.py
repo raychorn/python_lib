@@ -1,4 +1,5 @@
-from sys import stdout,stderr
+from __future__ import print_function
+import sys
 from pdb import set_trace as bp
 
 __copyright__ = """\
@@ -34,10 +35,10 @@ class DecoTrace(object):
         self.f = f
 
     def _showargs(self, *fargs, **kw):
-        print >> stderr, 'T: enter %s with args=%s, kw=%s' % (self.f.__name__, str(fargs), str(kw))
+        sys.stderr.write('T: enter %s with args=%s, kw=%s\n' % (self.f.__name__, str(fargs), str(kw)))
 
     def _aftercall(self, status):
-        print >> stderr, 'T: exit %s with status=%s' % (self.f.__name__, str(status))
+        sys.stderr.write('T: exit %s with status=%s\n' % (self.f.__name__, str(status)))
 
     def __call__(self, *fargs, **kw):
         '''pass just function arguments to wrapped function'''
@@ -69,15 +70,13 @@ class DecoTraceWithArgs(object):
 
     def _showargs(self, *fargs, **kw):
 
-        print >> self.fid, \
-              '%s: enter %s with args=%s, kw=%s' % (self.label, self.f.__name__, str(fargs), str(kw))
-        print >> self.fid, \
-              '%s:   passing decorator args=%s, kw=%s' % (self.label, str(self.dec_args), str(self.dec_kw))
+        self.fid.write('%s: enter %s with args=%s, kw=%s\n' % (self.label, self.f.__name__, str(fargs), str(kw)))
+        self.fid.write('%s:   passing decorator args=%s, kw=%s\n' % (self.label, str(self.dec_args), str(self.dec_kw)))
 
     def _aftercall(self, status):
-        print >> self.fid, '%s: exit %s with status=%s' % (self.label, self.f.__name__, str(status))
+        self.fid.write('%s: exit %s with status=%s\n' % (self.label, self.f.__name__, str(status)))
     def _showinstance(self, instance):
-        print >> self.fid, '%s: instance=%s' % (self.label, instance)
+        self.fid.write('%s: instance=%s\n' % (self.label, instance))
         
     def __call__(self, f):
         def wrapper(*fargs, **kw):

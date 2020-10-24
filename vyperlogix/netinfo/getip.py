@@ -1,3 +1,4 @@
+from __future__ import print_function
 import socket
 import fcntl
 import struct
@@ -11,4 +12,4 @@ def get_ip_address(ifname):
     )[20:24])
 
 if (__name__ == '__main__'):
-	print get_ip_address('eth0')
+	print(get_ip_address('eth0'))

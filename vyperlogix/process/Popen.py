@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import subprocess
 import errno
@@ -184,8 +185,8 @@ class Shell(Cooperative):
         self.isVerbose = isVerbose
         self.fOut = fOut
         self.__onExit__ = onExit
-	self.__delayed__ = []
-	self.__has_issued_callback__ = False
+        self.__delayed__ = []
+        self.__has_issued_callback__ = False
         if (callable(fOut)):
             self.isVerbose = True
         if (not misc.isList(commands)):
@@ -203,9 +204,9 @@ class Shell(Cooperative):
                     fOut(recv_some(self.proc))
                 except Exception as details:
                     info_string = _utils.formattedException(details=details)
-                    print >> sys.stdout, info_string
+                    sys.stdout.write(info_string+'\n')
             else:
-                print >>self.fOut, recv_some(self.proc),
+                self.fOut.write(recv_some(self.proc))
         for cmd in commands:
             send_all(self.proc, str(cmd) + self.tail)
             if (self.isVerbose):
@@ -216,38 +217,38 @@ class Shell(Cooperative):
 		_begin_ = time.time()
 		_num_ = 0
 		_max_ = 30
-                while ((time.time() - _begin_) < _max_) and (_num_ < _max_):
-		    if (len(__toks__) > 1):
-			misc.append(__lines__,__toks__)
-		    else:
-			_num_ += 1
-		    time.sleep(1)
-                    data = recv_some(self.proc)
-		    __toks__ = str(data).split(os.linesep)
-		self.__has_issued_callback__ = True
-		if (callable(fOut)):
-		    try:
-			fOut(os.linesep.join(__lines__))
-		    except Exception as details:
-			info_string = _utils.formattedException(details=details)
-			print >> _target_[0:2], info_string
-		else:
-		    print >>self.fOut, recv_some(self.proc),
-	while (len(self.__delayed__) > 0):
-	    if (callable(self.__delayed__[-1])):
-		callee = self.__delayed__.pop()
-		try:
-		    callee()
-		except Exception as details:
-		    info_string = _utils.formattedException(details=details)
-		    print >> _target_[0:2], info_string
-        if (isExit):
-	    if (not self.__has_issued_callback__):
-		self.__delayed__.append(self.doExit)
-	    else:
-		self.doExit()
-        if (isWait):
-            self.doWait()
+        while ((time.time() - _begin_) < _max_) and (_num_ < _max_):
+            if (len(__toks__) > 1):
+                misc.append(__lines__,__toks__)
+            else:
+                _num_ += 1
+                time.sleep(1)
+            data = recv_some(self.proc)
+            __toks__ = str(data).split(os.linesep)
+            self.__has_issued_callback__ = True
+            if (callable(fOut)):
+                try:
+                    fOut(os.linesep.join(__lines__))
+                except Exception as details:
+                    info_string = _utils.formattedException(details=details)
+                    _target_[0:2].write(info_string)
+            else:
+                self.fOut.write(recv_some(self.proc))
+        while (len(self.__delayed__) > 0):
+            if (callable(self.__delayed__[-1])):
+                callee = self.__delayed__.pop()
+            try:
+                callee()
+            except Exception as details:
+                info_string = _utils.formattedException(details=details)
+                _target_[0:2].write(info_string)
+            if (isExit):
+                if (not self.__has_issued_callback__):
+                    self.__delayed__.append(self.doExit)
+                else:
+                    self.doExit()
+                if (isWait):
+                    self.doWait()
     
     def doSend(self,data):
         try:
@@ -260,43 +261,43 @@ class Shell(Cooperative):
                     self.fOut(recv_some(self.proc))
                 except Exception as details:
                     info_string = _utils.formattedException(details=details)
-                    print >> _target_[0:2], info_string
+                    _target_[0:2].write(info_string)
             else:
-                print >>self.fOut, recv_some(self.proc, e=0)
+                self.fOut.write(recv_some(self.proc, e=0))
             
     def doSendWithTail(self,data):
         self.doSend(data + self.tail)
             
     def doExit(self):
-	try:
-	    send_all(self.proc, 'exit' + self.tail)
-	    if (self.isVerbose):
-		if (callable(self.fOut)):
-		    try:
-			data = recv_some(self.proc)
-		    except:
-			data = None
-		    if (data is not None) and (len(data) > 0):
-			try:
-			    self.fOut(data)
-			except Exception as details:
-			    info_string = _utils.formattedException(details=details)
-			    print >> _target_[0:2], info_string
-		else:
-		    try:
-			data = recv_some(self.proc, e=0)
-		    except:
-			data = None
-		    if (data is not None) and (len(data) > 0):
-			print >>self.fOut, data
-	except:
-	    pass # suppress because the other side may have become disconnected simply because we have all the content from it...
+        try:
+            send_all(self.proc, 'exit' + self.tail)
+            if (self.isVerbose):
+                if (callable(self.fOut)):
+                    try:
+                        data = recv_some(self.proc)
+                    except:
+                        data = None
+                    if (data is not None) and (len(data) > 0):
+                        try:
+                            self.fOut(data)
+                        except Exception as details:
+                            info_string = _utils.formattedException(details=details)
+                            _target_[0:2].write(info_string)
+            else:
+                try:
+                    data = recv_some(self.proc, e=0)
+                except:
+                    data = None
+                if (data is not None) and (len(data) > 0):
+                    self.fOut.write(data)
+        except:
+            pass # suppress because the other side may have become disconnected simply because we have all the content from it...
         if (callable(self.__onExit__)):
             try:
                 self.__onExit__()
             except Exception as details:
                 info_string = _utils.formattedException(details=details)
-                print >> sys.stderr, info_string
+                sys.stderr.write(info_string+'\n')
 
     def doWait(self):
         self.proc.wait()

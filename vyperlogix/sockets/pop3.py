@@ -1,3 +1,4 @@
+from __future__ import print_function
 """pop3: a file-based pop3 server
 
 Useage:
@@ -142,7 +143,7 @@ def serve(host, port, filename):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "USAGE: [<host>:]<port> <path_to_message_file>"
+        print("USAGE: [<host>:]<port> <path_to_message_file>")
     else:
         _, port, filename = sys.argv
         if ":" in port:
@@ -153,7 +154,7 @@ if __name__ == "__main__":
         try:
             port = int(port)
         except Exception:
-            print "Unknown port:", port
+            print("Unknown port:", port)
         else:
             if (not os.path.exists(filename)):
                 fhOut = open(filename,'w')
@@ -163,6 +164,6 @@ if __name__ == "__main__":
             if (os.path.exists(filename)):
                 serve(host, port, filename)
             else:
-                print 'Oops - something went wrong with the automatic creation of the mailbox file which is "%s".' % filename
+                print('Oops - something went wrong with the automatic creation of the mailbox file which is "%s".' % filename)
 
 

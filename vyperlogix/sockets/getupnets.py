@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -37,4 +38,4 @@ def all_interfaces():
     return [namestr[i:i+32].split('\0', 1)[0] for i in range(0, outbytes, 32)]
 
 if (__name__ == '__main__'):
-    print all_interfaces()
+    print(all_interfaces())

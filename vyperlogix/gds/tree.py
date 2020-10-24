@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This module defines the Tree() function.  This function will return 
 a list of strings that represent the directory tree for the directory
@@ -66,5 +67,5 @@ if __name__ == "__main__":
         dir_to_process = sys.argv[1]
     leading_char = "|"
     for dir in Tree(dir_to_process, leading_char=leading_char):
-        print dir
+        print(dir)
 

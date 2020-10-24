@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 Python script to provide stopwatch like behavior.  It is specific to 
 the 32 bit Windows environment.
@@ -64,7 +65,7 @@ Keys = {
 #-----------------------------------------------------------------------------
 
 def Usage():    
-    print '''Commands:
+    print('''Commands:
   q       Quit
   Z       Zero time
   C       Enter a comment
@@ -72,7 +73,7 @@ def Usage():
 Any other keys take a split.  Start with a filename on the command
 line to also have the data appended to that file.  A state summary
 report will be written to the file.
-'''
+''')
 
 def Header():
     return '''Times are in seconds
@@ -82,7 +83,7 @@ def Header():
 
 def Log(str, quiet=0):
     if not quiet:
-        print str
+        print(str)
     if log_stream:
         log_stream.write(str + "\n")
 

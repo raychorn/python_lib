@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This module contains the function Banner() which can be used to print
 a banner message like the UNIX banner(1) function.
@@ -105,13 +106,13 @@ def Banner(string, char_to_use):
         ix = ord(char)-32
         bytes = []
         lines = letters[ix][0]
-        #print "Lines = 0x%08x" % lines
+        #print("Lines = 0x%08x" % lines)
         out[0].append(((lines & (0xff << 24)) >> 24) & 0xff)
         out[1].append(((lines & (0xff << 16)) >> 16) & 0xff)
         out[2].append(((lines & (0xff <<  8)) >>  8) & 0xff)
         out[3].append(lines & 0xff)
         lines = letters[ix][1]
-        #print "Lines = 0x%08x" % lines
+        #print("Lines = 0x%08x" % lines)
         out[4].append(((lines & (0xff << 24)) >> 24) & 0xff)
         out[5].append(((lines & (0xff << 16)) >> 16) & 0xff)
         out[6].append(((lines & (0xff <<  8)) >>  8) & 0xff)
@@ -136,12 +137,12 @@ def Example():
         /   H  L  M  _  l  159  178  179  206  216  219  220 228  251
     '''
     for ix in xrange(33, 256):
-        print ix
+        print(ix)
         banner.Banner("banner", chr(ix))
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print "Usage:  banner <string>"
+        print("Usage:  banner <string>")
         sys.exit(1)
     Banner(sys.argv[1], "X")

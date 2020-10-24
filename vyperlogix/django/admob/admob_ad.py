@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from urllib2 import urlopen
 from urllib import urlencode
 try:
@@ -103,15 +105,15 @@ def admob_ad(request, admob_params=HashedFuzzyLists2()):
 			admob_contents = admob_params["alternate_content"]
 		else:
 			admob_contents = "<img src=\"http://t.admob.com/li.php/c.gif/%(admob_site_id)s/1/%(admob_timeout)F/%(absolute_uri)s\" alt=\"\" width=\"1\" height=\"1\" />"  \
-				           % {"admob_site_id" : admob_params["admob_site_id"], 
-				              "admob_timeout" : admob_timeout, 
-				              "absolute_uri" : md5(request.build_absolute_uri()).hexdigest()}
+							% {"admob_site_id" : admob_params["admob_site_id"], 
+								"admob_timeout" : admob_timeout, 
+								"absolute_uri" : md5(request.build_absolute_uri()).hexdigest()}
 
 	# DEBUG:
-	# print 'Connecting to: %s' % admob_endpoint
-	# print 'Sending Parameters:'
-	# print admob_post
-	# print 'Got reponse:'
-	# print admob_contents
+	# print('Connecting to: %s' % admob_endpoint)
+	# print('Sending Parameters:')
+	# print(admob_post)
+	# print('Got reponse:')
+	# print(admob_contents)
 
 	return admob_contents

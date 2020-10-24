@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -196,32 +197,32 @@ class ParamikoSFTP(Cooperative):
     getSFTPClient = property(**getSFTPClient())
     
     def put(self,source,dest,callback=None):
-	responses = []
+        responses = []
 
-	def __sftp__():
-	    return ParamikoSFTP(self.hostname,self.port,self.username,password=self.password,callback=callback,use_manual_auth=self.manual_auth,auto_close=False,logger=self.logger)
-	
-	def __callback__(size, file_size):
-	    pcent = size/file_size
-	    if (pcent > 0.0):
-		responses.append('%4.2f %%' % ((size/file_size)*100.0))
+        def __sftp__():
+            return ParamikoSFTP(self.hostname,self.port,self.username,password=self.password,callback=callback,use_manual_auth=self.manual_auth,auto_close=False,logger=self.logger)
+        
+        def __callback__(size, file_size):
+            pcent = size/file_size
+            if (pcent > 0.0):
+                responses.append('%4.2f %%' % ((size/file_size)*100.0))
 
-	try:
-	    sftp = __sftp__()
-	    client = sftp.getSFTPClient
-	    client.put(source, dest, callback=__callback__ if (not callable(callback)) else callback)
-	except paramiko.ChannelException:
-	    count = 0
-	    for line in open(source):
-		if (len(str(line).strip()) > 0):
-		    sftp = __sftp__()
-		    ch = '>' if (count == 0) else '>>'
-		    cmd = 'echo "%s" %s %s' % (line.replace('\$','$').replace('$','\$').replace('\>','>').replace('>','\>').rstrip(),ch,dest)
-		    print 'DEBUG: cmd=%s' % (cmd)
-		    resp = sftp.exec_command(cmd)
-		    responses.append('%s --> %s' % (cmd,','.join(resp)))
-		    count += 1
-	return responses
+            try:
+                sftp = __sftp__()
+                client = sftp.getSFTPClient
+                client.put(source, dest, callback=__callback__ if (not callable(callback)) else callback)
+            except paramiko.ChannelException:
+                count = 0
+                for line in open(source):
+                    if (len(str(line).strip()) > 0):
+                        sftp = __sftp__()
+                        ch = '>' if (count == 0) else '>>'
+                        cmd = 'echo "%s" %s %s' % (line.replace('\$','$').replace('$','\$').replace('\>','>').replace('>','\>').rstrip(),ch,dest)
+                        print('DEBUG: cmd=%s' % (cmd))
+                        resp = sftp.exec_command(cmd)
+                        responses.append('%s --> %s' % (cmd,','.join(resp)))
+                        count += 1
+        return responses
     
     def agent_auth(self):
         """
@@ -257,7 +258,7 @@ class ParamikoSFTP(Cooperative):
             try:
                 x = self.channel.recv(1024)
                 if len(x) == 0:
-                    #print '\r\n*** EOF\r\n',
+                    #print('\r\n*** EOF\r\n',)
                     break
                 responses.append(str(x).strip())
             except socket.timeout:
@@ -278,11 +279,11 @@ class ParamikoSFTP(Cooperative):
                 time.sleep(sleep)
             self.channel.exec_command(command)
             __responses__ = self.get_channel_response()
-	    __lines__ = [r.split('\n') for r in __responses__]
-	    responses = []
-	    for l in __lines__:
-		for ll in l:
-		    responses.append(ll.strip())
+            __lines__ = [r.split('\n') for r in __responses__]
+            responses = []
+            for l in __lines__:
+                for ll in l:
+                    responses.append(ll.strip())
         except Exception:
             self.logger.exception('"%s" failed to execute.' % (command))
         return responses

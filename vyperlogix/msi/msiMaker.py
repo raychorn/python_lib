@@ -1,3 +1,4 @@
+from __future__ import print_function
 import msilib, schema, sequence, os, sets, glob
 from msilib import Feature, CAB, Directory, Dialog, Binary, add_data
 import uisample
@@ -25,12 +26,12 @@ class msiMaker():
 
     def build_database(self):
         self.db = msilib.init_database("%s%s.msi" % (self.package_name,self.current_version),self.schema,
-                                  "%s %s" % (self.package_name,self.current_version),
-                                  self.product_codes[self.current_version],
-                                  self.current_version,
-                                  self.package_author)
+                                        "%s %s" % (self.package_name,self.current_version),
+                                        self.product_codes[self.current_version],
+                                        self.current_version,
+                                        self.package_author)
         if (self.isDebug):
-            print '(build_database) :: db=(%s)' % (str(self.db))
+            print('(build_database) :: db=(%s)' % (str(self.db)))
         msilib.add_tables(self.db, self.sequence)
         self.db.Commit()
 
@@ -305,7 +306,7 @@ class msiMaker():
     def add_features(self):
         global default_feature
         if (self.isDebug):
-            print '(add_features).1 :: db=(%s)' % (str(self.db))
+            print('(add_features).1 :: db=(%s)' % (str(self.db)))
         default_feature = Feature(self.db, "DefaultFeature", "DSS", "DSS Installation", 1, directory = "TARGETDIR")
         #tcltk = Feature(self.db, "TclTk", "Tcl/Tk", "Tkinter, IDLE, pydoc", 3)
         #htmlfiles = Feature(self.db, "Documentation", "Documentation", "Python HTMLHelp File", 5)
@@ -322,7 +323,7 @@ class msiMaker():
         pydirs = [(self.root,"Lib")]
         while pydirs:
             parent, dir = pydirs.pop()
-            print '(_add_files) :: parent=(%s), dir=(%s)' % (str(parent),str(dir))
+            print('(_add_files) :: parent=(%s), dir=(%s)' % (str(parent),str(dir)))
             if dir == "CVS" or dir.startswith("plat-"):
                 continue
             else:
@@ -332,12 +333,12 @@ class msiMaker():
             for f in os.listdir(lib.absolute):
                 if os.path.isdir(os.path.join(lib.absolute, f)):
                     pydirs.append((lib, f))
-        print '(_add_files) :: self.dirs=(%s)' % (str(self.dirs))
+        print('(_add_files) :: self.dirs=(%s)' % (str(self.dirs)))
 
     def add_files(self,files):
         self.cab = CAB(self.package_name)
         self.root = Directory(self.db, self.cab, None, '\\', "TARGETDIR", "SourceDir")
-        print '(add_files) :: self.srcdir=(%s)' % (self.srcdir)
+        print('(add_files) :: self.srcdir=(%s)' % (self.srcdir))
         
         dirs={}
         # Add all other root files into the TARGETDIR component
@@ -354,9 +355,9 @@ class msiMaker():
             else:
                 _f = f
             f_dir = os.path.dirname(_f)
-            print '(add_files) :: f_dir=(%s), _f=(%s)' % (f_dir,_f)
+            print('(add_files) :: f_dir=(%s), _f=(%s)' % (f_dir,_f))
             if (_cur_dir != f_dir):
-                print '(add_files) :: NEW DIRECTORY !\n'
+                print('(add_files) :: NEW DIRECTORY !\n')
                 _dir = f_dir # .split(os.sep)[-1]
                 lib = Directory(self.db, self.cab, _parent, _dir, _dir, "%s|%s" % (_parent.make_short(_dir), _dir))
                 dirs[dir]=lib
@@ -368,8 +369,7 @@ class msiMaker():
     def add_registry(self):
         # File extensions, associated with the REGISTRY component
         # msidbComponentAttributesRegistryKeyPath = 4
-        add_data(self.db, "Component",
-                 [("REGISTRY", msilib.gen_uuid(), "TARGETDIR", 4, None, "InstallPath")])
+        add_data(self.db, "Component", [("REGISTRY", msilib.gen_uuid(), "TARGETDIR", 4, None, "InstallPath")])
         add_data(self.db, "FeatureComponents", [(default_feature.id, "REGISTRY")])
         self.db.Commit()
 
@@ -377,22 +377,22 @@ class msiMaker():
         self.build_database()
         try:
             if (self.isDebug):
-                print '(make_msi) :: BEFORE.add_features(), db=(%s)' % (str(self.db))
+                print('(make_msi) :: BEFORE.add_features(), db=(%s)' % (str(self.db)))
             self.add_features()
             if (self.isDebug):
-                print '(make_msi) :: BEFORE.add_ui()'
+                print('(make_msi) :: BEFORE.add_ui()')
             self.add_ui()
             if (self.isDebug):
-                print '(make_msi) :: BEFORE.add_files()'
+                print('(make_msi) :: BEFORE.add_files()')
             self._add_files()
             self.add_files(files)
             if (self.isDebug):
-                print '(make_msi) :: BEFORE.add_registry()'
+                print('(make_msi) :: BEFORE.add_registry()')
             self.add_registry()
             if (self.isDebug):
-                print '(make_msi) :: BEFORE.db.Commit()'
+                print('(make_msi) :: BEFORE.db.Commit()')
             self.db.Commit()
         finally:
             if (self.isDebug):
-                print '(make_msi) :: BEFORE.[del self.db]'
+                print('(make_msi) :: BEFORE.[del self.db]')
             del self.db

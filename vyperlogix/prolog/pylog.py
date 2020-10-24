@@ -1,3 +1,4 @@
+from __future__ import print_function
 __version__ = "3.0-dev"
 
 import copy
@@ -602,7 +603,7 @@ class Or(Term2):
             for g in self.args:
                 for gs in g(s):
                     yield gs
-        except CutException:
+        except Exception:
             pass
 
 class IfThenElse(Term3):
@@ -646,6 +647,6 @@ if __name__ == '__main__':
 
     for arg in sys.argv[1:]:
         if arg == '--version':
-            print __version__
+            print(__version__)
         else:
-            print "Bad argument:", arg
+            print("Bad argument:", arg)

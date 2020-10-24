@@ -1,3 +1,4 @@
+from __future__ import print_function
 from win32api import GetComputerName
 try:
     import shelve
@@ -57,7 +58,7 @@ class persistence(object):
                     try:
                         value = handle[key]
                     except Exception as details:
-                        print 'Unable to un-shelve from "%s" due to "%s".' % (fname,str(details))
+                        print('Unable to un-shelve from "%s" due to "%s".' % (fname,str(details)))
                     finally:
                         handle.close()
             else:
@@ -67,11 +68,11 @@ class persistence(object):
                     try:
                         value = handle[key]
                     except Exception as details:
-                        print 'Unable to un-shelve from "%s" due to "%s".' % (fname,str(details))
+                        print('Unable to un-shelve from "%s" due to "%s".' % (fname,str(details)))
                     finally:
                         handle.close()
         except:
-            print 'Unable to un-shelve from "%s", probably due to a faulty path name.' % fname
+            print('Unable to un-shelve from "%s", probably due to a faulty path name.' % fname)
         return value
 
     fname = property(get_fname, set_fname)

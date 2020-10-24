@@ -1,3 +1,4 @@
+from __future__ import print_function
 '''
 This routine provides a 128 bit checksum for each file given on the
 command line.  It also prints the file size in bytes.  (The 'checksum'
@@ -78,7 +79,7 @@ def IsDirectory(dir_name):
 
 def Usage():
     global retvalG
-    print '''Usage:  checksum [-r] [-s n] file1 [file2 ...]
+    print('''Usage:  checksum [-r] [-s n] file1 [file2 ...]
 Typical output:
   44A5D1B02117CA7AC44AF086ACA74B8C 116710    filename
     First  field:    MD5 hash (in hex) of file
@@ -89,7 +90,7 @@ Typical output:
     0   In command line order [default]
     1   Sort by MD5 hash
     2   Sort by file size
-    3   Sort by file name'''
+    3   Sort by file name''')
     retvalG = 1
     sys.exit(retvalG)
 
@@ -99,7 +100,7 @@ def ProcessCommandLine(cmdline_args):
     try:
         optlist, args = getopt.getopt(cmdline_args, "rs:")
     except getopt.error, str:
-        print str
+        print(str)
         retvalG = 1
         sys.exit(retvalG)
     if len(args) < 1:
@@ -165,7 +166,7 @@ def main():
     if sortG:
         results.sort(Sort)
     for r in results:
-        print "%s %-9d %s" % r
+        print("%s %-9d %s" % r)
     return retvalG
 
 if __name__ == "__main__":

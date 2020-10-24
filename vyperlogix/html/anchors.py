@@ -1,3 +1,6 @@
+from __future__ import print_function
+import sys
+
 def parse_href(href):
     toks = href.split('href=')
     if (len(toks) == 2) and (toks[0] == ''):
@@ -23,13 +26,13 @@ def rewrite_anchor(_url,params='',callback=None,isDebug=False):
                     if (callable(callback)):
                         try:
                             if (isDebug):
-                                print '%s :: %s' % (misc.funcName(),str(d_toks4))
+                                print('%s :: %s' % (misc.funcName(),str(d_toks4)))
                             href = callback(d_toks4)
                         except:
                             href = _url # do nothing if there is not a callback...
                     return href
                 except Exception as details:
-                    print >>sys.stderr, _utils.formattedException(details=details)
+                    sys.stderr.write(_utils.formattedException(details=details))
     return _url
 
 def rewrite_anchors(subject,callback=None,isDebug=False):

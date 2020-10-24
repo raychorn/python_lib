@@ -1,3 +1,7 @@
+import imp
+
+
+import sys
 import msvcrt
 
 __copyright__ = """\
@@ -26,7 +30,7 @@ def putStr(s):
 
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write(__copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
 
     putStr('Testing...')

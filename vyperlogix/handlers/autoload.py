@@ -1,3 +1,4 @@
+from __future__ import print_function
 """
 autoload - load common symbols automatically on demand
 
@@ -39,10 +40,10 @@ def _autoload_exc(ty, va, tb):
         name = mat.group(1)
         if name in _common:
             mod = _common[name]
-            print >> sys.stderr, "found", name, "in", mod, "module"
+            sys.stderr.write("found " + name + " in " + mod + " module\n")
             _exec("from %s import %s" % (mod, name), tb)
         else:
-            print >> sys.stderr, "autoloading", name
+            sys.stderr.write("autoloading" + name + '\n')
             _exec("import %s" % name, tb)
     else:
         traceback.print_exception(ty, va, tb)

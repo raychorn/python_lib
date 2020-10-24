@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys, asyncore, threading, socket, smtpd, time
 import types
 import logging
@@ -50,7 +51,7 @@ def dummy_callback():
 
 def logMessage(info_string, fromObjName, fromFunc, _logging=standardLogging.LoggingLevels.info):
     info_string = '%s.%s %s' % (fromObjName,fromFunc,info_string)
-    print >> sys.stdout, info_string
+    sys.stdout.write(info_string+'\n')
     if (_logging.value == standardLogging.LoggingLevels.info.value):
         logging.info(info_string)
     elif (_logging.value == standardLogging.LoggingLevels.warning.value):
@@ -193,10 +194,10 @@ class SmtpMailsinkServer(smtpd.SMTPServer):
 			d.prettyPrint(prefix='',title='Mail Parts',fOut=io_buffer)
 		    else:
 			if (self.use_html):
-			    print >>io_buffer, self.renderHTML(f_unpack(d,const_subject_symbol),f_unpack(d,const_body_symbol))
+			    io_buffer.write(self.renderHTML(f_unpack(d,const_subject_symbol),f_unpack(d,const_body_symbol))+'\n')
 			else:
-			    print >>io_buffer, '%s' % (f_unpack(d,const_subject_symbol))
-			    print >>io_buffer, '%s' % ('\n'.join(f_unpack(d,const_body_symbol)))
+			    io_buffer.write('%s' % (f_unpack(d,const_subject_symbol))+'\n')
+			    io_buffer.write('%s' % ('\n'.join(f_unpack(d,const_body_symbol)))+'\n')
 		    s = io_buffer.getvalue()
 		    self.mailboxFile.write( s )
 		except:
@@ -210,7 +211,7 @@ class SmtpMailsinkServer(smtpd.SMTPServer):
 		    self.mailboxFile.close()
 		    self.mailboxFile = _fMbx
 	    else:
-		print >>sys.stderr, 'ERROR: self.mailboxFile is "%s".' % (self.mailboxFile)
+		sys.stderr.write('ERROR: self.mailboxFile is "%s".' % (self.mailboxFile)+'\n')
 	    
 	    if (callable(self.callback)):
 		try:
@@ -327,6 +328,6 @@ class SmtpMailsink( threading.Thread ):
         
 if __name__ == "__main__":
     import sys
-    print >>sys.stdout, __copyright__
-    print >>sys.stderr, __copyright__
+    sys.stdout.write( __copyright__+'\n')
+    sys.stderr.write(__copyright__+'\n')
     

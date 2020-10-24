@@ -1,3 +1,4 @@
+from __future__ import print_function
 __copyright__ = """\
 (c). Copyright 2008-2020, Vyper Logix Corp., All Rights Reserved.
 
@@ -51,7 +52,7 @@ def runWithAnalysis(func=dummy,args=[],_ioElapsedTime=dummy,num_iters=None):
     except:
         exc_info = sys.exc_info()
         info_string = '\n'.join(traceback.format_exception(*exc_info))
-        print >>sys.stderr, '(%s) Reason: %s' % (misc.funcName(),info_string)
+        sys.stderr.write('(%s) Reason: %s\n' % (misc.funcName(),info_string))
     ioTimeAnalysis.ioEndTime('%s::%s' % (__name__,caller))
     ioTimeAnalysis.ioTimeAnalysisReport()
 
@@ -64,6 +65,6 @@ def runWithAnalysis(func=dummy,args=[],_ioElapsedTime=dummy,num_iters=None):
         if (_per_sec > 0):
             _ms_per_soql = 1000 / _per_sec
     else:
-        print >>sys.stderr, '(%s) 1.0 Cannot correctly report ms per iteration because there is no reported elapsed time from activities.' % (misc.funcName())
+        sys.stderr.write('(%s) 1.0 Cannot correctly report ms per iteration because there is no reported elapsed time from activities.\n' % (misc.funcName()))
 
     return val

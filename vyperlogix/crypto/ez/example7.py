@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 """
 example7.py
 
@@ -30,17 +30,17 @@ dec = k.decString(enc)
 
 # test
 if dec == raw:
-	print "Successful decryption using correct passphrase"
+	print("Successful decryption using correct passphrase")
 else:
-	print "Failed somewhere"
+	print("Failed somewhere")
 
-print "Trying now with a bad passphrase"
+print("Trying now with a bad passphrase")
 try:
 	k2 = ezPyCrypto.key(publicAndPrivateKey, passphrase="cracking attempt")
 except ezPyCrypto.CryptoKeyError:
-	print "Oops - our feeble cracking attempt failed (which is a good thing)."
+	print("Oops - our feeble cracking attempt failed (which is a good thing).")
 else:
-	print "Cracking attempt succeeded - we're not safe"
+	print("Cracking attempt succeeded - we're not safe")
 	# We're in - let's plunder
 	dec2 = k2.decString(enc)
 

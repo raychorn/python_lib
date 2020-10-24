@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys
 
 from datetime import datetime
@@ -43,8 +44,8 @@ class VyperDjangoMiddleware(object):
         if (django_utils.isBeingDebugged) and (sys.platform != 'win32'):
             fout = open('/home/raychorn/debug.txt','w')
             try:
-                print >>fout, '_host is "%s".' % (_host)
-                print >>fout, '%s\n' % ('='*80)
+                fout.write('_host is "%s\n".' % (_host))
+                fout.write('%s\n' % ('='*80))
                 d.prettyPrint(title=s,fOut=fout)
             finally:
                 fout.flush()
@@ -104,15 +105,15 @@ class VyperDjangoMiddleware(object):
             fout = open(fname,'a')
             try:
                 ts = ' '.join(_utils.timeStampLocalTime().split('T'))
-                print >>fout, 'BEGIN: %s :: %s' % (ts,'='*80)
-                print >>fout, '_host is "%s".' % (_host)
-                print >>fout, '%s\n' % ('-'*80)
+                fout.write('BEGIN: %s :: %s\n' % (ts,'='*80))
+                fout.write('_host is "%s".\n' % (_host))
+                fout.write('%s\n' % ('-'*80))
                 del d['SECRET_KEY']
                 del d['DATABASE_PASSWORD']
                 d.prettyPrint(title=s,fOut=fout)
                 if (len(_app_loader_errors) > 0):
                     ReportTheList.reportTheList(_app_loader_errors,'App Loader Errors',fOut=fout)
-                print >>fout, 'END!   %s :: %s\n\n' % (ts,'='*80)
+                fout.write('END!   %s :: %s\n\n' % (ts,'='*80))
             finally:
                 fout.flush()
                 fout.close()
