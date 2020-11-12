@@ -26,7 +26,7 @@ _isRunningLocal = (_utils.isBeingDebugged) or (_utils.getComputerName().lower() 
 sys.stdout = BackgroundLog(fOut=sys.stdout)
 
 __copyright__ = """\
-(c). Copyright 2008-2013, Vyper Logix Corp., 
+(c). Copyright 2008-2020, Vyper Logix Corp., 
 
                    All Rights Reserved.
 

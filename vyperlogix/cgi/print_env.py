@@ -11,7 +11,7 @@ if sys.version_info[0] >= 3:
     unicode = str
     
 __copyright__ = """\
-(c). Copyright 2008-2013, Vyper Logix Corp., 
+(c). Copyright 2008-2020, Vyper Logix Corp., 
 
                    All Rights Reserved.
 

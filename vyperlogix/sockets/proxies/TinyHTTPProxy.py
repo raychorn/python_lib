@@ -1,5 +1,5 @@
 __copyright__ = """\
-(c). Copyright 2008-2013, Vyper Logix Corp., 
+(c). Copyright 2008-2020, Vyper Logix Corp., 
 
             All Rights Reserved.
 
